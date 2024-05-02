@@ -11,6 +11,7 @@
 .uuid
 
 pubspec.lock
+pubspec_overrides.yaml
 
 Podfile.lock
 Pods/
@@ -50,7 +51,10 @@ GeneratedPluginRegistrant.*
 .gradle/
 gradlew
 gradlew.bat
+gradle-wrapper.properties
+
 
 .project
 .classpath
 .settings
+

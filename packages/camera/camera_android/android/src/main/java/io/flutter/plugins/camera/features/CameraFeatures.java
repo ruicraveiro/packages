@@ -19,6 +19,7 @@ import io.flutter.plugins.camera.features.noisereduction.NoiseReductionFeature;
 import io.flutter.plugins.camera.features.resolution.ResolutionFeature;
 import io.flutter.plugins.camera.features.resolution.ResolutionPreset;
 import io.flutter.plugins.camera.features.sensororientation.SensorOrientationFeature;
+import io.flutter.plugins.camera.features.videostabilization.VideoStabilizationFeature;
 import io.flutter.plugins.camera.features.zoomlevel.ZoomLevelFeature;
 import java.util.Collection;
 import java.util.HashMap;
@@ -42,6 +43,7 @@ public class CameraFeatures {
   private static final String RESOLUTION = "RESOLUTION";
   private static final String SENSOR_ORIENTATION = "SENSOR_ORIENTATION";
   private static final String ZOOM_LEVEL = "ZOOM_LEVEL";
+  private static final String VIDEO_STABILIZATION = "VIDEO_STABILIZATION";
 
   @NonNull
   public static CameraFeatures init(
@@ -74,6 +76,7 @@ public class CameraFeatures {
         cameraFeatureFactory.createResolutionFeature(
             cameraProperties, resolutionPreset, cameraProperties.getCameraName()));
     cameraFeatures.setZoomLevel(cameraFeatureFactory.createZoomLevelFeature(cameraProperties));
+    cameraFeatures.setVideoStabilization(cameraFeatureFactory.createVideoStabilizationFeature(cameraProperties));
     return cameraFeatures;
   }
 
@@ -297,4 +300,26 @@ public class CameraFeatures {
   public void setZoomLevel(@NonNull ZoomLevelFeature zoomLevel) {
     this.featureMap.put(ZOOM_LEVEL, zoomLevel);
   }
+
+
+  /**
+   * Gets the zoom level feature if it has been set.
+   *
+   * @return the zoom level feature.
+   */
+  @NonNull
+  public VideoStabilizationFeature getVideoStabilization() {
+    return (VideoStabilizationFeature) Objects.requireNonNull(featureMap.get(VIDEO_STABILIZATION));
+  }
+
+  /**
+   * Sets the instance of the video stabilization feature.
+   *
+   * @param videoStabilization the {@link VideoStabilizationFeature} instance to set.
+   */
+  public void setVideoStabilization(@NonNull VideoStabilizationFeature videoStabilization) {
+    this.featureMap.put(VIDEO_STABILIZATION, videoStabilization);
+  }
+
+
 }

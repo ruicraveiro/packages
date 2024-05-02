@@ -49,6 +49,7 @@ import io.flutter.plugins.camera.features.resolution.ResolutionFeature;
 import io.flutter.plugins.camera.features.resolution.ResolutionPreset;
 import io.flutter.plugins.camera.features.sensororientation.DeviceOrientationManager;
 import io.flutter.plugins.camera.features.sensororientation.SensorOrientationFeature;
+import io.flutter.plugins.camera.features.videostabilization.VideoStabilizationFeature;
 import io.flutter.plugins.camera.features.zoomlevel.ZoomLevelFeature;
 import io.flutter.plugins.camera.media.ImageStreamReader;
 import io.flutter.view.TextureRegistry;
@@ -1349,6 +1350,7 @@ public class CameraTest {
     private final ResolutionFeature mockResolutionFeature;
     private final SensorOrientationFeature mockSensorOrientationFeature;
     private final ZoomLevelFeature mockZoomLevelFeature;
+    private final VideoStabilizationFeature mockVideoStabilizationFeature;
 
     public TestCameraFeatureFactory(FpsRangeFeature fpsRangeFeature) {
       this.mockAutoFocusFeature = mock(AutoFocusFeature.class);
@@ -1362,6 +1364,7 @@ public class CameraTest {
       this.mockResolutionFeature = mock(ResolutionFeature.class);
       this.mockSensorOrientationFeature = mock(SensorOrientationFeature.class);
       this.mockZoomLevelFeature = mock(ZoomLevelFeature.class);
+      this.mockVideoStabilizationFeature = mock(VideoStabilizationFeature.class);
     }
 
     @Override
@@ -1431,6 +1434,12 @@ public class CameraTest {
     public NoiseReductionFeature createNoiseReductionFeature(
         @NonNull CameraProperties cameraProperties) {
       return mockNoiseReductionFeature;
+    }
+
+    @NonNull
+    @Override
+    public VideoStabilizationFeature createVideoStabilizationFeature(@NonNull CameraProperties cameraProperties) {
+      return mockVideoStabilizationFeature;
     }
   }
 }

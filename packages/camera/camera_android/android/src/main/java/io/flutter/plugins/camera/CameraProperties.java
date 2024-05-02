@@ -24,7 +24,7 @@ public interface CameraProperties {
   String getCameraName();
 
   /**
-   * Returns the list of frame rate ranges for @see android.control.aeTargetFpsRange supported by
+   * Returns the list of frame rate ranges for @see android.control.aeTargetF psRange supported by
    * this camera device.
    *
    * <p>By default maps to the @see
@@ -273,4 +273,18 @@ public interface CameraProperties {
    */
   @NonNull
   int[] getAvailableNoiseReductionModes();
+
+
+  /**
+   * Returns a list of video-stabilization modes for that are supported by this
+   * camera device.
+   *
+   * <p>By default maps to the @see
+   * android.hardware.camera2.CameraCharacteristics#CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES key.
+   *
+   * @return int[] List of video-stabilization modes supported by this camera device.
+   */
+  @NonNull
+  int[] getControlVideoStabilizationAvailableModes();
+
 }
