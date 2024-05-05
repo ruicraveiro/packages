@@ -255,6 +255,12 @@ abstract class CameraPlatform extends PlatformInterface {
     throw UnimplementedError('setFocusPoint() is not implemented.');
   }
 
+  /// Sets the video stabilization mode for Android.
+  ///
+  /// This method is a no-op on all other platforms.
+  Future<void> setVideoStabilizationMode(
+      int cameraId, VideoStabilizationMode mode) async {}
+
   /// Gets the maximum supported zoom level for the selected camera.
   Future<double> getMaxZoomLevel(int cameraId) {
     throw UnimplementedError('getMaxZoomLevel() is not implemented.');

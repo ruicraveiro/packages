@@ -1052,6 +1052,34 @@ void main() {
       ]);
     });
 
+    test('Should set video stabilization mode', () async {
+      // Arrange
+      final MethodChannelMock channel = MethodChannelMock(
+        channelName: _channelName,
+        methods: <String, dynamic>{'setVideoStabilizationMode': null},
+      );
+
+      // Act
+      await camera.setVideoStabilizationMode(
+          cameraId, VideoStabilizationMode.off);
+      await camera.setVideoStabilizationMode(
+          cameraId, VideoStabilizationMode.on);
+      await camera.setVideoStabilizationMode(
+          cameraId, VideoStabilizationMode.previewStabilization);
+
+      // Assert
+      expect(channel.log, <Matcher>[
+        isMethodCall('setVideoStabilizationMode',
+            arguments: <String, Object?>{'cameraId': cameraId, 'mode': 'off'}),
+        isMethodCall('setVideoStabilizationMode',
+            arguments: <String, Object?>{'cameraId': cameraId, 'mode': 'on'}),
+        isMethodCall('setVideoStabilizationMode', arguments: <String, Object?>{
+          'cameraId': cameraId,
+          'mode': 'previewStabilization'
+        }),
+      ]);
+    });
+
     test('Should throw CameraException when illegal zoom level is supplied',
         () async {
       // Arrange

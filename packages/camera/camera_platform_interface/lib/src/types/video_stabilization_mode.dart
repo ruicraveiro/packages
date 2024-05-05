@@ -23,7 +23,7 @@ String serializeVideoStabilizationMode(
     case VideoStabilizationMode.on:
       return 'on';
     case VideoStabilizationMode.previewStabilization:
-      return 'preview_stabilization';
+      return 'previewStabilization';
   }
 }
 
@@ -34,7 +34,7 @@ VideoStabilizationMode deserializeVideoStabilizationMode(String str) {
       return VideoStabilizationMode.off;
     case 'on':
       return VideoStabilizationMode.on;
-    case 'preview_stabilization':
+    case 'previewStabilization':
       return VideoStabilizationMode.previewStabilization;
     default:
       throw ArgumentError('"$str" is not a valid VideoStabilizationMode value');

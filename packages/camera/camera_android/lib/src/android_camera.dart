@@ -535,6 +535,18 @@ class AndroidCamera extends CameraPlatform {
   }
 
   @override
+  Future<void> setVideoStabilizationMode(
+      int cameraId, VideoStabilizationMode mode) async {
+    return _channel.invokeMethod<void>(
+      'setVideoStabilizationMode',
+      <String, dynamic>{
+        'cameraId': cameraId,
+        'mode': serializeVideoStabilizationMode(mode),
+      },
+    );
+  }
+
+  @override
   Widget buildPreview(int cameraId) {
     return Texture(textureId: cameraId);
   }

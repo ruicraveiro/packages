@@ -26,14 +26,14 @@ void main() {
     expect(
         serializeVideoStabilizationMode(
             VideoStabilizationMode.previewStabilization),
-        'preview_stabilization');
+        'previewStabilization');
   });
 
   test('deserializeVideoStabilizationMode() should deserialize correctly', () {
     expect(
         deserializeVideoStabilizationMode('off'), VideoStabilizationMode.off);
     expect(deserializeVideoStabilizationMode('on'), VideoStabilizationMode.on);
-    expect(deserializeVideoStabilizationMode('preview_stabilization'),
+    expect(deserializeVideoStabilizationMode('previewStabilization'),
         VideoStabilizationMode.previewStabilization);
   });
 }
