@@ -197,22 +197,31 @@ NSString *const errorMethod = @"error";
     }
     return nil;
   }
+    NSLog(@"Current Stabilization Mode (3): %ld\n", connection.activeVideoStabilizationMode);
 
   [_videoCaptureSession addInputWithNoConnections:_captureVideoInput];
   [_videoCaptureSession addOutputWithNoConnections:_captureVideoOutput];
   [_videoCaptureSession addConnection:connection];
 
+    NSLog(@"Current Stabilization Mode (4): %ld\n", connection.activeVideoStabilizationMode);
+
   _capturePhotoOutput = [AVCapturePhotoOutput new];
   [_capturePhotoOutput setHighResolutionCaptureEnabled:YES];
   [_videoCaptureSession addOutput:_capturePhotoOutput];
+    NSLog(@"Current Stabilization Mode (5): %ld\n", connection.activeVideoStabilizationMode);
 
   _motionManager = [[CMMotionManager alloc] init];
   [_motionManager startAccelerometerUpdates];
+    NSLog(@"Current Stabilization Mode (6): %ld\n", connection.activeVideoStabilizationMode);
 
   if (_mediaSettings.framesPerSecond) {
+      NSLog(@"Current Stabilization Mode (7): %ld\n", connection.activeVideoStabilizationMode);
+
     // The frame rate can be changed only on a locked for configuration device.
     if ([mediaSettingsAVWrapper lockDevice:_captureDevice error:error]) {
       [_mediaSettingsAVWrapper beginConfigurationForSession:_videoCaptureSession];
+        
+        NSLog(@"Current Stabilization Mode (8): %ld\n", connection.activeVideoStabilizationMode);
 
       // Possible values for presets are hard-coded in FLT interface having
       // corresponding AVCaptureSessionPreset counterparts.
@@ -235,16 +244,27 @@ NSString *const errorMethod = @"error";
       [_mediaSettingsAVWrapper commitConfigurationForSession:_videoCaptureSession];
       [_mediaSettingsAVWrapper unlockDevice:_captureDevice];
     } else {
+        NSLog(@"Current Stabilization Mode (9): %ld\n", connection.activeVideoStabilizationMode);
+
       return nil;
     }
+      NSLog(@"Current Stabilization Mode (10): %ld\n", connection.activeVideoStabilizationMode);
+
   } else {
+      NSLog(@"Current Stabilization Mode (11): %ld\n", connection.activeVideoStabilizationMode);
+
     // If the frame rate is not important fall to a less restrictive
     // behavior (no configuration locking).
     if (![self setCaptureSessionPreset:_mediaSettings.resolutionPreset withError:error]) {
+        NSLog(@"Current Stabilization Mode (12): %ld\n", connection.activeVideoStabilizationMode);
+
       return nil;
     }
-  }
 
+      NSLog(@"Current Stabilization Mode (13): %ld\n", connection.activeVideoStabilizationMode);
+
+  }
+  NSLog(@"Current Stabilization Mode (N): %ld\n", connection.activeVideoStabilizationMode);
   [self updateOrientation];
 
   return self;
@@ -262,7 +282,7 @@ NSString *const errorMethod = @"error";
     return nil;
   }
 
-  // Setup video capture output.
+  // Setup video capture output.œœ
   _captureVideoOutput = [AVCaptureVideoDataOutput new];
   _captureVideoOutput.videoSettings =
       @{(NSString *)kCVPixelBufferPixelFormatTypeKey : @(_videoFormat)};
@@ -276,9 +296,18 @@ NSString *const errorMethod = @"error";
   if ([_captureDevice position] == AVCaptureDevicePositionFront) {
     connection.videoMirrored = YES;
   }
+ 
+    if (@available(iOS 13.0, *)) {
+        connection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeCinematicExtended;
+    } else {
+        connection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeCinematic;
+    }
+  NSLog(@"Current Stabilization Mode (1): %ld\n", connection.activeVideoStabilizationMode);
+
 
   return connection;
 }
+
 
 - (void)reportInitializationState {
   // Get all the state on the current thread, not the main thread.
@@ -1045,7 +1074,7 @@ NSString *const errorMethod = @"error";
                                    details:nil]);
   [_videoCaptureSession addConnection:newConnection];
   [_videoCaptureSession commitConfiguration];
-
+    NSLog(@"Current Stabilization Mode (2): %ld\n", newConnection.activeVideoStabilizationMode);
   completion(nil);
 }
 
