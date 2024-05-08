@@ -297,11 +297,13 @@ NSString *const errorMethod = @"error";
     connection.videoMirrored = YES;
   }
  
+ 
     if (@available(iOS 13.0, *)) {
         connection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeCinematicExtended;
     } else {
         connection.preferredVideoStabilizationMode = AVCaptureVideoStabilizationModeCinematic;
     }
+     
   NSLog(@"Current Stabilization Mode (1): %ld\n", connection.activeVideoStabilizationMode);
 
 
