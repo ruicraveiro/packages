@@ -282,7 +282,7 @@ NSString *const errorMethod = @"error";
     return nil;
   }
 
-  // Setup video capture output.œœ
+  // Setup video capture output.
   _captureVideoOutput = [AVCaptureVideoDataOutput new];
   _captureVideoOutput.videoSettings =
       @{(NSString *)kCVPixelBufferPixelFormatTypeKey : @(_videoFormat)};
