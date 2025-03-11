@@ -5,16 +5,17 @@
 package io.flutter.plugins.videoplayer;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import android.view.Surface;
+import androidx.annotation.NonNull;
 import androidx.media3.common.AudioAttributes;
 import androidx.media3.common.C;
+import androidx.media3.common.Format;
+import androidx.media3.common.MediaItem;
 import androidx.media3.common.PlaybackParameters;
 import androidx.media3.common.Player;
 import androidx.media3.exoplayer.ExoPlayer;
-import io.flutter.view.TextureRegistry;
+import io.flutter.plugins.videoplayer.platformview.PlatformViewExoPlayerEventListener;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,17 +45,33 @@ public final class VideoPlayerTest {
   private FakeVideoAsset fakeVideoAsset;
 
   @Mock private VideoPlayerCallbacks mockEvents;
-  @Mock private TextureRegistry.SurfaceProducer mockProducer;
   @Mock private ExoPlayer mockExoPlayer;
   @Captor private ArgumentCaptor<AudioAttributes> attributesCaptor;
-  @Captor private ArgumentCaptor<TextureRegistry.SurfaceProducer.Callback> callbackCaptor;
+  @Captor private ArgumentCaptor<Player.Listener> listenerCaptor;
 
   @Rule public MockitoRule initRule = MockitoJUnit.rule();
+
+  /** A test subclass of {@link VideoPlayer} that exposes the abstract class for testing. */
+  private final class TestVideoPlayer extends VideoPlayer {
+    private TestVideoPlayer(
+        @NonNull VideoPlayerCallbacks events,
+        @NonNull MediaItem mediaItem,
+        @NonNull VideoPlayerOptions options,
+        @NonNull ExoPlayerProvider exoPlayerProvider) {
+      super(events, mediaItem, options, exoPlayerProvider);
+    }
+
+    @NonNull
+    @Override
+    protected ExoPlayerEventListener createExoPlayerEventListener(@NonNull ExoPlayer exoPlayer) {
+      // Use platform view implementation for testing.
+      return new PlatformViewExoPlayerEventListener(exoPlayer, mockEvents);
+    }
+  }
 
   @Before
   public void setUp() {
     fakeVideoAsset = new FakeVideoAsset(FAKE_ASSET_URL);
-    when(mockProducer.getSurface()).thenReturn(mock(Surface.class));
   }
 
   private VideoPlayer createVideoPlayer() {
@@ -62,8 +79,8 @@ public final class VideoPlayerTest {
   }
 
   private VideoPlayer createVideoPlayer(VideoPlayerOptions options) {
-    return new VideoPlayer(
-        () -> mockExoPlayer, mockEvents, mockProducer, fakeVideoAsset.getMediaItem(), options);
+    return new TestVideoPlayer(
+        mockEvents, fakeVideoAsset.getMediaItem(), options, () -> mockExoPlayer);
   }
 
   @Test
@@ -72,8 +89,6 @@ public final class VideoPlayerTest {
 
     verify(mockExoPlayer).setMediaItem(fakeVideoAsset.getMediaItem());
     verify(mockExoPlayer).prepare();
-    verify(mockProducer).getSurface();
-    verify(mockExoPlayer).setVideoSurface(any());
 
     verify(mockExoPlayer).setAudioAttributes(attributesCaptor.capture(), eq(true));
     assertEquals(attributesCaptor.getValue().contentType, C.AUDIO_CONTENT_TYPE_MOVIE);
@@ -169,57 +184,29 @@ public final class VideoPlayerTest {
   }
 
   @Test
-  public void onSurfaceProducerDestroyedAndRecreatedReleasesAndThenRecreatesAndResumesPlayer() {
+  public void onInitializedCalledWhenVideoPlayerInitiallyAvailable() {
     VideoPlayer videoPlayer = createVideoPlayer();
 
-    verify(mockProducer).setCallback(callbackCaptor.capture());
-    verify(mockExoPlayer, never()).release();
+    // Pretend we have a video, and capture the registered event listener.
+    when(mockExoPlayer.getVideoFormat())
+        .thenReturn(
+            new Format.Builder().setWidth(300).setHeight(200).setRotationDegrees(0).build());
+    verify(mockExoPlayer).addListener(listenerCaptor.capture());
+    Player.Listener listener = listenerCaptor.getValue();
 
-    when(mockExoPlayer.getCurrentPosition()).thenReturn(10L);
-    when(mockExoPlayer.getRepeatMode()).thenReturn(Player.REPEAT_MODE_ALL);
-    when(mockExoPlayer.getVolume()).thenReturn(0.5f);
-    when(mockExoPlayer.getPlaybackParameters()).thenReturn(new PlaybackParameters(2.5f));
-
-    TextureRegistry.SurfaceProducer.Callback producerLifecycle = callbackCaptor.getValue();
-    producerLifecycle.onSurfaceDestroyed();
-
-    verify(mockExoPlayer).release();
-
-    // Create a new mock exo player so that we get a new instance.
-    mockExoPlayer = mock(ExoPlayer.class);
-    producerLifecycle.onSurfaceCreated();
-
-    verify(mockExoPlayer).seekTo(10L);
-    verify(mockExoPlayer).setRepeatMode(Player.REPEAT_MODE_ALL);
-    verify(mockExoPlayer).setVolume(0.5f);
-    verify(mockExoPlayer).setPlaybackParameters(new PlaybackParameters(2.5f));
+    // Trigger an event that would trigger onInitialized.
+    listener.onPlaybackStateChanged(Player.STATE_READY);
+    verify(mockEvents).onInitialized(anyInt(), anyInt(), anyLong(), anyInt());
 
     videoPlayer.dispose();
   }
 
   @Test
-  public void onSurfaceCreatedWithoutDestroyDoesNotRecreate() {
-    // Initially create the video player, which creates the initial surface.
+  public void disposeReleasesExoPlayer() {
     VideoPlayer videoPlayer = createVideoPlayer();
-    verify(mockProducer).getSurface();
-
-    // Capture the lifecycle events so we can simulate onSurfaceCreated/Destroyed.
-    verify(mockProducer).setCallback(callbackCaptor.capture());
-    TextureRegistry.SurfaceProducer.Callback producerLifecycle = callbackCaptor.getValue();
-
-    // Calling onSurfaceCreated does not do anything, since the surface was never destroyed.
-    producerLifecycle.onSurfaceCreated();
-    verifyNoMoreInteractions(mockProducer);
 
     videoPlayer.dispose();
-  }
 
-  @Test
-  public void disposeReleasesTextureAndPlayer() {
-    VideoPlayer videoPlayer = createVideoPlayer();
-    videoPlayer.dispose();
-
-    verify(mockProducer).release();
     verify(mockExoPlayer).release();
   }
 }

@@ -317,28 +317,33 @@ typedef void (^FLADAuthCompletion)(FLADAuthResultDetails *_Nullable, FlutterErro
     if (authError.code == LAErrorBiometryNotEnrolled) {
       return @YES;
     }
+    // Biometry hardware is available, but possibly permissions were denied.
+    if (authError.code == LAErrorBiometryNotAvailable &&
+        context.biometryType != LABiometryTypeNone) {
+      return @YES;
+    }
   }
 
   return @NO;
 }
 
-- (nullable NSArray<FLADAuthBiometricWrapper *> *)getEnrolledBiometricsWithError:
+- (nullable NSArray<FLADAuthBiometricBox *> *)getEnrolledBiometricsWithError:
     (FlutterError *_Nullable __autoreleasing *_Nonnull)error {
   id<FLADAuthContext> context = [self.authContextFactory createAuthContext];
   NSError *authError = nil;
-  NSMutableArray<FLADAuthBiometricWrapper *> *biometrics = [[NSMutableArray alloc] init];
+  NSMutableArray<FLADAuthBiometricBox *> *biometrics = [[NSMutableArray alloc] init];
   if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
                            error:&authError]) {
     if (authError == nil) {
       if (@available(macOS 10.15, iOS 11.0, *)) {
         if (context.biometryType == LABiometryTypeFaceID) {
-          [biometrics addObject:[FLADAuthBiometricWrapper makeWithValue:FLADAuthBiometricFace]];
+          [biometrics addObject:[[FLADAuthBiometricBox alloc] initWithValue:FLADAuthBiometricFace]];
           return biometrics;
         }
       }
       if (context.biometryType == LABiometryTypeTouchID) {
         [biometrics
-            addObject:[FLADAuthBiometricWrapper makeWithValue:FLADAuthBiometricFingerprint]];
+            addObject:[[FLADAuthBiometricBox alloc] initWithValue:FLADAuthBiometricFingerprint]];
       }
     }
   }

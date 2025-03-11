@@ -1,7 +1,11 @@
-## 2.9.0
+## 2.10.0
 
 * Adds support for video stabilization.
-* Updates minimum supported SDK version to Flutter 3.19/Dart 3.3.
+
+## 2.9.0
+
+* Updates minimum supported SDK version to Flutter 3.22/Dart 3.4.
+* Adds API support query for image streaming.
 
 ## 2.8.0
 

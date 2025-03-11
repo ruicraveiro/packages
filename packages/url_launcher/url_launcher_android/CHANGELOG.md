@@ -1,3 +1,23 @@
+## 6.3.15
+
+* Updates compileSdk 34 to flutter.compileSdkVersion.
+
+## 6.3.14
+
+* Bumps androidx.annotation:annotation from 1.9.0 to 1.9.1.
+
+## 6.3.13
+
+* Bumps androidx.annotation:annotation from 1.8.2 to 1.9.0.
+
+## 6.3.12
+
+* Updates Java compatibility version to 11.
+
+## 6.3.11
+
+* Updates Pigeon for non-nullable collection type support.
+
 ## 6.3.10
 
 * Removes dependency on org.jetbrains.kotlin:kotlin-bom.

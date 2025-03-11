@@ -258,7 +258,6 @@ gmaps.InfoWindowOptions? _infoWindowOptionsFromMarker(Marker marker) {
       // XSS attacks through the contents of the marker InfoWindow.
       // See: https://pub.dev/documentation/sanitize_html/latest/sanitize_html/sanitizeHtml.html
       // See: b/159137885, b/159598165
-      // ignore: unsafe_html
       snippet.innerHTMLString = sanitizeHtml(markerSnippet);
     }
 
@@ -295,6 +294,18 @@ void _setIconSize({
   final gmaps.Size gmapsSize = gmaps.Size(size.width, size.height);
   icon.size = gmapsSize;
   icon.scaledSize = gmapsSize;
+}
+
+void _setIconAnchor({
+  required Size size,
+  required Offset anchor,
+  required gmaps.Icon icon,
+}) {
+  final gmaps.Point gmapsAnchor = gmaps.Point(
+    size.width * anchor.dx,
+    size.height * anchor.dy,
+  );
+  icon.anchor = gmapsAnchor;
 }
 
 /// Determines the appropriate size for a bitmap based on its descriptor.
@@ -372,7 +383,7 @@ void _cleanUpBitmapConversionCaches() {
 
 // Converts a [BitmapDescriptor] into a [gmaps.Icon] that can be used in Markers.
 Future<gmaps.Icon?> _gmIconFromBitmapDescriptor(
-    BitmapDescriptor bitmapDescriptor) async {
+    BitmapDescriptor bitmapDescriptor, Offset anchor) async {
   gmaps.Icon? icon;
 
   if (bitmapDescriptor is MapBitmap) {
@@ -395,6 +406,7 @@ Future<gmaps.Icon?> _gmIconFromBitmapDescriptor(
         final Size? size = await _getBitmapSize(bitmapDescriptor, url);
         if (size != null) {
           _setIconSize(size: size, icon: icon);
+          _setIconAnchor(size: size, anchor: anchor, icon: icon);
         }
       case MapBitmapScaling.none:
         break;
@@ -461,7 +473,7 @@ Future<gmaps.MarkerOptions> _markerOptionsFromMarker(
     ..visible = marker.visible
     ..opacity = marker.alpha
     ..draggable = marker.draggable
-    ..icon = await _gmIconFromBitmapDescriptor(marker.icon);
+    ..icon = await _gmIconFromBitmapDescriptor(marker.icon, marker.anchor);
   // TODO(ditman): Compute anchor properly, otherwise infowindows attach to the wrong spot.
   // Flat and Rotation are not supported directly on the web.
 }

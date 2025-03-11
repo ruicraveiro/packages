@@ -4,6 +4,8 @@
 
 package com.example.test_plugin
 
+import android.os.Handler
+import android.os.Looper
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.FlutterPlugin.FlutterPluginBinding
 
@@ -26,6 +28,13 @@ class TestPlugin : FlutterPlugin, HostIntegrationCoreApi {
 
     proxyApiRegistrar = ProxyApiRegistrar(binding.binaryMessenger)
     proxyApiRegistrar!!.setUp()
+
+    StreamEventsStreamHandler.register(binding.binaryMessenger, SendClass)
+    StreamIntsStreamHandler.register(binding.binaryMessenger, SendInts)
+    StreamConsistentNumbersStreamHandler.register(
+        binding.binaryMessenger, SendConsistentNumbers(1), "1")
+    StreamConsistentNumbersStreamHandler.register(
+        binding.binaryMessenger, SendConsistentNumbers(2), "2")
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -98,6 +107,14 @@ class TestPlugin : FlutterPlugin, HostIntegrationCoreApi {
     return classList
   }
 
+  override fun echoNonNullEnumList(enumList: List<AnEnum>): List<AnEnum> {
+    return enumList
+  }
+
+  override fun echoNonNullClassList(classList: List<AllNullableTypes>): List<AllNullableTypes> {
+    return classList
+  }
+
   override fun echoMap(map: Map<Any?, Any?>): Map<Any?, Any?> {
     return map
   }
@@ -117,6 +134,24 @@ class TestPlugin : FlutterPlugin, HostIntegrationCoreApi {
   override fun echoClassMap(
       classMap: Map<Long?, AllNullableTypes?>
   ): Map<Long?, AllNullableTypes?> {
+    return classMap
+  }
+
+  override fun echoNonNullStringMap(stringMap: Map<String, String>): Map<String, String> {
+    return stringMap
+  }
+
+  override fun echoNonNullIntMap(intMap: Map<Long, Long>): Map<Long, Long> {
+    return intMap
+  }
+
+  override fun echoNonNullEnumMap(enumMap: Map<AnEnum, AnEnum>): Map<AnEnum, AnEnum> {
+    return enumMap
+  }
+
+  override fun echoNonNullClassMap(
+      classMap: Map<Long, AllNullableTypes>
+  ): Map<Long, AllNullableTypes> {
     return classMap
   }
 
@@ -215,6 +250,16 @@ class TestPlugin : FlutterPlugin, HostIntegrationCoreApi {
     return classList
   }
 
+  override fun echoNullableNonNullEnumList(enumList: List<AnEnum>?): List<AnEnum>? {
+    return enumList
+  }
+
+  override fun echoNullableNonNullClassList(
+      classList: List<AllNullableTypes>?
+  ): List<AllNullableTypes>? {
+    return classList
+  }
+
   override fun echoNullableMap(map: Map<Any?, Any?>?): Map<Any?, Any?>? {
     return map
   }
@@ -234,6 +279,24 @@ class TestPlugin : FlutterPlugin, HostIntegrationCoreApi {
   override fun echoNullableClassMap(
       classMap: Map<Long?, AllNullableTypes?>?
   ): Map<Long?, AllNullableTypes?>? {
+    return classMap
+  }
+
+  override fun echoNullableNonNullStringMap(stringMap: Map<String, String>?): Map<String, String>? {
+    return stringMap
+  }
+
+  override fun echoNullableNonNullIntMap(intMap: Map<Long, Long>?): Map<Long, Long>? {
+    return intMap
+  }
+
+  override fun echoNullableNonNullEnumMap(enumMap: Map<AnEnum, AnEnum>?): Map<AnEnum, AnEnum>? {
+    return enumMap
+  }
+
+  override fun echoNullableNonNullClassMap(
+      classMap: Map<Long, AllNullableTypes>?
+  ): Map<Long, AllNullableTypes>? {
     return classMap
   }
 
@@ -463,6 +526,14 @@ class TestPlugin : FlutterPlugin, HostIntegrationCoreApi {
     callback(Result.success(anotherEnum))
   }
 
+  override fun defaultIsMainThread(): Boolean {
+    return Thread.currentThread() == Looper.getMainLooper().getThread()
+  }
+
+  override fun taskQueueIsBackgroundThread(): Boolean {
+    return Thread.currentThread() != Looper.getMainLooper().getThread()
+  }
+
   override fun callFlutterNoop(callback: (Result<Unit>) -> Unit) {
     flutterApi!!.noop { callback(Result.success(Unit)) }
   }
@@ -547,6 +618,20 @@ class TestPlugin : FlutterPlugin, HostIntegrationCoreApi {
     flutterApi!!.echoClassList(classList) { echo -> callback(echo) }
   }
 
+  override fun callFlutterEchoNonNullEnumList(
+      enumList: List<AnEnum>,
+      callback: (Result<List<AnEnum>>) -> Unit
+  ) {
+    flutterApi!!.echoNonNullEnumList(enumList) { echo -> callback(echo) }
+  }
+
+  override fun callFlutterEchoNonNullClassList(
+      classList: List<AllNullableTypes>,
+      callback: (Result<List<AllNullableTypes>>) -> Unit
+  ) {
+    flutterApi!!.echoNonNullClassList(classList) { echo -> callback(echo) }
+  }
+
   override fun callFlutterEchoMap(
       map: Map<Any?, Any?>,
       callback: (Result<Map<Any?, Any?>>) -> Unit
@@ -580,6 +665,34 @@ class TestPlugin : FlutterPlugin, HostIntegrationCoreApi {
       callback: (Result<Map<Long?, AllNullableTypes?>>) -> Unit
   ) {
     flutterApi!!.echoClassMap(classMap) { echo -> callback(echo) }
+  }
+
+  override fun callFlutterEchoNonNullStringMap(
+      stringMap: Map<String, String>,
+      callback: (Result<Map<String, String>>) -> Unit
+  ) {
+    flutterApi!!.echoNonNullStringMap(stringMap) { echo -> callback(echo) }
+  }
+
+  override fun callFlutterEchoNonNullIntMap(
+      intMap: Map<Long, Long>,
+      callback: (Result<Map<Long, Long>>) -> Unit
+  ) {
+    flutterApi!!.echoNonNullIntMap(intMap) { echo -> callback(echo) }
+  }
+
+  override fun callFlutterEchoNonNullEnumMap(
+      enumMap: Map<AnEnum, AnEnum>,
+      callback: (Result<Map<AnEnum, AnEnum>>) -> Unit
+  ) {
+    flutterApi!!.echoNonNullEnumMap(enumMap) { echo -> callback(echo) }
+  }
+
+  override fun callFlutterEchoNonNullClassMap(
+      classMap: Map<Long, AllNullableTypes>,
+      callback: (Result<Map<Long, AllNullableTypes>>) -> Unit
+  ) {
+    flutterApi!!.echoNonNullClassMap(classMap) { echo -> callback(echo) }
   }
 
   override fun callFlutterEchoEnum(anEnum: AnEnum, callback: (Result<AnEnum>) -> Unit) {
@@ -650,6 +763,20 @@ class TestPlugin : FlutterPlugin, HostIntegrationCoreApi {
     flutterApi!!.echoNullableClassList(classList) { echo -> callback(echo) }
   }
 
+  override fun callFlutterEchoNullableNonNullEnumList(
+      enumList: List<AnEnum>?,
+      callback: (Result<List<AnEnum>?>) -> Unit
+  ) {
+    flutterApi!!.echoNullableNonNullEnumList(enumList) { echo -> callback(echo) }
+  }
+
+  override fun callFlutterEchoNullableNonNullClassList(
+      classList: List<AllNullableTypes>?,
+      callback: (Result<List<AllNullableTypes>?>) -> Unit
+  ) {
+    flutterApi!!.echoNullableNonNullClassList(classList) { echo -> callback(echo) }
+  }
+
   override fun callFlutterEchoNullableMap(
       map: Map<Any?, Any?>?,
       callback: (Result<Map<Any?, Any?>?>) -> Unit
@@ -683,6 +810,34 @@ class TestPlugin : FlutterPlugin, HostIntegrationCoreApi {
       callback: (Result<Map<Long?, AllNullableTypes?>?>) -> Unit
   ) {
     flutterApi!!.echoNullableClassMap(classMap) { echo -> callback(echo) }
+  }
+
+  override fun callFlutterEchoNullableNonNullStringMap(
+      stringMap: Map<String, String>?,
+      callback: (Result<Map<String, String>?>) -> Unit
+  ) {
+    flutterApi!!.echoNullableNonNullStringMap(stringMap) { echo -> callback(echo) }
+  }
+
+  override fun callFlutterEchoNullableNonNullIntMap(
+      intMap: Map<Long, Long>?,
+      callback: (Result<Map<Long, Long>?>) -> Unit
+  ) {
+    flutterApi!!.echoNullableNonNullIntMap(intMap) { echo -> callback(echo) }
+  }
+
+  override fun callFlutterEchoNullableNonNullEnumMap(
+      enumMap: Map<AnEnum, AnEnum>?,
+      callback: (Result<Map<AnEnum, AnEnum>?>) -> Unit
+  ) {
+    flutterApi!!.echoNullableNonNullEnumMap(enumMap) { echo -> callback(echo) }
+  }
+
+  override fun callFlutterEchoNullableNonNullClassMap(
+      classMap: Map<Long, AllNullableTypes>?,
+      callback: (Result<Map<Long, AllNullableTypes>?>) -> Unit
+  ) {
+    flutterApi!!.echoNullableNonNullClassMap(classMap) { echo -> callback(echo) }
   }
 
   override fun callFlutterEchoNullableEnum(anEnum: AnEnum?, callback: (Result<AnEnum?>) -> Unit) {
@@ -727,5 +882,84 @@ class TestPluginWithSuffix : HostSmallApi {
 
   override fun voidVoid(callback: (Result<Unit>) -> Unit) {
     callback(Result.success(Unit))
+  }
+}
+
+object SendInts : StreamIntsStreamHandler() {
+  val handler = Handler(Looper.getMainLooper())
+
+  override fun onListen(p0: Any?, sink: PigeonEventSink<Long>) {
+    var count: Long = 0
+    val r: Runnable =
+        object : Runnable {
+          override fun run() {
+            handler.post {
+              if (count >= 5) {
+                sink.endOfStream()
+              } else {
+                sink.success(count)
+                count++
+                handler.postDelayed(this, 10)
+              }
+            }
+          }
+        }
+    handler.postDelayed(r, 10)
+  }
+}
+
+object SendClass : StreamEventsStreamHandler() {
+  val handler = Handler(Looper.getMainLooper())
+  val eventList =
+      listOf(
+          IntEvent(1),
+          StringEvent("string"),
+          BoolEvent(false),
+          DoubleEvent(3.14),
+          ObjectsEvent(true),
+          EnumEvent(EventEnum.FORTY_TWO),
+          ClassEvent(EventAllNullableTypes(aNullableInt = 0)))
+
+  override fun onListen(p0: Any?, sink: PigeonEventSink<PlatformEvent>) {
+    var count: Int = 0
+    val r: Runnable =
+        object : Runnable {
+          override fun run() {
+            if (count >= eventList.size) {
+              sink.endOfStream()
+            } else {
+              handler.post {
+                sink.success(eventList[count])
+                count++
+              }
+              handler.postDelayed(this, 10)
+            }
+          }
+        }
+    handler.postDelayed(r, 10)
+  }
+}
+
+class SendConsistentNumbers(private val numberToSend: Long) :
+    StreamConsistentNumbersStreamHandler() {
+  private val handler = Handler(Looper.getMainLooper())
+
+  override fun onListen(p0: Any?, sink: PigeonEventSink<Long>) {
+    var count: Int = 0
+    val r: Runnable =
+        object : Runnable {
+          override fun run() {
+            if (count >= 10) {
+              sink.endOfStream()
+            } else {
+              handler.post {
+                sink.success(numberToSend)
+                count++
+              }
+              handler.postDelayed(this, 10)
+            }
+          }
+        }
+    handler.postDelayed(r, 10)
   }
 }

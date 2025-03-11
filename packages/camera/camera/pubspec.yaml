@@ -7,8 +7,8 @@ issue_tracker: https://github.com/flutter/flutter/issues?q=is%3Aissue+is%3Aopen+
 version: 0.12.0
 
 environment:
-  sdk: ^3.3.0
-  flutter: ">=3.19.0"
+  sdk: ^3.6.0
+  flutter: ">=3.27.0"
 
 flutter:
   plugin:
@@ -23,7 +23,7 @@ flutter:
 dependencies:
   camera_android_camerax: ^0.7.0
   camera_avfoundation: ^0.10.0
-  camera_platform_interface: ^2.9.0
+  camera_platform_interface: ^2.10.0
   camera_web: ^0.3.3
   flutter:
     sdk: flutter
@@ -32,7 +32,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito: 5.4.4
+  leak_tracker_flutter_testing: any
+  mockito: ^5.4.4
   plugin_platform_interface: ^2.1.7
 
 topics:

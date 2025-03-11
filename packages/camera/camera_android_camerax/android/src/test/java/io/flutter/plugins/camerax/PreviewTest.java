@@ -128,13 +128,13 @@ public class PreviewTest {
     TextureRegistry.SurfaceProducer.Callback callback = callbackCaptor.getValue();
 
     // Verify callback's onSurfaceDestroyed invalidates SurfaceRequest.
-    callback.onSurfaceDestroyed();
+    simulateSurfaceDestruction(callback);
     verify(mockSurfaceRequest).invalidate();
 
     reset(mockSurfaceRequest);
 
-    // Verify callback's onSurfaceCreated does not interact with the SurfaceRequest.
-    callback.onSurfaceCreated();
+    // Verify callback's onSurfaceAvailable does not interact with the SurfaceRequest.
+    callback.onSurfaceAvailable();
     verifyNoMoreInteractions(mockSurfaceRequest);
   }
 
@@ -261,5 +261,27 @@ public class PreviewTest {
     hostApi.setTargetRotation(instanceIdentifier, Long.valueOf(targetRotation));
 
     verify(mockPreview).setTargetRotation(targetRotation);
+  }
+
+  @Test
+  public void
+      surfaceProducerHandlesCropAndRotation_returnsIfSurfaceProducerHandlesCropAndRotation() {
+    final PreviewHostApiImpl hostApi =
+        new PreviewHostApiImpl(mockBinaryMessenger, testInstanceManager, mockTextureRegistry);
+    final TextureRegistry.SurfaceProducer mockSurfaceProducer =
+        mock(TextureRegistry.SurfaceProducer.class);
+
+    hostApi.flutterSurfaceProducer = mockSurfaceProducer;
+    when(mockSurfaceProducer.handlesCropAndRotation()).thenReturn(true);
+
+    assertEquals(hostApi.surfaceProducerHandlesCropAndRotation(), true);
+  }
+
+  // TODO(bparrishMines): Replace with inline calls to onSurfaceCleanup once available on stable;
+  // see https://github.com/flutter/flutter/issues/16125. This separate method only exists to scope
+  // the suppression.
+  @SuppressWarnings({"deprecation", "removal"})
+  void simulateSurfaceDestruction(TextureRegistry.SurfaceProducer.Callback producerLifecycle) {
+    producerLifecycle.onSurfaceDestroyed();
   }
 }

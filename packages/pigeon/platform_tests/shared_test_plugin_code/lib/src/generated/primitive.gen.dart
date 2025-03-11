@@ -32,6 +32,23 @@ List<Object?> wrapResponse(
 
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
+  @override
+  void writeValue(WriteBuffer buffer, Object? value) {
+    if (value is int) {
+      buffer.putUint8(4);
+      buffer.putInt64(value);
+    } else {
+      super.writeValue(buffer, value);
+    }
+  }
+
+  @override
+  Object? readValueOfType(int type, ReadBuffer buffer) {
+    switch (type) {
+      default:
+        return super.readValueOfType(type, buffer);
+    }
+  }
 }
 
 class PrimitiveHostApi {
@@ -58,8 +75,10 @@ class PrimitiveHostApi {
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[value]);
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[value]) as List<Object?>?;
+        await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -87,8 +106,10 @@ class PrimitiveHostApi {
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[value]);
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[value]) as List<Object?>?;
+        await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -116,8 +137,10 @@ class PrimitiveHostApi {
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[value]);
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[value]) as List<Object?>?;
+        await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -145,8 +168,10 @@ class PrimitiveHostApi {
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[value]);
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[value]) as List<Object?>?;
+        await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -174,8 +199,10 @@ class PrimitiveHostApi {
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[value]);
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[value]) as List<Object?>?;
+        await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -203,8 +230,10 @@ class PrimitiveHostApi {
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[value]);
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[value]) as List<Object?>?;
+        await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -232,8 +261,10 @@ class PrimitiveHostApi {
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[value]);
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[value]) as List<Object?>?;
+        await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -261,8 +292,10 @@ class PrimitiveHostApi {
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[value]);
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[value]) as List<Object?>?;
+        await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -290,8 +323,10 @@ class PrimitiveHostApi {
       pigeonChannelCodec,
       binaryMessenger: pigeonVar_binaryMessenger,
     );
+    final Future<Object?> pigeonVar_sendFuture =
+        pigeonVar_channel.send(<Object?>[value]);
     final List<Object?>? pigeonVar_replyList =
-        await pigeonVar_channel.send(<Object?>[value]) as List<Object?>?;
+        await pigeonVar_sendFuture as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {

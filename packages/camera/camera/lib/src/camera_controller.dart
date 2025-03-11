@@ -489,13 +489,12 @@ class CameraController extends ValueNotifier<CameraValue> {
   /// Throws a [CameraException] if image streaming or video recording has
   /// already started.
   ///
-  /// The `startImageStream` method is only available on Android and iOS (other
-  /// platforms won't be supported in current setup).
+  /// The `startImageStream` method is only available on platforms that
+  /// report support for image streaming via [supportsImageStreaming].
   ///
   // TODO(bmparr): Add settings for resolution and fps.
   Future<void> startImageStream(onLatestImageAvailable onAvailable) async {
-    assert(defaultTargetPlatform == TargetPlatform.android ||
-        defaultTargetPlatform == TargetPlatform.iOS);
+    assert(supportsImageStreaming());
     _throwIfNotInitialized('startImageStream');
     if (value.isRecordingVideo) {
       throw CameraException(
@@ -527,11 +526,10 @@ class CameraController extends ValueNotifier<CameraValue> {
   /// Throws a [CameraException] if image streaming was not started or video
   /// recording was started.
   ///
-  /// The `stopImageStream` method is only available on Android and iOS (other
-  /// platforms won't be supported in current setup).
+  /// The `stopImageStream` method is only available on platforms that
+  /// report support for image streaming via [supportsImageStreaming].
   Future<void> stopImageStream() async {
-    assert(defaultTargetPlatform == TargetPlatform.android ||
-        defaultTargetPlatform == TargetPlatform.iOS);
+    assert(supportsImageStreaming());
     _throwIfNotInitialized('stopImageStream');
     if (!value.isStreamingImages) {
       throw CameraException(
@@ -913,6 +911,10 @@ class CameraController extends ValueNotifier<CameraValue> {
       throw CameraException(e.code, e.message);
     }
   }
+
+  /// Check whether the camera platform supports image streaming.
+  bool supportsImageStreaming() =>
+      CameraPlatform.instance.supportsImageStreaming();
 
   /// Releases the resources of this camera.
   @override

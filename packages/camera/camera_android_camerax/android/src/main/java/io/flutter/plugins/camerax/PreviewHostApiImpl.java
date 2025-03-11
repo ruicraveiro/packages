@@ -83,12 +83,15 @@ public class PreviewHostApiImpl implements PreviewHostApi {
         surfaceProducer.setCallback(
             new TextureRegistry.SurfaceProducer.Callback() {
               @Override
-              public void onSurfaceCreated() {
+              public void onSurfaceAvailable() {
                 // Do nothing. The Preview.SurfaceProvider will handle this whenever a new
                 // Surface is needed.
               }
 
               @Override
+              // TODO(bparrishMines): Replace with onSurfaceCleanup once available on stable. See
+              // https://github.com/flutter/flutter/issues/161256.
+              @SuppressWarnings({"deprecation", "removal"})
               public void onSurfaceDestroyed() {
                 // Invalidate the SurfaceRequest so that CameraX knows to to make a new request
                 // for a surface.
@@ -152,7 +155,10 @@ public class PreviewHostApiImpl implements PreviewHostApi {
   public void releaseFlutterSurfaceTexture() {
     if (flutterSurfaceProducer != null) {
       flutterSurfaceProducer.release();
+      return;
     }
+    throw new IllegalStateException(
+        "releaseFlutterSurfaceTexture() cannot be called if the flutterSurfaceProducer for the camera preview has not yet been initialized.");
   }
 
   /** Returns the resolution information for the specified {@link Preview}. */
@@ -174,6 +180,16 @@ public class PreviewHostApiImpl implements PreviewHostApi {
   public void setTargetRotation(@NonNull Long identifier, @NonNull Long rotation) {
     Preview preview = getPreviewInstance(identifier);
     preview.setTargetRotation(rotation.intValue());
+  }
+
+  @NonNull
+  @Override
+  public Boolean surfaceProducerHandlesCropAndRotation() {
+    if (flutterSurfaceProducer != null) {
+      return flutterSurfaceProducer.handlesCropAndRotation();
+    }
+    throw new IllegalStateException(
+        "surfaceProducerHandlesCropAndRotation() cannot be called if the flutterSurfaceProducer for the camera preview has not yet been initialized.");
   }
 
   /** Retrieves the {@link Preview} instance associated with the specified {@code identifier}. */
