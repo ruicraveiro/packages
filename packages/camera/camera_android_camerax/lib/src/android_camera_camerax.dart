@@ -802,6 +802,9 @@ class AndroidCameraCameraX extends CameraPlatform {
   }
 
   /// Set the video stabilization mode for the selected camera.
+  ///
+  /// Throws a [ArgumentError] when an unsupported [mode] is
+  /// supplied.
   @override
   Future<void> setVideoStabilizationMode(
       int cameraId, VideoStabilizationMode mode) async {

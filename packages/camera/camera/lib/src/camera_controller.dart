@@ -702,16 +702,56 @@ class CameraController extends ValueNotifier<CameraValue> {
   /// the supplied [mode] value should be a mode in the list returned
   /// by [getSupportedVideoStabilizationModes].
   ///
-  /// Throws a [CameraException] when an unsupported video stabilization
-  /// mode is supplied.
-  Future<void> setVideoStabilizationMode(VideoStabilizationMode mode) async {
+  /// When [allowFallback] is true (default) and when
+  /// the camera supports any video stabilization other than
+  /// [VideoStabilizationMode.off], then the camera will
+  /// be set to the best video stabilization mode up to, and including, [mode].
+  ///
+  /// When either [allowFallback] is false or the only
+  /// supported video stabilization mode is [VideoStabilizationMode.off],
+  /// and if [mode] is not one of the supported modes,
+  /// then it throws an [ArgumentError].
+  Future<void> setVideoStabilizationMode(
+    VideoStabilizationMode mode, {
+    bool allowFallback = true,
+  }) async {
     _throwIfNotInitialized('setVideoStabilizationMode');
     try {
-      await CameraPlatform.instance.setVideoStabilizationMode(_cameraId, mode);
+      final VideoStabilizationMode requestMode =
+          allowFallback ? await _getVideoStabilizationFallbackMode(mode) : mode;
+
+      await CameraPlatform.instance
+          .setVideoStabilizationMode(_cameraId, requestMode);
       value = value.copyWith(videoStabilizationMode: mode);
     } on PlatformException catch (e) {
       throw CameraException(e.code, e.message);
     }
+  }
+
+  Future<VideoStabilizationMode> _getVideoStabilizationFallbackMode(
+      VideoStabilizationMode mode) async {
+    final Iterable<VideoStabilizationMode> supportedModes = await CameraPlatform
+        .instance
+        .getSupportedVideoStabilizationModes(_cameraId);
+
+    // if there are no supported modes or if the only supported mode is Off
+    // and something else is requested, then we throw an ArgumentError.
+    if (supportedModes.isEmpty ||
+        (mode != VideoStabilizationMode.off &&
+            supportedModes.every((VideoStabilizationMode sm) =>
+                sm == VideoStabilizationMode.off))) {
+      throw ArgumentError('Unavailable video stabilization mode.', 'mode');
+    }
+
+    VideoStabilizationMode requestMode = VideoStabilizationMode.off;
+    for (final VideoStabilizationMode supportedMode in supportedModes) {
+      if (supportedMode.index <= mode.index &&
+          supportedMode.index >= requestMode.index) {
+        requestMode = supportedMode;
+      }
+    }
+
+    return requestMode;
   }
 
   /// Gets a list of video stabilization modes that are supported for the selected camera.
