@@ -2212,8 +2212,7 @@ void main() {
     expect(requestedOptions.first.$2, equals(0));
   });
 
-  test(
-      'setVideoStabilizationMode throws CameraException when mode not available',
+  test('setVideoStabilizationMode throws ArgumentError when mode not available',
       () async {
     final AndroidCameraCameraX camera = AndroidCameraCameraX();
     const int cameraId = 78;
@@ -2247,10 +2246,11 @@ void main() {
     expect(
         () => camera.setVideoStabilizationMode(
             cameraId, VideoStabilizationMode.level2),
-        throwsA(isA<CameraException>()));
+        throwsA(isA<ArgumentError>()
+            .having((ArgumentError e) => e.name, 'name', 'mode')));
   });
 
-  test('setVideoStabilizationMode throws CameraException when mode not mapped',
+  test('setVideoStabilizationMode throws ArgumentError when mode not mapped',
       () async {
     final AndroidCameraCameraX camera = AndroidCameraCameraX();
     const int cameraId = 78;
@@ -2284,11 +2284,13 @@ void main() {
     expect(
         () => camera.setVideoStabilizationMode(
             cameraId, VideoStabilizationMode.level2),
-        throwsA(isA<CameraException>()));
+        throwsA(isA<ArgumentError>()
+            .having((ArgumentError e) => e.name, 'name', 'mode')));
     expect(
         () => camera.setVideoStabilizationMode(
             cameraId, VideoStabilizationMode.level3),
-        throwsA(isA<CameraException>()));
+        throwsA(isA<ArgumentError>()
+            .having((ArgumentError e) => e.name, 'name', 'mode')));
   });
 
   test('getVideoStabilizationMode returns no available mode', () async {

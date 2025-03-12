@@ -798,46 +798,20 @@ class AndroidCameraCameraX extends CameraPlatform {
   @override
   Future<Iterable<VideoStabilizationMode>> getSupportedVideoStabilizationModes(
       int cameraId) async {
-    final CameraInfo? camInfo = cameraInfo;
-    if (camInfo == null) {
-      return <VideoStabilizationMode>[];
-    }
-    final Camera2CameraInfo cam2Info =
-        await proxy.getCamera2CameraInfo(camInfo);
-
-    final List<int> controlModes =
-        await cam2Info.getAvailableVideoStabilizationModes();
-
-    /// If new modes need to be supported, the opposite of this mapping
-    /// code is in [_getControlVideoStabilizationMode(...)] in this class,
-    /// so don't forget to review that method as well.
-
-    final List<VideoStabilizationMode> modes = <VideoStabilizationMode>[
-      for (final int controlMode in controlModes)
-        if (controlMode == CameraMetadata.controlVideoStabilizationModeOff)
-          VideoStabilizationMode.off
-        else if (controlMode == CameraMetadata.controlVideoStabilizationModeOn)
-          VideoStabilizationMode.level1
-    ];
-
-    return modes;
+    return (await _getSupportedVideoStabilizationModeMap(cameraId)).keys;
   }
 
   /// Set the video stabilization mode for the selected camera.
   @override
   Future<void> setVideoStabilizationMode(
       int cameraId, VideoStabilizationMode mode) async {
-    final Iterable<VideoStabilizationMode> availableModes =
-        await getSupportedVideoStabilizationModes(cameraId);
+    final Map<VideoStabilizationMode, int> availableModes =
+        await _getSupportedVideoStabilizationModeMap(cameraId);
 
-    if (!availableModes.contains(mode)) {
-      // TODO(ruicraveiro): add to future possible error codes documentation
-      // https://github.com/flutter/flutter/issues/69298
-      throw CameraException('VIDEO_STABILIIZATION_ERROR',
-          'Unavailable video stabilization mode.');
+    final int? controlMode = availableModes[mode];
+    if (controlMode == null) {
+      throw ArgumentError('Unavailable video stabilization mode.', 'mode');
     }
-
-    final int controlMode = _getControlVideoStabilizationMode(mode);
 
     final CaptureRequestOptions captureRequestOptions = proxy
         .createCaptureRequestOptions(<(
@@ -855,27 +829,34 @@ class AndroidCameraCameraX extends CameraPlatform {
     await camera2Control.addCaptureRequestOptions(captureRequestOptions);
   }
 
-  /// Maps the common platform VideoStabilizationMode
-  /// to the Android specific control video stabilization mode
-  static int _getControlVideoStabilizationMode(VideoStabilizationMode mode) {
-    // if new modes need to be supported, the opposite of this mapping
-    // code is in [getSupportedVideoStabilizationModes(...)] in this class,
-    // so don't forget to review that method as well.
+  /// Gets a map of video stabilization control modes that are supported for the
+  /// selected camera, indexed by the respective [VideoStabilizationMode].
+  Future<Map<VideoStabilizationMode, int>>
+      _getSupportedVideoStabilizationModeMap(int cameraId) async {
+    final CameraInfo? camInfo = cameraInfo;
+    if (camInfo == null) {
+      return <VideoStabilizationMode, int>{};
+    }
+    final Camera2CameraInfo cam2Info =
+        await proxy.getCamera2CameraInfo(camInfo);
 
-    final int controlMode = switch (mode) {
-      // https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#CONTROL_VIDEO_STABILIZATION_MODE_OFF
-      VideoStabilizationMode.off =>
-        CameraMetadata.controlVideoStabilizationModeOff,
-      // https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#CONTROL_VIDEO_STABILIZATION_MODE_ON
-      VideoStabilizationMode.level1 =>
-        CameraMetadata.controlVideoStabilizationModeOn,
+    final List<int> controlModes =
+        await cam2Info.getAvailableVideoStabilizationModes();
 
-      // TODO(ruicraveiro): add to future possible error codes documentation
-      // https://github.com/flutter/flutter/issues/69298
-      _ => throw CameraException(
-          'VIDEO_STABILIIZATION_ERROR', 'Unavailable video stabilization mode.')
+    /// If new modes need to be supported, the opposite of this mapping
+    /// code is in [_getControlVideoStabilizationMode(...)] in this class,
+    /// so don't forget to review that method as well.
+
+    final Map<VideoStabilizationMode, int> modes =
+        <VideoStabilizationMode, int>{
+      for (final int controlMode in controlModes)
+        if (controlMode == CameraMetadata.controlVideoStabilizationModeOff)
+          VideoStabilizationMode.off: controlMode
+        else if (controlMode == CameraMetadata.controlVideoStabilizationModeOn)
+          VideoStabilizationMode.level1: controlMode
     };
-    return controlMode;
+
+    return modes;
   }
 
   /// The ui orientation changed.

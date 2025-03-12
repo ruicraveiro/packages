@@ -373,13 +373,13 @@ class AVFoundationCamera extends CameraPlatform {
   Future<void> setVideoStabilizationMode(
       int cameraId, VideoStabilizationMode mode) async {
     try {
-      final PlatformVideoStabilizationMode? platformMode =
-          _pigeonVideoStabilizationMode(mode);
+      final Map<VideoStabilizationMode, PlatformVideoStabilizationMode>
+          availableModes =
+          await _getSupportedVideoStabilizationModeMap(cameraId);
+
+      final PlatformVideoStabilizationMode? platformMode = availableModes[mode];
       if (platformMode == null) {
-        // TODO(ruicraveiro): add to future possible error codes documentation
-        // https://github.com/flutter/flutter/issues/69298
-        throw CameraException('VIDEO_STABILIIZATION_ERROR',
-            'Unavailable video stabilization mode.');
+        throw ArgumentError('Unavailable video stabilization mode.', 'mode');
       }
       await _hostApi.setVideoStabilizationMode(platformMode);
     } on PlatformException catch (e) {
@@ -390,7 +390,13 @@ class AVFoundationCamera extends CameraPlatform {
   @override
   Future<Iterable<VideoStabilizationMode>> getSupportedVideoStabilizationModes(
       int cameraId) async {
-    final Set<VideoStabilizationMode> ret = <VideoStabilizationMode>{};
+    return (await _getSupportedVideoStabilizationModeMap(cameraId)).keys;
+  }
+
+  Future<Map<VideoStabilizationMode, PlatformVideoStabilizationMode>>
+      _getSupportedVideoStabilizationModeMap(int cameraId) async {
+    final Map<VideoStabilizationMode, PlatformVideoStabilizationMode> ret =
+        <VideoStabilizationMode, PlatformVideoStabilizationMode>{};
 
     for (final VideoStabilizationMode mode in VideoStabilizationMode.values) {
       final PlatformVideoStabilizationMode? platformMode =
@@ -399,7 +405,7 @@ class AVFoundationCamera extends CameraPlatform {
         final bool isSupported =
             await _hostApi.isVideoStabilizationModeSupported(platformMode);
         if (isSupported) {
-          ret.add(mode);
+          ret[mode] = platformMode;
         }
       }
     }
