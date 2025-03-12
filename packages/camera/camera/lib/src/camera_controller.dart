@@ -700,7 +700,7 @@ class CameraController extends ValueNotifier<CameraValue> {
   ///
   /// On Android (when using camera_android_camerax) and on iOS
   /// the supplied [mode] value should be a mode in the list returned
-  /// by [getVideoStabilizationSupportedModes].
+  /// by [getSupportedVideoStabilizationModes].
   ///
   /// Throws a [CameraException] when an unsupported video stabilization
   /// mode is supplied.
@@ -720,11 +720,11 @@ class CameraController extends ValueNotifier<CameraValue> {
   /// on Android (when using camera_android_camerax package) and
   /// on iOS. Throws an [UnimplementedError] on all other platforms.
   Future<Iterable<VideoStabilizationMode>>
-      getVideoStabilizationSupportedModes() {
+      getSupportedVideoStabilizationModes() {
     _throwIfNotInitialized('isVideoStabilizationModeSupported');
     try {
       return CameraPlatform.instance
-          .getVideoStabilizationSupportedModes(_cameraId);
+          .getSupportedVideoStabilizationModes(_cameraId);
     } on PlatformException catch (e) {
       throw CameraException(e.code, e.message);
     }

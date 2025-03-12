@@ -503,11 +503,11 @@ class MethodChannelCamera extends CameraPlatform {
   }
 
   @override
-  Future<Iterable<VideoStabilizationMode>> getVideoStabilizationSupportedModes(
+  Future<Iterable<VideoStabilizationMode>> getSupportedVideoStabilizationModes(
       int cameraId) async {
     try {
       final List<Object?>? modes = await _channel.invokeMethod<List<Object?>>(
-        'getVideoStabilizationSupportedModes',
+        'getSupportedVideoStabilizationModes',
         <String, dynamic>{
           'cameraId': cameraId,
         },

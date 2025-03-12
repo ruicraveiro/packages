@@ -388,7 +388,7 @@ class AVFoundationCamera extends CameraPlatform {
   }
 
   @override
-  Future<Iterable<VideoStabilizationMode>> getVideoStabilizationSupportedModes(
+  Future<Iterable<VideoStabilizationMode>> getSupportedVideoStabilizationModes(
       int cameraId) async {
     final Set<VideoStabilizationMode> ret = <VideoStabilizationMode>{};
 

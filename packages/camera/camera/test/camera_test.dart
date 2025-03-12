@@ -1190,7 +1190,7 @@ void main() {
           .called(4);
     });
 
-    test('getVideoStabilizationSupportedModes() returns empty list', () async {
+    test('getSupportedVideoStabilizationModes() returns empty list', () async {
       // arrange
       final CameraController cameraController = CameraController(
           const CameraDescription(
@@ -1201,18 +1201,18 @@ void main() {
 
       await cameraController.initialize();
       when(CameraPlatform.instance
-              .getVideoStabilizationSupportedModes(mockInitializeCamera))
+              .getSupportedVideoStabilizationModes(mockInitializeCamera))
           .thenAnswer((_) async => <VideoStabilizationMode>[]);
 
       // act
       final Iterable<VideoStabilizationMode> modes =
-          await cameraController.getVideoStabilizationSupportedModes();
+          await cameraController.getSupportedVideoStabilizationModes();
 
       // assert
       expect(modes, <VideoStabilizationMode>[]);
     });
 
-    test('getVideoStabilizationSupportedModes() returns off', () async {
+    test('getSupportedVideoStabilizationModes() returns off', () async {
       // arrange
       final CameraController cameraController = CameraController(
           const CameraDescription(
@@ -1223,19 +1223,19 @@ void main() {
 
       await cameraController.initialize();
       when(CameraPlatform.instance
-              .getVideoStabilizationSupportedModes(mockInitializeCamera))
+              .getSupportedVideoStabilizationModes(mockInitializeCamera))
           .thenAnswer((_) async =>
               <VideoStabilizationMode>[VideoStabilizationMode.off]);
 
       // act
       final Iterable<VideoStabilizationMode> modes =
-          await cameraController.getVideoStabilizationSupportedModes();
+          await cameraController.getSupportedVideoStabilizationModes();
 
       // assert
       expect(modes, <VideoStabilizationMode>[VideoStabilizationMode.off]);
     });
 
-    test('getVideoStabilizationSupportedModes() returns all modes', () async {
+    test('getSupportedVideoStabilizationModes() returns all modes', () async {
       // arrange
       final CameraController cameraController = CameraController(
           const CameraDescription(
@@ -1246,7 +1246,7 @@ void main() {
 
       await cameraController.initialize();
       when(CameraPlatform.instance
-              .getVideoStabilizationSupportedModes(mockInitializeCamera))
+              .getSupportedVideoStabilizationModes(mockInitializeCamera))
           .thenAnswer((_) async => <VideoStabilizationMode>[
                 VideoStabilizationMode.off,
                 VideoStabilizationMode.level1,
@@ -1256,7 +1256,7 @@ void main() {
 
       // act
       final Iterable<VideoStabilizationMode> modes =
-          await cameraController.getVideoStabilizationSupportedModes();
+          await cameraController.getSupportedVideoStabilizationModes();
 
       // assert
       expect(modes, <VideoStabilizationMode>[
@@ -1728,11 +1728,11 @@ class MockCameraPlatform extends Mock
       ) as Future<double>;
 
   @override
-  Future<Iterable<VideoStabilizationMode>> getVideoStabilizationSupportedModes(
+  Future<Iterable<VideoStabilizationMode>> getSupportedVideoStabilizationModes(
       int cameraId) {
     return super.noSuchMethod(
       Invocation.method(
-          #getVideoStabilizationSupportedModes, <Object?>[cameraId]),
+          #getSupportedVideoStabilizationModes, <Object?>[cameraId]),
       returnValue: Future<Iterable<VideoStabilizationMode>>.value(
           <VideoStabilizationMode>[]),
     ) as Future<Iterable<VideoStabilizationMode>>;

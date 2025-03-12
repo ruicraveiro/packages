@@ -796,7 +796,7 @@ class AndroidCameraCameraX extends CameraPlatform {
   /// Gets a list of video stabilization modes that are supported for the
   /// selected camera.
   @override
-  Future<Iterable<VideoStabilizationMode>> getVideoStabilizationSupportedModes(
+  Future<Iterable<VideoStabilizationMode>> getSupportedVideoStabilizationModes(
       int cameraId) async {
     final CameraInfo? camInfo = cameraInfo;
     if (camInfo == null) {
@@ -828,7 +828,7 @@ class AndroidCameraCameraX extends CameraPlatform {
   Future<void> setVideoStabilizationMode(
       int cameraId, VideoStabilizationMode mode) async {
     final Iterable<VideoStabilizationMode> availableModes =
-        await getVideoStabilizationSupportedModes(cameraId);
+        await getSupportedVideoStabilizationModes(cameraId);
 
     if (!availableModes.contains(mode)) {
       // TODO(ruicraveiro): add to future possible error codes documentation
@@ -859,7 +859,7 @@ class AndroidCameraCameraX extends CameraPlatform {
   /// to the Android specific control video stabilization mode
   static int _getControlVideoStabilizationMode(VideoStabilizationMode mode) {
     // if new modes need to be supported, the opposite of this mapping
-    // code is in [getVideoStabilizationSupportedModes(...)] in this class,
+    // code is in [getSupportedVideoStabilizationModes(...)] in this class,
     // so don't forget to review that method as well.
 
     final int controlMode = switch (mode) {

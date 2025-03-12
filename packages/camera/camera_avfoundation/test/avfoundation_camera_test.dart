@@ -615,7 +615,7 @@ void main() {
           .thenAnswer((_) async => false);
 
       final Iterable<VideoStabilizationMode> modes =
-          await camera.getVideoStabilizationSupportedModes(cameraId);
+          await camera.getSupportedVideoStabilizationModes(cameraId);
 
       expect(modes, isEmpty);
     });
@@ -635,7 +635,7 @@ void main() {
           .thenAnswer((_) async => false);
 
       final List<VideoStabilizationMode> modes =
-          (await camera.getVideoStabilizationSupportedModes(cameraId)).toList();
+          (await camera.getSupportedVideoStabilizationModes(cameraId)).toList();
 
       expect(modes, <VideoStabilizationMode>[
         VideoStabilizationMode.off,
@@ -648,7 +648,7 @@ void main() {
           .thenAnswer((_) async => true);
 
       final List<VideoStabilizationMode> modes =
-          (await camera.getVideoStabilizationSupportedModes(cameraId)).toList();
+          (await camera.getSupportedVideoStabilizationModes(cameraId)).toList();
 
       expect(modes, <VideoStabilizationMode>[
         VideoStabilizationMode.off,

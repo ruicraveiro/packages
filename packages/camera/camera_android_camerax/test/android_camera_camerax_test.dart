@@ -2324,7 +2324,7 @@ void main() {
     );
 
     final Iterable<VideoStabilizationMode> modes =
-        await camera.getVideoStabilizationSupportedModes(cameraId);
+        await camera.getSupportedVideoStabilizationModes(cameraId);
 
     expect(modes, isEmpty);
   });
@@ -2362,7 +2362,7 @@ void main() {
     );
 
     final Iterable<VideoStabilizationMode> modes =
-        await camera.getVideoStabilizationSupportedModes(cameraId);
+        await camera.getSupportedVideoStabilizationModes(cameraId);
 
     expect(
         modes,

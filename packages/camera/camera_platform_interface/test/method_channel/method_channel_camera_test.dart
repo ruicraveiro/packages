@@ -1014,19 +1014,19 @@ void main() {
                     'Illegal zoom error')));
       });
 
-      test('Should get empty list from getVideoStabilizationSupportedModes',
+      test('Should get empty list from getSupportedVideoStabilizationModes',
           () async {
         // Arrange
         final MethodChannelMock channel = MethodChannelMock(
           channelName: 'plugins.flutter.io/camera',
           methods: <String, dynamic>{
-            'getVideoStabilizationSupportedModes': <String>[],
+            'getSupportedVideoStabilizationModes': <String>[],
           },
         );
 
         // Act
         final Iterable<VideoStabilizationMode> modes =
-            await camera.getVideoStabilizationSupportedModes(
+            await camera.getSupportedVideoStabilizationModes(
           cameraId,
         );
 
@@ -1034,7 +1034,7 @@ void main() {
         expect(modes, <VideoStabilizationMode>[]);
 
         expect(channel.log, <Matcher>[
-          isMethodCall('getVideoStabilizationSupportedModes',
+          isMethodCall('getSupportedVideoStabilizationModes',
               arguments: <String, Object?>{
                 'cameraId': cameraId,
               }),
@@ -1042,19 +1042,19 @@ void main() {
       });
 
       test(
-          'Should get list containing off from getVideoStabilizationSupportedModes',
+          'Should get list containing off from getSupportedVideoStabilizationModes',
           () async {
         // Arrange
         final MethodChannelMock channel = MethodChannelMock(
           channelName: 'plugins.flutter.io/camera',
           methods: <String, dynamic>{
-            'getVideoStabilizationSupportedModes': <String>['off'],
+            'getSupportedVideoStabilizationModes': <String>['off'],
           },
         );
 
         // Act
         final Iterable<VideoStabilizationMode> modes =
-            await camera.getVideoStabilizationSupportedModes(
+            await camera.getSupportedVideoStabilizationModes(
           cameraId,
         );
 
@@ -1062,7 +1062,7 @@ void main() {
         expect(modes, <VideoStabilizationMode>[VideoStabilizationMode.off]);
 
         expect(channel.log, <Matcher>[
-          isMethodCall('getVideoStabilizationSupportedModes',
+          isMethodCall('getSupportedVideoStabilizationModes',
               arguments: <String, Object?>{
                 'cameraId': cameraId,
               }),
@@ -1070,13 +1070,13 @@ void main() {
       });
 
       test(
-          'Should get list containing all from getVideoStabilizationSupportedModes',
+          'Should get list containing all from getSupportedVideoStabilizationModes',
           () async {
         // Arrange
         final MethodChannelMock channel = MethodChannelMock(
           channelName: 'plugins.flutter.io/camera',
           methods: <String, dynamic>{
-            'getVideoStabilizationSupportedModes': <String>[
+            'getSupportedVideoStabilizationModes': <String>[
               'off',
               'level1',
               'level2',
@@ -1087,7 +1087,7 @@ void main() {
 
         // Act
         final Iterable<VideoStabilizationMode> modes =
-            await camera.getVideoStabilizationSupportedModes(
+            await camera.getSupportedVideoStabilizationModes(
           cameraId,
         );
 
@@ -1100,7 +1100,7 @@ void main() {
         ]);
 
         expect(channel.log, <Matcher>[
-          isMethodCall('getVideoStabilizationSupportedModes',
+          isMethodCall('getSupportedVideoStabilizationModes',
               arguments: <String, Object?>{
                 'cameraId': cameraId,
               }),
