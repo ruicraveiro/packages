@@ -63,10 +63,8 @@ AVCaptureVideoStabilizationMode getAvCaptureVideoStabilizationMode(
       return AVCaptureVideoStabilizationModeOff;
     case FCPPlatformVideoStabilizationModeStandard:
       return AVCaptureVideoStabilizationModeStandard;
-
     case FCPPlatformVideoStabilizationModeCinematic:
       return AVCaptureVideoStabilizationModeCinematic;
-
     case FCPPlatformVideoStabilizationModeCinematicExtended:
       if (@available(iOS 13.0, *)) {
         return AVCaptureVideoStabilizationModeCinematicExtended;

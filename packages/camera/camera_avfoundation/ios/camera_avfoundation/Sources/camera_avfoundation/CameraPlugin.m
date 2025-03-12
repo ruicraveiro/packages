@@ -466,7 +466,7 @@ static FlutterError *FlutterErrorFromNSError(NSError *error) {
   __weak typeof(self) weakSelf = self;
 
   dispatch_async(self.captureSessionQueue, ^{
-    bool isSupported = [weakSelf.camera isVideoStabilizationModeSupported:mode];
+    BOOL isSupported = [weakSelf.camera isVideoStabilizationModeSupported:mode];
     completion(@(isSupported), nil);
   });
 }
