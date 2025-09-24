@@ -277,10 +277,8 @@ abstract class CameraPlatform extends PlatformInterface {
 
   /// Gets a list of video stabilization modes that are supported for the selected camera.
   Future<Iterable<VideoStabilizationMode>> getSupportedVideoStabilizationModes(
-      int cameraId) async {
-    throw UnimplementedError(
-        'getSupportedVideoStabilizationModes() is not implemented.');
-  }
+          int cameraId) async =>
+      <VideoStabilizationMode>[];
 
   /// Sets the video stabilization mode for the selected camera.
   ///

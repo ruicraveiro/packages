@@ -698,28 +698,32 @@ class CameraController extends ValueNotifier<CameraValue> {
 
   /// Set the video stabilization mode for the selected camera.
   ///
-  /// On Android (when using camera_android_camerax) and on iOS
-  /// the supplied [mode] value should be a mode in the list returned
-  /// by [getSupportedVideoStabilizationModes].
+  /// When [allowFallback] is true (default) the camera will
+  /// be set to the best video stabilization mode up to,
+  /// and including, [mode].
   ///
-  /// When [allowFallback] is true (default) and when
-  /// the camera supports any video stabilization other than
-  /// [VideoStabilizationMode.off], then the camera will
-  /// be set to the best video stabilization mode up to, and including, [mode].
-  ///
-  /// When either [allowFallback] is false or the only
-  /// supported video stabilization mode is [VideoStabilizationMode.off],
-  /// and if [mode] is not one of the supported modes,
+  /// When [allowFallback] is false and if
+  /// [mode] is not one of the supported modes
+  /// (see [getSupportedVideoStabilizationModes]),
   /// then it throws an [ArgumentError].
+  ///
+  /// This feature is only available on Android
+  /// (when using camera_android_camerax package)
+  /// and iOS. It is a no-op on all other platforms.
   Future<void> setVideoStabilizationMode(
     VideoStabilizationMode mode, {
     bool allowFallback = true,
   }) async {
     _throwIfNotInitialized('setVideoStabilizationMode');
     try {
-      final VideoStabilizationMode requestMode =
+      final VideoStabilizationMode? requestMode =
           allowFallback ? await _getVideoStabilizationFallbackMode(mode) : mode;
 
+      // This is only possible when allowFallback is true
+      // and the device doesn't have any video stabilization mode:
+      if (requestMode == null) {
+        return;
+      }
       await CameraPlatform.instance
           .setVideoStabilizationMode(_cameraId, requestMode);
       value = value.copyWith(videoStabilizationMode: mode);
@@ -728,19 +732,16 @@ class CameraController extends ValueNotifier<CameraValue> {
     }
   }
 
-  Future<VideoStabilizationMode> _getVideoStabilizationFallbackMode(
+  Future<VideoStabilizationMode?> _getVideoStabilizationFallbackMode(
       VideoStabilizationMode mode) async {
     final Iterable<VideoStabilizationMode> supportedModes = await CameraPlatform
         .instance
         .getSupportedVideoStabilizationModes(_cameraId);
 
-    // if there are no supported modes or if the only supported mode is Off
-    // and something else is requested, then we throw an ArgumentError.
-    if (supportedModes.isEmpty ||
-        (mode != VideoStabilizationMode.off &&
-            supportedModes.every((VideoStabilizationMode sm) =>
-                sm == VideoStabilizationMode.off))) {
-      throw ArgumentError('Unavailable video stabilization mode.', 'mode');
+    // In this case the device doesn't report any
+    // available stabilization mode available.
+    if (supportedModes.isEmpty) {
+      return null;
     }
 
     VideoStabilizationMode requestMode = VideoStabilizationMode.off;
@@ -758,7 +759,7 @@ class CameraController extends ValueNotifier<CameraValue> {
   ///
   /// Will return the list of supported video stabilization modes
   /// on Android (when using camera_android_camerax package) and
-  /// on iOS. Throws an [UnimplementedError] on all other platforms.
+  /// on iOS. Will return an empty list on all other platforms.
   Future<Iterable<VideoStabilizationMode>>
       getSupportedVideoStabilizationModes() {
     _throwIfNotInitialized('isVideoStabilizationModeSupported');
