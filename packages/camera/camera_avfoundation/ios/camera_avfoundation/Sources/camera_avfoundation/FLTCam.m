@@ -1244,7 +1244,7 @@ static void selectBestFormatForRequestedFrameRate(
                    withCompletion:(void (^)(FlutterError *_Nullable))completion {
   AVCaptureVideoStabilizationMode stabilizationMode = getAvCaptureVideoStabilizationMode(mode);
 
-  if (![_captureDevice.activeFormat isVideoStabilizationModeSupported:stabilizationMode]) {
+  if (![_captureDevice isVideoStabilizationModeSupported:stabilizationMode]) {
     completion([FlutterError errorWithCode:@"VIDEO_STABILIIZATION_ERROR"
                                    message:@"Unavailable video stabilization mode."
                                    details:nil]);
@@ -1260,7 +1260,7 @@ static void selectBestFormatForRequestedFrameRate(
 
 - (BOOL)isVideoStabilizationModeSupported:(FCPPlatformVideoStabilizationMode)mode {
   AVCaptureVideoStabilizationMode stabilizationMode = getAvCaptureVideoStabilizationMode(mode);
-  return [_captureDevice.activeFormat isVideoStabilizationModeSupported:stabilizationMode];
+  return [_captureDevice isVideoStabilizationModeSupported:stabilizationMode];
 }
 
 - (CGFloat)minimumAvailableZoomFactor {

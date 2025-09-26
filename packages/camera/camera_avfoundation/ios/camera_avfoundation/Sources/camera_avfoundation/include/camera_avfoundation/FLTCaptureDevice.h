@@ -57,6 +57,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (float)videoZoomFactor;
 - (void)setVideoZoomFactor:(float)factor;
 
+// Video Stabilization
+- (BOOL)isVideoStabilizationModeSupported:(AVCaptureVideoStabilizationMode)videoStabilizationMode;
+
 // Camera Properties
 - (float)lensAperture;
 - (CMTime)exposureDuration;
