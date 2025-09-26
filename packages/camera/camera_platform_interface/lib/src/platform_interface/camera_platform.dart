@@ -281,9 +281,6 @@ abstract class CameraPlatform extends PlatformInterface {
       <VideoStabilizationMode>[];
 
   /// Sets the video stabilization mode for the selected camera.
-  ///
-  /// Throws a [ArgumentError] when a not supported video stabilization
-  /// mode is supplied.
   Future<void> setVideoStabilizationMode(
       int cameraId, VideoStabilizationMode mode) async {
     throw UnimplementedError('setVideoStabilizationMode() is not implemented.');
