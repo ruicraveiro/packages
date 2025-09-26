@@ -754,7 +754,7 @@ class CameraController extends ValueNotifier<CameraValue> {
       return null;
     }
 
-    // If, on the other hand if it can't fallback and the specific
+    // If it can't fallback and the specific
     // requested mode isn't available, then it throws.
     if (!allowFallback && !supportedModes.contains(requestedMode)) {
       throw ArgumentError('Unavailable video stabilization mode.', 'mode');
