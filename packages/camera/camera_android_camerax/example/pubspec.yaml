@@ -3,8 +3,8 @@ description: Demonstrates how to use the camera_android_camerax plugin.
 publish_to: 'none'
 
 environment:
-  sdk: ^3.5.0
-  flutter: ">=3.24.0"
+  sdk: ^3.7.0
+  flutter: ">=3.29.0"
 
 dependencies:
   camera_android_camerax:
@@ -33,4 +33,3 @@ flutter:
 # See https://github.com/flutter/flutter/blob/master/docs/ecosystem/contributing/README.md#changing-federated-plugins
 dependency_overrides:
    {camera_android_camerax: {path: ../../../camera/camera_android_camerax}, camera_platform_interface: {path: ../../../camera/camera_platform_interface}}
-
