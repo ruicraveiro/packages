@@ -203,18 +203,12 @@ class CameraValue {
               : recordingOrientation.orNull,
       isPreviewPaused: isPreviewPaused ?? this.isPreviewPaused,
       description: description ?? this.description,
-<<<<<<< HEAD
-      previewPauseOrientation: previewPauseOrientation == null
-          ? this.previewPauseOrientation
-          : previewPauseOrientation.orNull,
-      videoStabilizationMode:
-          videoStabilizationMode ?? this.videoStabilizationMode,
-=======
       previewPauseOrientation:
           previewPauseOrientation == null
               ? this.previewPauseOrientation
               : previewPauseOrientation.orNull,
->>>>>>> gh/main
+      videoStabilizationMode:
+          videoStabilizationMode ?? this.videoStabilizationMode,
     );
   }
 
@@ -748,8 +742,10 @@ class CameraController extends ValueNotifier<CameraValue> {
       if (modeToSet == null) {
         return;
       }
-      await CameraPlatform.instance
-          .setVideoStabilizationMode(_cameraId, modeToSet);
+      await CameraPlatform.instance.setVideoStabilizationMode(
+        _cameraId,
+        modeToSet,
+      );
       value = value.copyWith(videoStabilizationMode: mode);
     } on PlatformException catch (e) {
       throw CameraException(e.code, e.message);
@@ -804,13 +800,14 @@ class CameraController extends ValueNotifier<CameraValue> {
   ///
   /// [VideoStabilizationMode.off] will always be listed.
   Future<Iterable<VideoStabilizationMode>>
-      getSupportedVideoStabilizationModes() async {
+  getSupportedVideoStabilizationModes() async {
     _throwIfNotInitialized('isVideoStabilizationModeSupported');
     try {
       final Set<VideoStabilizationMode> modes = <VideoStabilizationMode>{
         VideoStabilizationMode.off,
-        ...await CameraPlatform.instance
-            .getSupportedVideoStabilizationModes(_cameraId)
+        ...await CameraPlatform.instance.getSupportedVideoStabilizationModes(
+          _cameraId,
+        ),
       };
       return modes;
     } on PlatformException catch (e) {
