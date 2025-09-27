@@ -1,7 +1,6 @@
 ## 0.3.5+1
 
-* Updates camera_platform_interface lib to 2.9.0.
-* Updates minimum supported SDK version to Flutter 3.22/Dart 3.4.
+* Updates minimum supported SDK version to Flutter 3.29/Dart 3.7.
 
 ## 0.3.5
 

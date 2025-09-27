@@ -1,4 +1,4 @@
-// Copyright 2013 The Flutter Authors. All rights reserved.
+// Copyright 2013 The Flutter Authors
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -44,7 +44,9 @@ void main() {
       expect(cameraValue.exposurePointSupported, true);
       expect(cameraValue.deviceOrientation, DeviceOrientation.portraitUp);
       expect(
-          cameraValue.lockedCaptureOrientation, DeviceOrientation.portraitUp);
+        cameraValue.lockedCaptureOrientation,
+        DeviceOrientation.portraitUp,
+      );
       expect(cameraValue.recordingOrientation, DeviceOrientation.portraitUp);
       expect(cameraValue.isPreviewPaused, false);
       expect(cameraValue.previewPauseOrientation, DeviceOrientation.portraitUp);
@@ -52,8 +54,9 @@ void main() {
     });
 
     test('Can be created as uninitialized', () {
-      const CameraValue cameraValue =
-          CameraValue.uninitialized(FakeController.fakeDescription);
+      const CameraValue cameraValue = CameraValue.uninitialized(
+        FakeController.fakeDescription,
+      );
 
       expect(cameraValue, isA<CameraValue>());
       expect(cameraValue.isInitialized, isFalse);
@@ -76,8 +79,9 @@ void main() {
     });
 
     test('Can be copied with isInitialized', () {
-      const CameraValue cv =
-          CameraValue.uninitialized(FakeController.fakeDescription);
+      const CameraValue cv = CameraValue.uninitialized(
+        FakeController.fakeDescription,
+      );
       final CameraValue cameraValue = cv.copyWith(isInitialized: true);
 
       expect(cameraValue, isA<CameraValue>());
@@ -101,17 +105,21 @@ void main() {
     });
 
     test('Has aspectRatio after setting size', () {
-      const CameraValue cv =
-          CameraValue.uninitialized(FakeController.fakeDescription);
-      final CameraValue cameraValue =
-          cv.copyWith(isInitialized: true, previewSize: const Size(20, 10));
+      const CameraValue cv = CameraValue.uninitialized(
+        FakeController.fakeDescription,
+      );
+      final CameraValue cameraValue = cv.copyWith(
+        isInitialized: true,
+        previewSize: const Size(20, 10),
+      );
 
       expect(cameraValue.aspectRatio, 2.0);
     });
 
     test('hasError is true after setting errorDescription', () {
-      const CameraValue cv =
-          CameraValue.uninitialized(FakeController.fakeDescription);
+      const CameraValue cv = CameraValue.uninitialized(
+        FakeController.fakeDescription,
+      );
       final CameraValue cameraValue = cv.copyWith(errorDescription: 'error');
 
       expect(cameraValue.hasError, isTrue);
@@ -119,12 +127,14 @@ void main() {
     });
 
     test('Recording paused is false when not recording', () {
-      const CameraValue cv =
-          CameraValue.uninitialized(FakeController.fakeDescription);
+      const CameraValue cv = CameraValue.uninitialized(
+        FakeController.fakeDescription,
+      );
       final CameraValue cameraValue = cv.copyWith(
-          isInitialized: true,
-          isRecordingVideo: false,
-          isRecordingPaused: true);
+        isInitialized: true,
+        isRecordingVideo: false,
+        isRecordingPaused: true,
+      );
 
       expect(cameraValue.isRecordingPaused, isFalse);
     });
@@ -151,8 +161,24 @@ void main() {
         videoStabilizationMode: VideoStabilizationMode.level3,
       );
 
-      expect(cameraValue.toString(),
-          'CameraValue(isRecordingVideo: false, isInitialized: false, errorDescription: null, previewSize: Size(10.0, 10.0), isStreamingImages: false, flashMode: FlashMode.auto, exposureMode: ExposureMode.auto, focusMode: FocusMode.auto, exposurePointSupported: true, focusPointSupported: true, deviceOrientation: DeviceOrientation.portraitUp, lockedCaptureOrientation: DeviceOrientation.portraitUp, recordingOrientation: DeviceOrientation.portraitUp, isPreviewPaused: true, previewPausedOrientation: DeviceOrientation.portraitUp, videoStabilizationMode: VideoStabilizationMode.level3, description: CameraDescription(, CameraLensDirection.back, 0))');
+      expect(
+        cameraValue.toString(),
+        'CameraValue(isRecordingVideo: false, isInitialized: false, '
+        'errorDescription: null, previewSize: Size(10.0, 10.0), '
+        'isStreamingImages: false, flashMode: FlashMode.auto, '
+        'exposureMode: ExposureMode.auto, focusMode: FocusMode.auto, '
+        'exposurePointSupported: true, focusPointSupported: true, '
+        'deviceOrientation: DeviceOrientation.portraitUp, '
+        'lockedCaptureOrientation: DeviceOrientation.portraitUp, '
+        'recordingOrientation: DeviceOrientation.portraitUp, '
+        'isPreviewPaused: true, '
+        'previewPausedOrientation: DeviceOrientation.portraitUp, '
+        'videoStabilizationMode: VideoStabilizationMode.level3, '
+        // CameraDescription.toString is defined in the platform interface
+        // package, so don't assert a specific value for it, only that
+        // whatever it returns is inserted as expected.
+        'description: ${FakeController.fakeDescription})',
+      );
     });
   });
 }
