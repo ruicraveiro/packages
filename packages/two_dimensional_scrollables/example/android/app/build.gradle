@@ -23,9 +23,9 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace 'dev.flutter.packages.two_dimensional_scrollables.example'
-    compileSdk flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    namespace = "dev.flutter.packages.two_dimensional_scrollables.example"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -58,7 +58,6 @@ android {
             signingConfig signingConfigs.debug
         }
     }
-    namespace 'com.example.example'
 }
 
 flutter {

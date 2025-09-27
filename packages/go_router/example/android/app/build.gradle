@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    compileSdk flutter.compileSdkVersion
+    compileSdk = flutter.compileSdkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -54,7 +54,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
-    namespace 'com.example.example'
+    namespace = "com.example.example"
 }
 
 flutter {

@@ -23,8 +23,8 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace 'io.flutter.plugins.sharedpreferencesexample'
-    compileSdk flutter.compileSdkVersion
+    namespace = "io.flutter.plugins.sharedpreferencesexample"
+    compileSdk = flutter.compileSdkVersion
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'

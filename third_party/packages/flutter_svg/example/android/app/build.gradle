@@ -23,8 +23,8 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace 'io.flutter.plugins.fluttersvgexample'
-    compileSdkVersion flutter.compileSdkVersion
+    namespace = "io.flutter.plugins.fluttersvgexample"
+    compileSdk = flutter.compileSdkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11

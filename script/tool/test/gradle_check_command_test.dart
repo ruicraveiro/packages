@@ -1,13 +1,13 @@
-// Copyright 2013 The Flutter Authors. All rights reserved.
+// Copyright 2013 The Flutter Authors
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
 import 'package:args/command_runner.dart';
 import 'package:file/file.dart';
-import 'package:file/memory.dart';
 import 'package:flutter_plugin_tools/src/common/core.dart';
 import 'package:flutter_plugin_tools/src/common/plugin_utils.dart';
 import 'package:flutter_plugin_tools/src/gradle_check_command.dart';
+import 'package:git/git.dart';
 import 'package:test/test.dart';
 
 import 'util.dart';
@@ -16,15 +16,15 @@ const String _defaultFakeNamespace = 'dev.flutter.foo';
 
 void main() {
   late CommandRunner<void> runner;
-  late FileSystem fileSystem;
   late Directory packagesDir;
 
   setUp(() {
-    fileSystem = MemoryFileSystem();
-    packagesDir = fileSystem.currentDirectory.childDirectory('packages');
-    createPackagesDirectory(parentDir: packagesDir.parent);
+    final GitDir gitDir;
+    (:packagesDir, processRunner: _, gitProcessRunner: _, :gitDir) =
+        configureBaseCommandMocks();
     final GradleCheckCommand command = GradleCheckCommand(
       packagesDir,
+      gitDir: gitDir,
     );
 
     runner = CommandRunner<void>(
@@ -44,6 +44,7 @@ void main() {
     bool commentNamespace = false,
     bool warningsConfigured = true,
     bool useDeprecatedCompileSdkVersion = false,
+    bool usePropertyAssignment = true,
     String compileSdk = '33',
   }) {
     final File buildGradle = package
@@ -72,7 +73,7 @@ java {
     final String targetCompat =
         '${commentSourceLanguage ? '// ' : ''}targetCompatibility JavaVersion.VERSION_11';
     final String namespace =
-        "    ${commentNamespace ? '// ' : ''}namespace '$_defaultFakeNamespace'";
+        "    ${commentNamespace ? '// ' : ''}namespace = '$_defaultFakeNamespace'";
 
     buildGradle.writeAsStringSync('''
 group 'dev.flutter.plugins.fake'
@@ -90,10 +91,10 @@ apply plugin: 'com.android.library'
 ${includeLanguageVersion ? javaSection : ''}
 android {
 ${includeNamespace ? namespace : ''}
-    ${useDeprecatedCompileSdkVersion ? 'compileSdkVersion' : 'compileSdk'} $compileSdk
+    ${useDeprecatedCompileSdkVersion ? 'compileSdkVersion' : 'compileSdk'} ${usePropertyAssignment ? '=' : ''} $compileSdk
 
     defaultConfig {
-        minSdkVersion 30
+        minSdk ${usePropertyAssignment ? '=' : ''} 30
     }
 ${warningsConfigured ? warningConfig : ''}
     compileOptions {
@@ -224,6 +225,7 @@ include ":app"
     required bool includeNamespace,
     required bool commentNamespace,
     required bool includeNameSpaceAsDeclaration,
+    required bool usePropertyAssignment,
   }) {
     final File buildGradle = package
         .platformDirectory(FlutterPlatform.android)
@@ -244,7 +246,7 @@ apply from: "\$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     ${includeNamespace ? namespace : ''}
-    compileSdk flutter.compileSdkVersion
+    compileSdk ${usePropertyAssignment ? '=' : ''} flutter.compileSdkVersion
 
     lintOptions {
         disable 'InvalidPackage'
@@ -262,7 +264,7 @@ flutter {
 }
 
 dependencies {
-    testImplementation 'fake.package:fake:1.0.0'
+    testImplementation("fake.package:fake:1.0.0")
 }
 ''');
   }
@@ -272,12 +274,13 @@ dependencies {
     required String pluginName,
     bool includeNamespace = true,
     bool commentNamespace = false,
-    bool includeNameSpaceAsDeclaration = false,
+    bool includeNameSpaceAsDeclaration = true,
     bool warningsConfigured = true,
     String? kotlinVersion,
     bool includeBuildArtifactHub = true,
     bool includeSettingsArtifactHub = true,
     bool includeSettingsDocumentationArtifactHub = true,
+    bool usePropertyAssignment = true,
   }) {
     writeFakeExampleTopLevelBuildGradle(
       package,
@@ -289,7 +292,8 @@ dependencies {
     writeFakeExampleAppBuildGradle(package,
         includeNamespace: includeNamespace,
         commentNamespace: commentNamespace,
-        includeNameSpaceAsDeclaration: includeNameSpaceAsDeclaration);
+        includeNameSpaceAsDeclaration: includeNameSpaceAsDeclaration,
+        usePropertyAssignment: usePropertyAssignment);
     writeFakeExampleSettingsGradle(
       package,
       includeArtifactHub: includeSettingsArtifactHub,
@@ -604,14 +608,14 @@ dependencies {
     );
   });
 
-  test('passes when namespace is declared with "=" declaration', () async {
+  test('fails when namespace is declared without "=" declaration', () async {
     const String pluginName = 'a_plugin';
     final RepositoryPackage package = createFakePlugin(pluginName, packagesDir);
     writeFakePluginBuildGradle(package, includeLanguageVersion: true);
     writeFakeManifest(package);
     final RepositoryPackage example = package.getExamples().first;
     writeFakeExampleBuildGradles(example,
-        pluginName: pluginName, includeNameSpaceAsDeclaration: true);
+        pluginName: pluginName, includeNameSpaceAsDeclaration: false);
     writeFakeManifest(example, isApp: true);
 
     final List<String> output = await runCapturingPrint(
@@ -1094,6 +1098,33 @@ dependencies {
         containsAllInOrder(<Matcher>[
           contains('Please replace the deprecated "compileSdkVersion" setting '
               'with the newer "compileSdk"'),
+        ]),
+      );
+    });
+
+    test('fails if compileSdk uses the method assignment', () async {
+      const String packageName = 'a_package';
+      final RepositoryPackage package =
+          createFakePackage(packageName, packagesDir, isFlutter: true);
+      writeFakePluginBuildGradle(package,
+          includeLanguageVersion: true, usePropertyAssignment: false);
+      writeFakeManifest(package);
+      final RepositoryPackage example = package.getExamples().first;
+      writeFakeExampleBuildGradles(example,
+          pluginName: packageName, usePropertyAssignment: false);
+      writeFakeManifest(example, isApp: true);
+
+      Error? commandError;
+      final List<String> output = await runCapturingPrint(
+          runner, <String>['gradle-check'], errorHandler: (Error e) {
+        commandError = e;
+      });
+
+      expect(commandError, isA<ToolExit>());
+      expect(
+        output,
+        containsAllInOrder(<Matcher>[
+          contains('No "compileSdk =" found. Please use property assignment.'),
         ]),
       );
     });

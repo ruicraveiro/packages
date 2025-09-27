@@ -23,8 +23,8 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace 'dev.flutter.rfw.examples.remote'
-    compileSdk flutter.compileSdkVersion
+    namespace = "dev.flutter.rfw.examples.remote"
+    compileSdk = flutter.compileSdkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11

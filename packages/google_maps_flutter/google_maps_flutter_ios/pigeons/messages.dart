@@ -1,25 +1,20 @@
-// Copyright 2013 The Flutter Authors. All rights reserved.
+// Copyright 2013 The Flutter Authors
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
 import 'package:pigeon/pigeon.dart';
 
-@ConfigurePigeon(PigeonOptions(
-  dartOut: 'lib/src/messages.g.dart',
-  objcHeaderOut: 'ios/Classes/messages.g.h',
-  objcSourceOut: 'ios/Classes/messages.g.m',
-  objcOptions: ObjcOptions(prefix: 'FGM'),
-  copyrightHeader: 'pigeons/copyright.txt',
-))
-
+@ConfigurePigeon(
+  PigeonOptions(
+    dartOut: 'lib/src/messages.g.dart',
+    objcHeaderOut: 'ios/Classes/messages.g.h',
+    objcSourceOut: 'ios/Classes/messages.g.m',
+    objcOptions: ObjcOptions(prefix: 'FGM'),
+    copyrightHeader: 'pigeons/copyright.txt',
+  ),
+)
 /// Pigeon equivalent of MapType
-enum PlatformMapType {
-  none,
-  normal,
-  satellite,
-  terrain,
-  hybrid,
-}
+enum PlatformMapType { none, normal, satellite, terrain, hybrid }
 
 /// Pigeon representatation of a CameraPosition.
 class PlatformCameraPosition {
@@ -140,11 +135,7 @@ class PlatformHeatmap {
 
 /// Pigeon equivalent of the InfoWindow class.
 class PlatformInfoWindow {
-  PlatformInfoWindow({
-    required this.anchor,
-    this.title,
-    this.snippet,
-  });
+  PlatformInfoWindow({required this.anchor, this.title, this.snippet});
 
   final String? title;
   final String? snippet;
@@ -187,7 +178,7 @@ class PlatformMarker {
     required this.position,
     this.rotation = 0.0,
     this.visible = true,
-    this.zIndex = 0.0,
+    this.zIndex = 0,
     this.clusterManagerId,
   });
 
@@ -202,7 +193,7 @@ class PlatformMarker {
   final PlatformLatLng position;
   final double rotation;
   final bool visible;
-  final double zIndex;
+  final int zIndex;
   final String markerId;
   final String? clusterManagerId;
 }
@@ -235,11 +226,7 @@ class PlatformPolygon {
 }
 
 /// Join types for polyline joints.
-enum PlatformJointType {
-  mitered,
-  bevel,
-  round,
-}
+enum PlatformJointType { mitered, bevel, round }
 
 /// Pigeon equivalent of the Polyline class.
 class PlatformPolyline {
@@ -274,11 +261,7 @@ class PlatformPolyline {
 }
 
 /// Enumeration of possible types for PatternItem.
-enum PlatformPatternItemType {
-  dot,
-  dash,
-  gap,
-}
+enum PlatformPatternItemType { dot, dash, gap }
 
 /// Pigeon equivalent of the PatternItem class.
 class PlatformPatternItem {
@@ -357,6 +340,35 @@ class PlatformCameraTargetBounds {
   final PlatformLatLngBounds? bounds;
 }
 
+/// Pigeon equivalent of the GroundOverlay class.
+class PlatformGroundOverlay {
+  PlatformGroundOverlay({
+    required this.groundOverlayId,
+    required this.image,
+    required this.position,
+    required this.bounds,
+    required this.anchor,
+    required this.transparency,
+    required this.bearing,
+    required this.zIndex,
+    required this.visible,
+    required this.clickable,
+    required this.zoomLevel,
+  });
+
+  final String groundOverlayId;
+  final PlatformBitmap image;
+  final PlatformLatLng? position;
+  final PlatformLatLngBounds? bounds;
+  final PlatformPoint? anchor;
+  final double transparency;
+  final double bearing;
+  final int zIndex;
+  final bool visible;
+  final bool clickable;
+  final double? zoomLevel;
+}
+
 /// Information passed to the platform view creation.
 class PlatformMapViewCreationParams {
   PlatformMapViewCreationParams({
@@ -369,6 +381,7 @@ class PlatformMapViewCreationParams {
     required this.initialHeatmaps,
     required this.initialTileOverlays,
     required this.initialClusterManagers,
+    required this.initialGroundOverlays,
   });
 
   final PlatformCameraPosition initialCameraPosition;
@@ -380,6 +393,7 @@ class PlatformMapViewCreationParams {
   final List<PlatformHeatmap> initialHeatmaps;
   final List<PlatformTileOverlay> initialTileOverlays;
   final List<PlatformClusterManager> initialClusterManagers;
+  final List<PlatformGroundOverlay> initialGroundOverlays;
 }
 
 /// Pigeon equivalent of MapConfiguration.
@@ -503,8 +517,11 @@ class PlatformBitmapAsset {
 
 /// Pigeon equivalent of [AssetImageBitmap].
 class PlatformBitmapAssetImage {
-  PlatformBitmapAssetImage(
-      {required this.name, required this.scale, this.size});
+  PlatformBitmapAssetImage({
+    required this.name,
+    required this.scale,
+    this.size,
+  });
   final String name;
   final double scale;
   final PlatformSize? size;
@@ -512,12 +529,13 @@ class PlatformBitmapAssetImage {
 
 /// Pigeon equivalent of [AssetMapBitmap].
 class PlatformBitmapAssetMap {
-  PlatformBitmapAssetMap(
-      {required this.assetName,
-      required this.bitmapScaling,
-      required this.imagePixelRatio,
-      this.width,
-      this.height});
+  PlatformBitmapAssetMap({
+    required this.assetName,
+    required this.bitmapScaling,
+    required this.imagePixelRatio,
+    this.width,
+    this.height,
+  });
   final String assetName;
   final PlatformMapBitmapScaling bitmapScaling;
   final double imagePixelRatio;
@@ -527,12 +545,13 @@ class PlatformBitmapAssetMap {
 
 /// Pigeon equivalent of [BytesMapBitmap].
 class PlatformBitmapBytesMap {
-  PlatformBitmapBytesMap(
-      {required this.byteData,
-      required this.bitmapScaling,
-      required this.imagePixelRatio,
-      this.width,
-      this.height});
+  PlatformBitmapBytesMap({
+    required this.byteData,
+    required this.bitmapScaling,
+    required this.imagePixelRatio,
+    this.width,
+    this.height,
+  });
   final Uint8List byteData;
   final PlatformMapBitmapScaling bitmapScaling;
   final double imagePixelRatio;
@@ -541,10 +560,7 @@ class PlatformBitmapBytesMap {
 }
 
 /// Pigeon equivalent of [MapBitmapScaling].
-enum PlatformMapBitmapScaling {
-  auto,
-  none,
-}
+enum PlatformMapBitmapScaling { auto, none }
 
 /// Interface for non-test interactions with the native SDK.
 ///
@@ -563,38 +579,66 @@ abstract class MapsApi {
 
   /// Updates the set of circles on the map.
   @ObjCSelector('updateCirclesByAdding:changing:removing:')
-  void updateCircles(List<PlatformCircle> toAdd, List<PlatformCircle> toChange,
-      List<String> idsToRemove);
+  void updateCircles(
+    List<PlatformCircle> toAdd,
+    List<PlatformCircle> toChange,
+    List<String> idsToRemove,
+  );
 
   /// Updates the set of heatmaps on the map.
   @ObjCSelector('updateHeatmapsByAdding:changing:removing:')
-  void updateHeatmaps(List<PlatformHeatmap> toAdd,
-      List<PlatformHeatmap> toChange, List<String> idsToRemove);
+  void updateHeatmaps(
+    List<PlatformHeatmap> toAdd,
+    List<PlatformHeatmap> toChange,
+    List<String> idsToRemove,
+  );
 
   /// Updates the set of custer managers for clusters on the map.
   @ObjCSelector('updateClusterManagersByAdding:removing:')
   void updateClusterManagers(
-      List<PlatformClusterManager> toAdd, List<String> idsToRemove);
+    List<PlatformClusterManager> toAdd,
+    List<String> idsToRemove,
+  );
 
   /// Updates the set of markers on the map.
   @ObjCSelector('updateMarkersByAdding:changing:removing:')
-  void updateMarkers(List<PlatformMarker> toAdd, List<PlatformMarker> toChange,
-      List<String> idsToRemove);
+  void updateMarkers(
+    List<PlatformMarker> toAdd,
+    List<PlatformMarker> toChange,
+    List<String> idsToRemove,
+  );
 
   /// Updates the set of polygonss on the map.
   @ObjCSelector('updatePolygonsByAdding:changing:removing:')
-  void updatePolygons(List<PlatformPolygon> toAdd,
-      List<PlatformPolygon> toChange, List<String> idsToRemove);
+  void updatePolygons(
+    List<PlatformPolygon> toAdd,
+    List<PlatformPolygon> toChange,
+    List<String> idsToRemove,
+  );
 
   /// Updates the set of polylines on the map.
   @ObjCSelector('updatePolylinesByAdding:changing:removing:')
-  void updatePolylines(List<PlatformPolyline> toAdd,
-      List<PlatformPolyline> toChange, List<String> idsToRemove);
+  void updatePolylines(
+    List<PlatformPolyline> toAdd,
+    List<PlatformPolyline> toChange,
+    List<String> idsToRemove,
+  );
 
   /// Updates the set of tile overlays on the map.
   @ObjCSelector('updateTileOverlaysByAdding:changing:removing:')
-  void updateTileOverlays(List<PlatformTileOverlay> toAdd,
-      List<PlatformTileOverlay> toChange, List<String> idsToRemove);
+  void updateTileOverlays(
+    List<PlatformTileOverlay> toAdd,
+    List<PlatformTileOverlay> toChange,
+    List<String> idsToRemove,
+  );
+
+  /// Updates the set of ground overlays on the map.
+  @ObjCSelector('updateGroundOverlaysByAdding:changing:removing:')
+  void updateGroundOverlays(
+    List<PlatformGroundOverlay> toAdd,
+    List<PlatformGroundOverlay> toChange,
+    List<String> idsToRemove,
+  );
 
   /// Gets the screen coordinate for the given map location.
   @ObjCSelector('screenCoordinatesForLatLng:')
@@ -613,9 +657,13 @@ abstract class MapsApi {
   @ObjCSelector('moveCameraWithUpdate:')
   void moveCamera(PlatformCameraUpdate cameraUpdate);
 
-  /// Moves the camera according to [cameraUpdate], animating the update.
-  @ObjCSelector('animateCameraWithUpdate:')
-  void animateCamera(PlatformCameraUpdate cameraUpdate);
+  /// Moves the camera according to [cameraUpdate], animating the update using a
+  /// duration in milliseconds if provided.
+  @ObjCSelector('animateCameraWithUpdate:duration:')
+  void animateCamera(
+    PlatformCameraUpdate cameraUpdate,
+    int? durationMilliseconds,
+  );
 
   /// Gets the current map zoom level.
   @ObjCSelector('currentZoomLevel')
@@ -717,11 +765,18 @@ abstract class MapsCallbackApi {
   @ObjCSelector('didTapPolylineWithIdentifier:')
   void onPolylineTap(String polylineId);
 
+  /// Called when a ground overlay is tapped.
+  @ObjCSelector('didTapGroundOverlayWithIdentifier:')
+  void onGroundOverlayTap(String groundOverlayId);
+
   /// Called to get data for a map tile.
   @async
   @ObjCSelector('tileWithOverlayIdentifier:location:zoom:')
   PlatformTile getTileOverlayTile(
-      String tileOverlayId, PlatformPoint location, int zoom);
+    String tileOverlayId,
+    PlatformPoint location,
+    int zoom,
+  );
 }
 
 /// Dummy interface to force generation of the platform view creation params,
@@ -746,10 +801,14 @@ abstract class MapsInspectorApi {
   bool isTrafficEnabled();
   @ObjCSelector('tileOverlayWithIdentifier:')
   PlatformTileLayer? getTileOverlayInfo(String tileOverlayId);
+  @ObjCSelector('groundOverlayWithIdentifier:')
+  PlatformGroundOverlay? getGroundOverlayInfo(String groundOverlayId);
   @ObjCSelector('heatmapWithIdentifier:')
   PlatformHeatmap? getHeatmapInfo(String heatmapId);
   @ObjCSelector('zoomRange')
   PlatformZoomRange getZoomRange();
   @ObjCSelector('clustersWithIdentifier:')
   List<PlatformCluster> getClusters(String clusterManagerId);
+  @ObjCSelector('cameraPosition')
+  PlatformCameraPosition getCameraPosition();
 }

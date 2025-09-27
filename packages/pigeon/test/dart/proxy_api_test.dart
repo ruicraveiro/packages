@@ -1,4 +1,4 @@
-// Copyright 2013 The Flutter Authors. All rights reserved.
+// Copyright 2013 The Flutter Authors
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -11,67 +11,76 @@ const String DEFAULT_PACKAGE_NAME = 'test_package';
 void main() {
   group('ProxyApi', () {
     test('one api', () {
-      final Root root = Root(apis: <Api>[
-        AstProxyApi(name: 'Api', constructors: <Constructor>[
-          Constructor(name: 'name', parameters: <Parameter>[
-            Parameter(
-              type: const TypeDeclaration(
-                baseName: 'Input',
-                isNullable: false,
+      final Root root = Root(
+        apis: <Api>[
+          AstProxyApi(
+            name: 'Api',
+            constructors: <Constructor>[
+              Constructor(
+                name: 'name',
+                parameters: <Parameter>[
+                  Parameter(
+                    type: const TypeDeclaration(
+                      baseName: 'Input',
+                      isNullable: false,
+                    ),
+                    name: 'input',
+                  ),
+                ],
               ),
-              name: 'input',
-            ),
-          ]),
-        ], fields: <ApiField>[
-          ApiField(
-            name: 'someField',
-            type: const TypeDeclaration(
-              baseName: 'int',
-              isNullable: false,
-            ),
-          )
-        ], methods: <Method>[
-          Method(
-            name: 'doSomething',
-            location: ApiLocation.host,
-            parameters: <Parameter>[
-              Parameter(
-                type: const TypeDeclaration(
-                  baseName: 'Input',
+            ],
+            fields: <ApiField>[
+              ApiField(
+                name: 'someField',
+                type: const TypeDeclaration(baseName: 'int', isNullable: false),
+              ),
+            ],
+            methods: <Method>[
+              Method(
+                name: 'doSomething',
+                location: ApiLocation.host,
+                parameters: <Parameter>[
+                  Parameter(
+                    type: const TypeDeclaration(
+                      baseName: 'Input',
+                      isNullable: false,
+                    ),
+                    name: 'input',
+                  ),
+                ],
+                returnType: const TypeDeclaration(
+                  baseName: 'String',
                   isNullable: false,
                 ),
-                name: 'input',
-              )
-            ],
-            returnType: const TypeDeclaration(
-              baseName: 'String',
-              isNullable: false,
-            ),
-          ),
-          Method(
-            name: 'doSomethingElse',
-            location: ApiLocation.flutter,
-            parameters: <Parameter>[
-              Parameter(
-                type: const TypeDeclaration(
-                  baseName: 'Input',
+              ),
+              Method(
+                name: 'doSomethingElse',
+                location: ApiLocation.flutter,
+                parameters: <Parameter>[
+                  Parameter(
+                    type: const TypeDeclaration(
+                      baseName: 'Input',
+                      isNullable: false,
+                    ),
+                    name: 'input',
+                  ),
+                ],
+                returnType: const TypeDeclaration(
+                  baseName: 'String',
                   isNullable: false,
                 ),
-                name: 'input',
-              )
+                isRequired: false,
+              ),
             ],
-            returnType: const TypeDeclaration(
-              baseName: 'String',
-              isNullable: false,
-            ),
-            isRequired: false,
           ),
-        ])
-      ], classes: <Class>[], enums: <Enum>[]);
+        ],
+        classes: <Class>[],
+        enums: <Enum>[],
+      );
       final StringBuffer sink = StringBuffer();
       const DartGenerator generator = DartGenerator();
       generator.generate(
-        const DartOptions(),
+        const InternalDartOptions(),
         root,
         sink,
         dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -84,29 +93,29 @@ void main() {
       expect(code, contains(r'class _PigeonInternalInstanceManagerApi'));
 
       // Base Api class
-      expect(
-        code,
-        contains(r'abstract class PigeonInternalProxyApiBaseClass'),
-      );
+      expect(code, contains(r'abstract class PigeonInternalProxyApiBaseClass'));
 
       // Codec and class
       expect(code, contains('class _PigeonInternalProxyApiBaseCodec'));
       expect(
-          code, contains(r'class Api extends PigeonInternalProxyApiBaseClass'));
+        code,
+        contains(r'class Api extends PigeonInternalProxyApiBaseClass'),
+      );
 
       // Constructors
       expect(
         collapsedCode,
         contains(
-          r'Api.name({ super.pigeon_binaryMessenger, super.pigeon_instanceManager, required this.someField, this.doSomethingElse, required Input input, })',
+          r'factory Api.name({ BinaryMessenger? pigeon_binaryMessenger, PigeonInstanceManager? pigeon_instanceManager, required int someField, String Function( Api pigeon_instance, Input input, )? doSomethingElse, required Input input, })',
         ),
       );
       expect(
-        code,
+        collapsedCode,
         contains(
-          r'Api.pigeon_detached',
+          r'Api.pigeon_name({ super.pigeon_binaryMessenger, super.pigeon_instanceManager, required this.someField, this.doSomethingElse, required Input input, })',
         ),
       );
+      expect(code, contains(r'Api.pigeon_detached'));
 
       // Field
       expect(code, contains('final int someField;'));
@@ -128,18 +137,22 @@ void main() {
     });
 
     test('InstanceManagerApi', () {
-      final Root root = Root(apis: <Api>[
-        AstProxyApi(
-          name: 'Api',
-          constructors: <Constructor>[],
-          fields: <ApiField>[],
-          methods: <Method>[],
-        )
-      ], classes: <Class>[], enums: <Enum>[]);
+      final Root root = Root(
+        apis: <Api>[
+          AstProxyApi(
+            name: 'Api',
+            constructors: <Constructor>[],
+            fields: <ApiField>[],
+            methods: <Method>[],
+          ),
+        ],
+        classes: <Class>[],
+        enums: <Enum>[],
+      );
       final StringBuffer sink = StringBuffer();
       const DartGenerator generator = DartGenerator();
       generator.generate(
-        const DartOptions(),
+        const InternalDartOptions(),
         root,
         sink,
         dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -151,9 +164,7 @@ void main() {
 
       expect(
         code,
-        contains(
-          'Future<void> removeStrongReference(int identifier)',
-        ),
+        contains('Future<void> removeStrongReference(int identifier)'),
       );
       expect(
         code,
@@ -179,18 +190,22 @@ void main() {
 
     group('ProxyApi base class', () {
       test('class name', () {
-        final Root root = Root(apis: <Api>[
-          AstProxyApi(
-            name: 'Api',
-            constructors: <Constructor>[],
-            fields: <ApiField>[],
-            methods: <Method>[],
-          )
-        ], classes: <Class>[], enums: <Enum>[]);
+        final Root root = Root(
+          apis: <Api>[
+            AstProxyApi(
+              name: 'Api',
+              constructors: <Constructor>[],
+              fields: <ApiField>[],
+              methods: <Method>[],
+            ),
+          ],
+          classes: <Class>[],
+          enums: <Enum>[],
+        );
         final StringBuffer sink = StringBuffer();
         const DartGenerator generator = DartGenerator();
         generator.generate(
-          const DartOptions(),
+          const InternalDartOptions(),
           root,
           sink,
           dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -204,18 +219,22 @@ void main() {
       });
 
       test('InstanceManager field', () {
-        final Root root = Root(apis: <Api>[
-          AstProxyApi(
-            name: 'Api',
-            constructors: <Constructor>[],
-            fields: <ApiField>[],
-            methods: <Method>[],
-          )
-        ], classes: <Class>[], enums: <Enum>[]);
+        final Root root = Root(
+          apis: <Api>[
+            AstProxyApi(
+              name: 'Api',
+              constructors: <Constructor>[],
+              fields: <ApiField>[],
+              methods: <Method>[],
+            ),
+          ],
+          classes: <Class>[],
+          enums: <Enum>[],
+        );
         final StringBuffer sink = StringBuffer();
         const DartGenerator generator = DartGenerator();
         generator.generate(
-          const DartOptions(),
+          const InternalDartOptions(),
           root,
           sink,
           dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -241,24 +260,28 @@ void main() {
           fields: <ApiField>[],
           methods: <Method>[],
         );
-        final Root root = Root(apis: <Api>[
-          AstProxyApi(
-            name: 'Api',
-            constructors: <Constructor>[],
-            fields: <ApiField>[],
-            methods: <Method>[],
-            superClass: TypeDeclaration(
-              baseName: 'Api2',
-              isNullable: false,
-              associatedProxyApi: api2,
+        final Root root = Root(
+          apis: <Api>[
+            AstProxyApi(
+              name: 'Api',
+              constructors: <Constructor>[],
+              fields: <ApiField>[],
+              methods: <Method>[],
+              superClass: TypeDeclaration(
+                baseName: 'Api2',
+                isNullable: false,
+                associatedProxyApi: api2,
+              ),
             ),
-          ),
-          api2,
-        ], classes: <Class>[], enums: <Enum>[]);
+            api2,
+          ],
+          classes: <Class>[],
+          enums: <Enum>[],
+        );
         final StringBuffer sink = StringBuffer();
         const DartGenerator generator = DartGenerator();
         generator.generate(
-          const DartOptions(),
+          const InternalDartOptions(),
           root,
           sink,
           dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -281,26 +304,30 @@ void main() {
           fields: <ApiField>[],
           methods: <Method>[],
         );
-        final Root root = Root(apis: <Api>[
-          AstProxyApi(
-            name: 'Api',
-            constructors: <Constructor>[],
-            fields: <ApiField>[],
-            methods: <Method>[],
-            interfaces: <TypeDeclaration>{
-              TypeDeclaration(
-                baseName: 'Api2',
-                isNullable: false,
-                associatedProxyApi: api2,
-              )
-            },
-          ),
-          api2,
-        ], classes: <Class>[], enums: <Enum>[]);
+        final Root root = Root(
+          apis: <Api>[
+            AstProxyApi(
+              name: 'Api',
+              constructors: <Constructor>[],
+              fields: <ApiField>[],
+              methods: <Method>[],
+              interfaces: <TypeDeclaration>{
+                TypeDeclaration(
+                  baseName: 'Api2',
+                  isNullable: false,
+                  associatedProxyApi: api2,
+                ),
+              },
+            ),
+            api2,
+          ],
+          classes: <Class>[],
+          enums: <Enum>[],
+        );
         final StringBuffer sink = StringBuffer();
         const DartGenerator generator = DartGenerator();
         generator.generate(
-          const DartOptions(),
+          const InternalDartOptions(),
           root,
           sink,
           dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -327,32 +354,36 @@ void main() {
           fields: <ApiField>[],
           methods: <Method>[],
         );
-        final Root root = Root(apis: <Api>[
-          AstProxyApi(
-            name: 'Api',
-            constructors: <Constructor>[],
-            fields: <ApiField>[],
-            methods: <Method>[],
-            interfaces: <TypeDeclaration>{
-              TypeDeclaration(
-                baseName: 'Api2',
-                isNullable: false,
-                associatedProxyApi: api2,
-              ),
-              TypeDeclaration(
-                baseName: 'Api3',
-                isNullable: false,
-                associatedProxyApi: api2,
-              ),
-            },
-          ),
-          api2,
-          api3,
-        ], classes: <Class>[], enums: <Enum>[]);
+        final Root root = Root(
+          apis: <Api>[
+            AstProxyApi(
+              name: 'Api',
+              constructors: <Constructor>[],
+              fields: <ApiField>[],
+              methods: <Method>[],
+              interfaces: <TypeDeclaration>{
+                TypeDeclaration(
+                  baseName: 'Api2',
+                  isNullable: false,
+                  associatedProxyApi: api2,
+                ),
+                TypeDeclaration(
+                  baseName: 'Api3',
+                  isNullable: false,
+                  associatedProxyApi: api2,
+                ),
+              },
+            ),
+            api2,
+            api3,
+          ],
+          classes: <Class>[],
+          enums: <Enum>[],
+        );
         final StringBuffer sink = StringBuffer();
         const DartGenerator generator = DartGenerator();
         generator.generate(
-          const DartOptions(),
+          const InternalDartOptions(),
           root,
           sink,
           dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -387,26 +418,30 @@ void main() {
             ),
           ],
         );
-        final Root root = Root(apis: <Api>[
-          AstProxyApi(
-            name: 'Api',
-            constructors: <Constructor>[],
-            fields: <ApiField>[],
-            methods: <Method>[],
-            interfaces: <TypeDeclaration>{
-              TypeDeclaration(
-                baseName: 'Api2',
-                isNullable: false,
-                associatedProxyApi: api2,
-              )
-            },
-          ),
-          api2,
-        ], classes: <Class>[], enums: <Enum>[]);
+        final Root root = Root(
+          apis: <Api>[
+            AstProxyApi(
+              name: 'Api',
+              constructors: <Constructor>[],
+              fields: <ApiField>[],
+              methods: <Method>[],
+              interfaces: <TypeDeclaration>{
+                TypeDeclaration(
+                  baseName: 'Api2',
+                  isNullable: false,
+                  associatedProxyApi: api2,
+                ),
+              },
+            ),
+            api2,
+          ],
+          classes: <Class>[],
+          enums: <Enum>[],
+        );
         final StringBuffer sink = StringBuffer();
         const DartGenerator generator = DartGenerator();
         generator.generate(
-          const DartOptions(),
+          const InternalDartOptions(),
           root,
           sink,
           dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -435,12 +470,14 @@ void main() {
       test('empty name and no params constructor', () {
         final Root root = Root(
           apis: <Api>[
-            AstProxyApi(name: 'Api', constructors: <Constructor>[
-              Constructor(
-                name: '',
-                parameters: <Parameter>[],
-              )
-            ], fields: <ApiField>[], methods: <Method>[]),
+            AstProxyApi(
+              name: 'Api',
+              constructors: <Constructor>[
+                Constructor(name: '', parameters: <Parameter>[]),
+              ],
+              fields: <ApiField>[],
+              methods: <Method>[],
+            ),
           ],
           classes: <Class>[],
           enums: <Enum>[],
@@ -448,7 +485,7 @@ void main() {
         final StringBuffer sink = StringBuffer();
         const DartGenerator generator = DartGenerator();
         generator.generate(
-          const DartOptions(),
+          const InternalDartOptions(),
           root,
           sink,
           dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -459,7 +496,14 @@ void main() {
         expect(
           collapsedCode,
           contains(
-            r'Api({ super.pigeon_binaryMessenger, '
+            r'factory Api({ BinaryMessenger? pigeon_binaryMessenger, '
+            r'PigeonInstanceManager? pigeon_instanceManager, })',
+          ),
+        );
+        expect(
+          collapsedCode,
+          contains(
+            r'Api.pigeon_new({ super.pigeon_binaryMessenger, '
             r'super.pigeon_instanceManager, })',
           ),
         );
@@ -490,57 +534,62 @@ void main() {
         );
         final Root root = Root(
           apis: <Api>[
-            AstProxyApi(name: 'Api', constructors: <Constructor>[
-              Constructor(
-                name: 'name',
-                parameters: <Parameter>[
-                  Parameter(
-                    type: const TypeDeclaration(
-                      isNullable: false,
-                      baseName: 'int',
+            AstProxyApi(
+              name: 'Api',
+              constructors: <Constructor>[
+                Constructor(
+                  name: 'name',
+                  parameters: <Parameter>[
+                    Parameter(
+                      type: const TypeDeclaration(
+                        isNullable: false,
+                        baseName: 'int',
+                      ),
+                      name: 'validType',
                     ),
-                    name: 'validType',
-                  ),
-                  Parameter(
-                    type: TypeDeclaration(
-                      isNullable: false,
-                      baseName: 'AnEnum',
-                      associatedEnum: anEnum,
+                    Parameter(
+                      type: TypeDeclaration(
+                        isNullable: false,
+                        baseName: 'AnEnum',
+                        associatedEnum: anEnum,
+                      ),
+                      name: 'enumType',
                     ),
-                    name: 'enumType',
-                  ),
-                  Parameter(
-                    type: const TypeDeclaration(
-                      isNullable: false,
-                      baseName: 'Api2',
+                    Parameter(
+                      type: const TypeDeclaration(
+                        isNullable: false,
+                        baseName: 'Api2',
+                      ),
+                      name: 'proxyApiType',
                     ),
-                    name: 'proxyApiType',
-                  ),
-                  Parameter(
-                    type: const TypeDeclaration(
-                      isNullable: true,
-                      baseName: 'int',
+                    Parameter(
+                      type: const TypeDeclaration(
+                        isNullable: true,
+                        baseName: 'int',
+                      ),
+                      name: 'nullableValidType',
                     ),
-                    name: 'nullableValidType',
-                  ),
-                  Parameter(
-                    type: TypeDeclaration(
-                      isNullable: true,
-                      baseName: 'AnEnum',
-                      associatedEnum: anEnum,
+                    Parameter(
+                      type: TypeDeclaration(
+                        isNullable: true,
+                        baseName: 'AnEnum',
+                        associatedEnum: anEnum,
+                      ),
+                      name: 'nullableEnumType',
                     ),
-                    name: 'nullableEnumType',
-                  ),
-                  Parameter(
-                    type: const TypeDeclaration(
-                      isNullable: true,
-                      baseName: 'Api2',
+                    Parameter(
+                      type: const TypeDeclaration(
+                        isNullable: true,
+                        baseName: 'Api2',
+                      ),
+                      name: 'nullableProxyApiType',
                     ),
-                    name: 'nullableProxyApiType',
-                  ),
-                ],
-              )
-            ], fields: <ApiField>[], methods: <Method>[]),
+                  ],
+                ),
+              ],
+              fields: <ApiField>[],
+              methods: <Method>[],
+            ),
             AstProxyApi(
               name: 'Api2',
               constructors: <Constructor>[],
@@ -554,7 +603,7 @@ void main() {
         final StringBuffer sink = StringBuffer();
         const DartGenerator generator = DartGenerator();
         generator.generate(
-          const DartOptions(),
+          const InternalDartOptions(),
           root,
           sink,
           dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -565,7 +614,20 @@ void main() {
         expect(
           collapsedCode,
           contains(
-            r'Api.name({ super.pigeon_binaryMessenger, '
+            r'factory Api.name({ BinaryMessenger? pigeon_binaryMessenger, '
+            r'PigeonInstanceManager? pigeon_instanceManager, '
+            r'required int validType, '
+            r'required AnEnum enumType, '
+            r'required Api2 proxyApiType, '
+            r'int? nullableValidType, '
+            r'AnEnum? nullableEnumType, '
+            r'Api2? nullableProxyApiType, })',
+          ),
+        );
+        expect(
+          collapsedCode,
+          contains(
+            r'Api.pigeon_name({ super.pigeon_binaryMessenger, '
             r'super.pigeon_instanceManager, '
             r'required int validType, '
             r'required AnEnum enumType, '
@@ -598,10 +660,7 @@ void main() {
             AstProxyApi(
               name: 'Api',
               constructors: <Constructor>[
-                Constructor(
-                  name: 'name',
-                  parameters: <Parameter>[],
-                )
+                Constructor(name: 'name', parameters: <Parameter>[]),
               ],
               fields: <ApiField>[
                 ApiField(
@@ -664,7 +723,7 @@ void main() {
         final StringBuffer sink = StringBuffer();
         const DartGenerator generator = DartGenerator();
         generator.generate(
-          const DartOptions(),
+          const InternalDartOptions(),
           root,
           sink,
           dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -675,7 +734,20 @@ void main() {
         expect(
           collapsedCode,
           contains(
-            r'Api.name({ super.pigeon_binaryMessenger, '
+            r'factory Api.name({ BinaryMessenger? pigeon_binaryMessenger, '
+            r'PigeonInstanceManager? pigeon_instanceManager, '
+            r'required int validType, '
+            r'required AnEnum enumType, '
+            r'required Api2 proxyApiType, '
+            r'int? nullableValidType, '
+            r'AnEnum? nullableEnumType, '
+            r'Api2? nullableProxyApiType, })',
+          ),
+        );
+        expect(
+          collapsedCode,
+          contains(
+            r'Api.pigeon_name({ super.pigeon_binaryMessenger, '
             r'super.pigeon_instanceManager, '
             r'required this.validType, '
             r'required this.enumType, '
@@ -694,30 +766,12 @@ void main() {
             r'nullableValidType, nullableEnumType, nullableProxyApiType ])',
           ),
         );
-        expect(
-          code,
-          contains(r'final int validType;'),
-        );
-        expect(
-          code,
-          contains(r'final AnEnum enumType;'),
-        );
-        expect(
-          code,
-          contains(r'final Api2 proxyApiType;'),
-        );
-        expect(
-          code,
-          contains(r'final int? nullableValidType;'),
-        );
-        expect(
-          code,
-          contains(r'final AnEnum? nullableEnumType;'),
-        );
-        expect(
-          code,
-          contains(r'final Api2? nullableProxyApiType;'),
-        );
+        expect(code, contains(r'final int validType;'));
+        expect(code, contains(r'final AnEnum enumType;'));
+        expect(code, contains(r'final Api2 proxyApiType;'));
+        expect(code, contains(r'final int? nullableValidType;'));
+        expect(code, contains(r'final AnEnum? nullableEnumType;'));
+        expect(code, contains(r'final Api2? nullableProxyApiType;'));
       });
 
       test('attached field', () {
@@ -753,7 +807,7 @@ void main() {
         final StringBuffer sink = StringBuffer();
         const DartGenerator generator = DartGenerator();
         generator.generate(
-          const DartOptions(),
+          const InternalDartOptions(),
           root,
           sink,
           dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -798,7 +852,7 @@ void main() {
         final StringBuffer sink = StringBuffer();
         const DartGenerator generator = DartGenerator();
         generator.generate(
-          const DartOptions(),
+          const InternalDartOptions(),
           root,
           sink,
           dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -806,7 +860,15 @@ void main() {
         final String code = sink.toString();
         expect(code, contains('class Api'));
         expect(
-            code, contains(r'static final Api2 aField = pigeonVar_aField();'));
+          code,
+          contains(
+            r'static Api2 get aField => PigeonOverrides.api_aField ?? _aField;',
+          ),
+        );
+        expect(
+          code,
+          contains(r'static final Api2 _aField = pigeonVar_aField();'),
+        );
         expect(code, contains(r'static Api2 pigeonVar_aField()'));
       });
     });
@@ -890,7 +952,7 @@ void main() {
         final StringBuffer sink = StringBuffer();
         const DartGenerator generator = DartGenerator();
         generator.generate(
-          const DartOptions(),
+          const InternalDartOptions(),
           root,
           sink,
           dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -941,7 +1003,7 @@ void main() {
         final StringBuffer sink = StringBuffer();
         const DartGenerator generator = DartGenerator();
         generator.generate(
-          const DartOptions(),
+          const InternalDartOptions(),
           root,
           sink,
           dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -956,10 +1018,7 @@ void main() {
             r'PigeonInstanceManager? pigeon_instanceManager, })',
           ),
         );
-        expect(
-          collapsedCode,
-          contains(r'pigeonVar_channel.send(null)'),
-        );
+        expect(collapsedCode, contains(r'pigeonVar_channel.send(null)'));
         expect(code, contains('await pigeonVar_sendFuture'));
       });
     });
@@ -970,8 +1029,9 @@ void main() {
           name: 'AnEnum',
           members: <EnumMember>[EnumMember(name: 'one')],
         );
-        final Root root = Root(apis: <Api>[
-          AstProxyApi(
+        final Root root = Root(
+          apis: <Api>[
+            AstProxyApi(
               name: 'Api',
               constructors: <Constructor>[],
               fields: <ApiField>[],
@@ -1028,14 +1088,16 @@ void main() {
                   ],
                   returnType: const TypeDeclaration.voidDeclaration(),
                 ),
-              ])
-        ], classes: <Class>[], enums: <Enum>[
-          anEnum
-        ]);
+              ],
+            ),
+          ],
+          classes: <Class>[],
+          enums: <Enum>[anEnum],
+        );
         final StringBuffer sink = StringBuffer();
         const DartGenerator generator = DartGenerator();
         generator.generate(
-          const DartOptions(),
+          const InternalDartOptions(),
           root,
           sink,
           dartPackageName: DEFAULT_PACKAGE_NAME,
@@ -1055,10 +1117,11 @@ void main() {
         expect(
           collapsedCode,
           contains(
-              r'void Function( Api pigeon_instance, int validType, AnEnum enumType, '
-              r'Api2 proxyApiType, int? nullableValidType, '
-              r'AnEnum? nullableEnumType, Api2? nullableProxyApiType, )? '
-              r'doSomething'),
+            r'void Function( Api pigeon_instance, int validType, AnEnum enumType, '
+            r'Api2 proxyApiType, int? nullableValidType, '
+            r'AnEnum? nullableEnumType, Api2? nullableProxyApiType, )? '
+            r'doSomething',
+          ),
         );
         expect(
           code,
@@ -1070,9 +1133,7 @@ void main() {
         );
         expect(
           code,
-          contains(
-            r'final AnEnum? arg_enumType = (args[2] as AnEnum?);',
-          ),
+          contains(r'final AnEnum? arg_enumType = (args[2] as AnEnum?);'),
         );
         expect(
           code,

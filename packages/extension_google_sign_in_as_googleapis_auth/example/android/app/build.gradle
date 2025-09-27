@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    compileSdk flutter.compileSdkVersion
+    compileSdk = flutter.compileSdkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -47,7 +47,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
-    namespace 'io.flutter.plugins.googlesigninexample'
+    namespace = "io.flutter.plugins.googlesigninexample"
 }
 
 flutter {

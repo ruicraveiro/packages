@@ -1,4 +1,4 @@
-// Copyright 2013 The Flutter Authors. All rights reserved.
+// Copyright 2013 The Flutter Authors
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -6,7 +6,6 @@ import 'dart:io' as io;
 
 import 'package:args/command_runner.dart';
 import 'package:file/file.dart';
-import 'package:file/memory.dart';
 import 'package:flutter_plugin_tools/src/common/core.dart';
 import 'package:flutter_plugin_tools/src/create_all_packages_app_command.dart';
 import 'package:platform/platform.dart';
@@ -20,17 +19,15 @@ void main() {
   late CommandRunner<void> runner;
   late CreateAllPackagesAppCommand command;
   late Platform mockPlatform;
-  late FileSystem fileSystem;
   late Directory testRoot;
   late Directory packagesDir;
   late RecordingProcessRunner processRunner;
 
   setUp(() {
     mockPlatform = MockPlatform(isMacOS: true);
-    fileSystem = MemoryFileSystem();
-    testRoot = fileSystem.systemTempDirectory.createTempSync();
-    packagesDir = testRoot.childDirectory('packages');
-    processRunner = RecordingProcessRunner();
+    (:packagesDir, :processRunner, gitProcessRunner: _, gitDir: _) =
+        configureBaseCommandMocks(platform: mockPlatform);
+    testRoot = packagesDir.parent;
 
     command = CreateAllPackagesAppCommand(
       packagesDir,
@@ -342,7 +339,7 @@ android {
           buildGradle,
           containsAll(<Matcher>[
             contains('This is the legacy file'),
-            contains('compileSdk 34'),
+            contains('compileSdk 36'),
           ]));
     });
 
@@ -375,7 +372,7 @@ android {
       expect(
           buildGradle,
           containsAll(<Matcher>[
-            contains('compileSdk 34'),
+            contains('compileSdk 36'),
             contains('androidx.lifecycle:lifecycle-runtime'),
           ]));
     });
@@ -530,7 +527,7 @@ android {
 
     test('handles --output-dir', () async {
       final Directory customOutputDir =
-          fileSystem.systemTempDirectory.createTempSync();
+          testRoot.fileSystem.systemTempDirectory.createTempSync();
       writeFakeFlutterCreateOutput(customOutputDir);
       createFakePlugin('plugina', packagesDir);
 
