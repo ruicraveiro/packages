@@ -7,6 +7,8 @@ package io.flutter.plugins.camerax;
 import android.hardware.camera2.CaptureRequest;
 import androidx.annotation.NonNull;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * ProxyApi implementation for {@link CaptureRequest}. This class may handle instantiating native
  * object instances that are attached to a Dart instance or handle method calls on the associated
@@ -21,5 +23,11 @@ class CaptureRequestProxyApi extends PigeonApiCaptureRequest {
   @Override
   public CaptureRequest.Key<?> controlAELock() {
     return CaptureRequest.CONTROL_AE_LOCK;
+  }
+
+  @NonNull
+  @Override
+  public CaptureRequest.@NotNull Key<?> controlVideoStabilizationMode() {
+    return CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE;
   }
 }

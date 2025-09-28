@@ -746,7 +746,7 @@ class CameraController extends ValueNotifier<CameraValue> {
         _cameraId,
         modeToSet,
       );
-      value = value.copyWith(videoStabilizationMode: mode);
+      value = value.copyWith(videoStabilizationMode: modeToSet);
     } on PlatformException catch (e) {
       throw CameraException(e.code, e.message);
     }

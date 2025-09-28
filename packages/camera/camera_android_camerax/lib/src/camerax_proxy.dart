@@ -66,10 +66,14 @@ class CameraXProxy {
     this.ratio_4_3FallbackAutoStrategyAspectRatioStrategy =
         _ratio_4_3FallbackAutoStrategyAspectRatioStrategy,
     this.controlAELockCaptureRequest = _controlAELockCaptureRequest,
+    this.controlVideoStabilizationModeRequest =
+        _controlVideoStabilizationModeRequest,
     this.infoSupportedHardwareLevelCameraCharacteristics =
         _infoSupportedHardwareLevelCameraCharacteristics,
     this.sensorOrientationCameraCharacteristics =
         _sensorOrientationCameraCharacteristics,
+    this.controlAvailableVideoStabilizationModesCameraCharacteristics =
+        _controlAvailableVideoStabilizationModesCameraCharacteristics,
   });
 
   /// Handles adding support for generic classes.
@@ -368,6 +372,9 @@ class CameraXProxy {
   /// Calls to [CaptureRequest.controlAELock].
   CaptureRequestKey Function() controlAELockCaptureRequest;
 
+  /// Calls to [CaptureRequest.controlVideoStabilizationMode].
+  CaptureRequestKey Function() controlVideoStabilizationModeRequest;
+
   /// Calls to [CameraCharacteristics.infoSupportedHardwareLevel].
   final CameraCharacteristicsKey Function()
   infoSupportedHardwareLevelCameraCharacteristics;
@@ -375,6 +382,10 @@ class CameraXProxy {
   /// Calls to [CameraCharacteristics.sensorOrientation].
   final CameraCharacteristicsKey Function()
   sensorOrientationCameraCharacteristics;
+
+  /// Calls to [CameraCharacteristics.controlAvailableVideoStabilizationModes].
+  final CameraCharacteristicsKey Function()
+  controlAvailableVideoStabilizationModesCameraCharacteristics;
 
   static CameraSelector _defaultBackCameraCameraSelector() =>
       CameraSelector.defaultBackCamera;
@@ -396,10 +407,17 @@ class CameraXProxy {
   static CaptureRequestKey _controlAELockCaptureRequest() =>
       CaptureRequest.controlAELock;
 
+  static CaptureRequestKey _controlVideoStabilizationModeRequest() =>
+      CaptureRequest.controlVideoStabilizationMode;
+
   static CameraCharacteristicsKey
   _infoSupportedHardwareLevelCameraCharacteristics() =>
       CameraCharacteristics.infoSupportedHardwareLevel;
 
   static CameraCharacteristicsKey _sensorOrientationCameraCharacteristics() =>
       CameraCharacteristics.sensorOrientation;
+
+  static CameraCharacteristicsKey
+  _controlAvailableVideoStabilizationModesCameraCharacteristics() =>
+      CameraCharacteristics.controlAvailableVideoStabilizationModes;
 }

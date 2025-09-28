@@ -7,6 +7,8 @@ package io.flutter.plugins.camerax;
 import android.hardware.camera2.CameraCharacteristics;
 import androidx.annotation.NonNull;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * ProxyApi implementation for {@link CameraCharacteristics}. This class may handle instantiating
  * native object instances that are attached to a Dart instance or handle method calls on the
@@ -27,5 +29,10 @@ class CameraCharacteristicsProxyApi extends PigeonApiCameraCharacteristics {
   @Override
   public CameraCharacteristics.Key<?> sensorOrientation() {
     return CameraCharacteristics.SENSOR_ORIENTATION;
+  }
+
+  @Override
+  public CameraCharacteristics.@NotNull Key<?> controlAvailableVideoStabilizationModes() {
+    return CameraCharacteristics.CONTROL_AVAILABLE_VIDEO_STABILIZATION_MODES;
   }
 }
