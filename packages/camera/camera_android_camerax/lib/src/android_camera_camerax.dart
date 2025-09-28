@@ -924,11 +924,10 @@ class AndroidCameraCameraX extends CameraPlatform {
     int cameraId,
     VideoStabilizationMode mode,
   ) async {
-    final Map<VideoStabilizationMode, ControlAvailableVideoStabilizationMode>
-    availableModes = await _getSupportedVideoStabilizationModeMap(cameraId);
+    final Map<VideoStabilizationMode, int> availableModes =
+        await _getSupportedVideoStabilizationModeMap(cameraId);
 
-    final ControlAvailableVideoStabilizationMode? controlMode =
-        availableModes[mode];
+    final int? controlMode = availableModes[mode];
     if (controlMode == null) {
       throw ArgumentError('Unavailable video stabilization mode.', 'mode');
     }
@@ -936,7 +935,7 @@ class AndroidCameraCameraX extends CameraPlatform {
     final CaptureRequestOptions captureRequestOptions = proxy
         .newCaptureRequestOptions(
           options: <CaptureRequestKey, Object?>{
-            proxy.controlVideoStabilizationModeRequest(): 1,
+            proxy.controlVideoStabilizationModeRequest(): controlMode,
           },
         );
 
@@ -948,11 +947,11 @@ class AndroidCameraCameraX extends CameraPlatform {
 
   /// Gets a map of video stabilization control modes that are supported for the
   /// selected camera, indexed by the respective [VideoStabilizationMode].
-  Future<Map<VideoStabilizationMode, ControlAvailableVideoStabilizationMode>>
+  Future<Map<VideoStabilizationMode, int>>
   _getSupportedVideoStabilizationModeMap(int cameraId) async {
     final CameraInfo? camInfo = cameraInfo;
     if (camInfo == null) {
-      return <VideoStabilizationMode, ControlAvailableVideoStabilizationMode>{};
+      return <VideoStabilizationMode, int>{};
     }
     final Camera2CameraInfo camera2CameraInfo = proxy.fromCamera2CameraInfo(
       cameraInfo: cameraInfo!,
@@ -965,14 +964,15 @@ class AndroidCameraCameraX extends CameraPlatform {
             ))!
             as List<int>;
 
-    final Map<VideoStabilizationMode, ControlAvailableVideoStabilizationMode>
-    modes = <VideoStabilizationMode, ControlAvailableVideoStabilizationMode>{
+    final Map<VideoStabilizationMode, int>
+    modes = <VideoStabilizationMode, int>{
       for (final int controlMode in controlModes)
+        // https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#CONTROL_VIDEO_STABILIZATION_MODE_OFF
         if (controlMode == 0)
-          VideoStabilizationMode.off: ControlAvailableVideoStabilizationMode.off
+          VideoStabilizationMode.off: 0
+        // https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#CONTROL_VIDEO_STABILIZATION_MODE_ON
         else if (controlMode == 1)
-          VideoStabilizationMode.level1:
-              ControlAvailableVideoStabilizationMode.on,
+          VideoStabilizationMode.level1: 1,
     };
 
     return modes;

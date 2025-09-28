@@ -71,21 +71,6 @@ enum InfoSupportedHardwareLevel {
   limited,
 }
 
-/// The video stabilization mode.
-///
-/// See https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#CONTROL_VIDEO_STABILIZATION_MODE_OFF.
-enum ControlAvailableVideoStabilizationMode {
-  /// Video stabilization is disabled.
-  off,
-
-  /// Video stabilization is enabled.
-  on,
-
-  /// Preview stabilization, where the preview in addition to all other non-RAW streams
-  /// are stabilized with the same quality of stabilization, is enabled.
-  previewStabilization,
-}
-
 /// The aspect ratio of the use case.
 ///
 /// See https://developer.android.com/reference/kotlin/androidx/camera/core/AspectRatio.

@@ -2180,6 +2180,21 @@ class MockCameraXProxy extends _i1.Mock implements _i7.CameraXProxy {
           as _i2.CaptureRequestKey Function());
 
   @override
+  _i2.CaptureRequestKey Function() get controlVideoStabilizationModeRequest =>
+      (super.noSuchMethod(
+            Invocation.getter(#controlVideoStabilizationModeRequest),
+            returnValue: () => _FakeCaptureRequestKey_34(
+              this,
+              Invocation.getter(#controlVideoStabilizationModeRequest),
+            ),
+            returnValueForMissingStub: () => _FakeCaptureRequestKey_34(
+              this,
+              Invocation.getter(#controlVideoStabilizationModeRequest),
+            ),
+          )
+          as _i2.CaptureRequestKey Function());
+
+  @override
   _i2.CameraCharacteristicsKey Function()
   get infoSupportedHardwareLevelCameraCharacteristics =>
       (super.noSuchMethod(
@@ -2211,6 +2226,28 @@ class MockCameraXProxy extends _i1.Mock implements _i7.CameraXProxy {
             returnValueForMissingStub: () => _FakeCameraCharacteristicsKey_9(
               this,
               Invocation.getter(#sensorOrientationCameraCharacteristics),
+            ),
+          )
+          as _i2.CameraCharacteristicsKey Function());
+
+  @override
+  _i2.CameraCharacteristicsKey Function()
+  get controlAvailableVideoStabilizationModesCameraCharacteristics =>
+      (super.noSuchMethod(
+            Invocation.getter(
+              #controlAvailableVideoStabilizationModesCameraCharacteristics,
+            ),
+            returnValue: () => _FakeCameraCharacteristicsKey_9(
+              this,
+              Invocation.getter(
+                #controlAvailableVideoStabilizationModesCameraCharacteristics,
+              ),
+            ),
+            returnValueForMissingStub: () => _FakeCameraCharacteristicsKey_9(
+              this,
+              Invocation.getter(
+                #controlAvailableVideoStabilizationModesCameraCharacteristics,
+              ),
             ),
           )
           as _i2.CameraCharacteristicsKey Function());
@@ -2283,6 +2320,17 @@ class MockCameraXProxy extends _i1.Mock implements _i7.CameraXProxy {
     Invocation.setter(
       #controlAELockCaptureRequest,
       _controlAELockCaptureRequest,
+    ),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  set controlVideoStabilizationModeRequest(
+    _i2.CaptureRequestKey Function()? _controlVideoStabilizationModeRequest,
+  ) => super.noSuchMethod(
+    Invocation.setter(
+      #controlVideoStabilizationModeRequest,
+      _controlVideoStabilizationModeRequest,
     ),
     returnValueForMissingStub: null,
   );

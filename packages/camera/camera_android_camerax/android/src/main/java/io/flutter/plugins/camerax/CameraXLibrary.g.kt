@@ -799,7 +799,7 @@ private class CameraXLibraryPigeonProxyApiBaseCodec(val registrar: CameraXLibrar
   }
 
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?) {
-    if (value is Boolean || value is ByteArray || value is Double || value is DoubleArray || value is FloatArray || value is Int || value is IntArray || value is List<*> || value is Long || value is LongArray || value is Map<*, *> || value is String || value is InfoSupportedHardwareLevel || value is ControlAvailableVideoStabilizationMode || value is AspectRatio || value is CameraStateType || value is LiveDataSupportedType || value is VideoQuality || value is MeteringMode || value is LensFacing || value is CameraXFlashMode || value is ResolutionStrategyFallbackRule || value is AspectRatioStrategyFallbackRule || value is CameraStateErrorCode || value == null) {
+    if (value is Boolean || value is ByteArray || value is Double || value is DoubleArray || value is FloatArray || value is Int || value is IntArray || value is List<*> || value is Long || value is LongArray || value is Map<*, *> || value is String || value is InfoSupportedHardwareLevel || value is AspectRatio || value is CameraStateType || value is LiveDataSupportedType || value is VideoQuality || value is MeteringMode || value is LensFacing || value is CameraXFlashMode || value is ResolutionStrategyFallbackRule || value is AspectRatioStrategyFallbackRule || value is CameraStateErrorCode || value == null) {
       super.writeValue(stream, value)
       return
     }
@@ -999,29 +999,6 @@ enum class InfoSupportedHardwareLevel(val raw: Int) {
 
   companion object {
     fun ofRaw(raw: Int): InfoSupportedHardwareLevel? {
-      return values().firstOrNull { it.raw == raw }
-    }
-  }
-}
-
-/**
- * The video stabilization mode.
- *
- * See https://developer.android.com/reference/android/hardware/camera2/CameraMetadata#CONTROL_VIDEO_STABILIZATION_MODE_OFF.
- */
-enum class ControlAvailableVideoStabilizationMode(val raw: Int) {
-  /** Video stabilization is disabled. */
-  OFF(0),
-  /** Video stabilization is enabled. */
-  ON(1),
-  /**
-   * Preview stabilization, where the preview in addition to all other non-RAW streams
-   * are stabilized with the same quality of stabilization, is enabled.
-   */
-  PREVIEW_STABILIZATION(2);
-
-  companion object {
-    fun ofRaw(raw: Int): ControlAvailableVideoStabilizationMode? {
       return values().firstOrNull { it.raw == raw }
     }
   }
@@ -1338,55 +1315,50 @@ private open class CameraXLibraryPigeonCodec : StandardMessageCodec() {
       }
       130.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          ControlAvailableVideoStabilizationMode.ofRaw(it.toInt())
+          AspectRatio.ofRaw(it.toInt())
         }
       }
       131.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          AspectRatio.ofRaw(it.toInt())
+          CameraStateType.ofRaw(it.toInt())
         }
       }
       132.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          CameraStateType.ofRaw(it.toInt())
+          LiveDataSupportedType.ofRaw(it.toInt())
         }
       }
       133.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          LiveDataSupportedType.ofRaw(it.toInt())
+          VideoQuality.ofRaw(it.toInt())
         }
       }
       134.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          VideoQuality.ofRaw(it.toInt())
+          MeteringMode.ofRaw(it.toInt())
         }
       }
       135.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          MeteringMode.ofRaw(it.toInt())
+          LensFacing.ofRaw(it.toInt())
         }
       }
       136.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          LensFacing.ofRaw(it.toInt())
+          CameraXFlashMode.ofRaw(it.toInt())
         }
       }
       137.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          CameraXFlashMode.ofRaw(it.toInt())
+          ResolutionStrategyFallbackRule.ofRaw(it.toInt())
         }
       }
       138.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
-          ResolutionStrategyFallbackRule.ofRaw(it.toInt())
-        }
-      }
-      139.toByte() -> {
-        return (readValue(buffer) as Long?)?.let {
           AspectRatioStrategyFallbackRule.ofRaw(it.toInt())
         }
       }
-      140.toByte() -> {
+      139.toByte() -> {
         return (readValue(buffer) as Long?)?.let {
           CameraStateErrorCode.ofRaw(it.toInt())
         }
@@ -1400,48 +1372,44 @@ private open class CameraXLibraryPigeonCodec : StandardMessageCodec() {
         stream.write(129)
         writeValue(stream, value.raw)
       }
-      is ControlAvailableVideoStabilizationMode -> {
+      is AspectRatio -> {
         stream.write(130)
         writeValue(stream, value.raw)
       }
-      is AspectRatio -> {
+      is CameraStateType -> {
         stream.write(131)
         writeValue(stream, value.raw)
       }
-      is CameraStateType -> {
+      is LiveDataSupportedType -> {
         stream.write(132)
         writeValue(stream, value.raw)
       }
-      is LiveDataSupportedType -> {
+      is VideoQuality -> {
         stream.write(133)
         writeValue(stream, value.raw)
       }
-      is VideoQuality -> {
+      is MeteringMode -> {
         stream.write(134)
         writeValue(stream, value.raw)
       }
-      is MeteringMode -> {
+      is LensFacing -> {
         stream.write(135)
         writeValue(stream, value.raw)
       }
-      is LensFacing -> {
+      is CameraXFlashMode -> {
         stream.write(136)
         writeValue(stream, value.raw)
       }
-      is CameraXFlashMode -> {
+      is ResolutionStrategyFallbackRule -> {
         stream.write(137)
         writeValue(stream, value.raw)
       }
-      is ResolutionStrategyFallbackRule -> {
+      is AspectRatioStrategyFallbackRule -> {
         stream.write(138)
         writeValue(stream, value.raw)
       }
-      is AspectRatioStrategyFallbackRule -> {
-        stream.write(139)
-        writeValue(stream, value.raw)
-      }
       is CameraStateErrorCode -> {
-        stream.write(140)
+        stream.write(139)
         writeValue(stream, value.raw)
       }
       else -> super.writeValue(stream, value)
