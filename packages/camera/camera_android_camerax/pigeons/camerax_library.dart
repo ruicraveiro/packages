@@ -1113,9 +1113,6 @@ abstract class CaptureRequest {
   /// This key is available on all devices.
   @static
   late CaptureRequestKey controlAELock;
-
-  @static
-  late CaptureRequestKey controlVideoStabilizationMode;
 }
 
 /// A Key is used to do capture request field lookups with CaptureRequest.get or

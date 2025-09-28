@@ -910,41 +910,6 @@ class AndroidCameraCameraX extends CameraPlatform {
     }
   }
 
-  @override
-  Future<Iterable<VideoStabilizationMode>> getSupportedVideoStabilizationModes(
-    int cameraId,
-  ) async {
-    return (await _getSupportedVideoStabilizationModeMap(cameraId)).keys;
-  }
-
-  /// Gets a map of video stabilization control modes that are supported for the
-  /// selected camera, indexed by the respective [VideoStabilizationMode].
-  Future<Map<VideoStabilizationMode, int>>
-  _getSupportedVideoStabilizationModeMap(int cameraId) async {
-    final CameraInfo? camInfo = cameraInfo;
-    if (camInfo == null) {
-      return <VideoStabilizationMode, int>{};
-    }
-    final Camera2CameraInfo cam2Info = proxy.fromCamera2CameraInfo(
-      cameraInfo: camInfo,
-    );
-
-    final List<int> controlModes = await cam2Info
-        .getAvailableVideoStabilizationModes();
-
-    final Map<VideoStabilizationMode, int> modes =
-        <VideoStabilizationMode, int>{
-          for (final int controlMode in controlModes)
-            if (controlMode == CameraMetadata.controlVideoStabilizationModeOff)
-              VideoStabilizationMode.off: controlMode
-            else if (controlMode ==
-                CameraMetadata.controlVideoStabilizationModeOn)
-              VideoStabilizationMode.level1: controlMode,
-        };
-
-    return modes;
-  }
-
   /// The ui orientation changed.
   @override
   Stream<DeviceOrientationChangedEvent> onDeviceOrientationChanged() {
