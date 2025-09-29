@@ -349,8 +349,8 @@ void main() {
 
       test('Should receive initialized event', () async {
         // Act
-        final Stream<CameraInitializedEvent> eventStream = camera
-            .onCameraInitialized(cameraId);
+        final Stream<CameraInitializedEvent> eventStream =
+            camera.onCameraInitialized(cameraId);
         final StreamQueue<CameraInitializedEvent> streamQueue =
             StreamQueue<CameraInitializedEvent>(eventStream);
 
@@ -378,8 +378,8 @@ void main() {
 
       test('Should receive resolution changes', () async {
         // Act
-        final Stream<CameraResolutionChangedEvent> resolutionStream = camera
-            .onCameraResolutionChanged(cameraId);
+        final Stream<CameraResolutionChangedEvent> resolutionStream =
+            camera.onCameraResolutionChanged(cameraId);
         final StreamQueue<CameraResolutionChangedEvent> streamQueue =
             StreamQueue<CameraResolutionChangedEvent>(resolutionStream);
 

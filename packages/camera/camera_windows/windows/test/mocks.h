@@ -35,12 +35,12 @@ class MockBinaryMessenger : public flutter::BinaryMessenger {
   ~MockBinaryMessenger() = default;
 
   MOCK_METHOD(void, Send,
-              (const std::string& channel, const uint8_t* message,
+              (const std::string &channel, const uint8_t *message,
                size_t message_size, flutter::BinaryReply reply),
               (const));
 
   MOCK_METHOD(void, SetMessageHandler,
-              (const std::string& channel,
+              (const std::string &channel,
                flutter::BinaryMessageHandler handler),
               ());
 };
@@ -49,7 +49,7 @@ class MockTextureRegistrar : public flutter::TextureRegistrar {
  public:
   MockTextureRegistrar() {
     ON_CALL(*this, RegisterTexture)
-        .WillByDefault([this](flutter::TextureVariant* texture) -> int64_t {
+        .WillByDefault([this](flutter::TextureVariant *texture) -> int64_t {
           EXPECT_TRUE(texture);
           this->texture_ = texture;
           this->texture_id_ = 1000;
@@ -103,7 +103,7 @@ class MockTextureRegistrar : public flutter::TextureRegistrar {
   MOCK_METHOD(bool, MarkTextureFrameAvailable, (int64_t), (override));
 
   int64_t texture_id_ = -1;
-  flutter::TextureVariant* texture_ = nullptr;
+  flutter::TextureVariant *texture_ = nullptr;
 };
 
 class MockCameraFactory : public CameraFactory {
@@ -118,62 +118,62 @@ class MockCameraFactory : public CameraFactory {
   ~MockCameraFactory() = default;
 
   // Disallow copy and move.
-  MockCameraFactory(const MockCameraFactory&) = delete;
-  MockCameraFactory& operator=(const MockCameraFactory&) = delete;
+  MockCameraFactory(const MockCameraFactory &) = delete;
+  MockCameraFactory &operator=(const MockCameraFactory &) = delete;
 
   MOCK_METHOD(std::unique_ptr<Camera>, CreateCamera,
-              (const std::string& device_id), (override));
+              (const std::string &device_id), (override));
 
   std::unique_ptr<Camera> pending_camera_;
 };
 
 class MockCamera : public Camera {
  public:
-  MockCamera(const std::string& device_id)
+  MockCamera(const std::string &device_id)
       : device_id_(device_id), Camera(device_id) {}
 
   ~MockCamera() = default;
 
   // Disallow copy and move.
-  MockCamera(const MockCamera&) = delete;
-  MockCamera& operator=(const MockCamera&) = delete;
+  MockCamera(const MockCamera &) = delete;
+  MockCamera &operator=(const MockCamera &) = delete;
 
   MOCK_METHOD(void, OnCreateCaptureEngineSucceeded, (int64_t texture_id),
               (override));
   MOCK_METHOD(std::unique_ptr<flutter::MethodResult<>>, GetPendingResultByType,
               (PendingResultType type));
   MOCK_METHOD(void, OnCreateCaptureEngineFailed,
-              (CameraResult result, const std::string& error), (override));
+              (CameraResult result, const std::string &error), (override));
 
   MOCK_METHOD(void, OnStartPreviewSucceeded, (int32_t width, int32_t height),
               (override));
   MOCK_METHOD(void, OnStartPreviewFailed,
-              (CameraResult result, const std::string& error), (override));
+              (CameraResult result, const std::string &error), (override));
 
   MOCK_METHOD(void, OnResumePreviewSucceeded, (), (override));
   MOCK_METHOD(void, OnResumePreviewFailed,
-              (CameraResult result, const std::string& error), (override));
+              (CameraResult result, const std::string &error), (override));
 
   MOCK_METHOD(void, OnPausePreviewSucceeded, (), (override));
   MOCK_METHOD(void, OnPausePreviewFailed,
-              (CameraResult result, const std::string& error), (override));
+              (CameraResult result, const std::string &error), (override));
 
   MOCK_METHOD(void, OnStartRecordSucceeded, (), (override));
   MOCK_METHOD(void, OnStartRecordFailed,
-              (CameraResult result, const std::string& error), (override));
+              (CameraResult result, const std::string &error), (override));
 
-  MOCK_METHOD(void, OnStopRecordSucceeded, (const std::string& file_path),
+  MOCK_METHOD(void, OnStopRecordSucceeded, (const std::string &file_path),
               (override));
   MOCK_METHOD(void, OnStopRecordFailed,
-              (CameraResult result, const std::string& error), (override));
+              (CameraResult result, const std::string &error), (override));
 
-  MOCK_METHOD(void, OnTakePictureSucceeded, (const std::string& file_path),
+  MOCK_METHOD(void, OnTakePictureSucceeded, (const std::string &file_path),
               (override));
   MOCK_METHOD(void, OnTakePictureFailed,
-              (CameraResult result, const std::string& error), (override));
+              (CameraResult result, const std::string &error), (override));
 
   MOCK_METHOD(void, OnCaptureError,
-              (CameraResult result, const std::string& error), (override));
+              (CameraResult result, const std::string &error), (override));
 
   MOCK_METHOD(bool, HasDeviceId, (std::string & device_id), (const override));
   MOCK_METHOD(bool, HasCameraId, (int64_t camera_id), (const override));
@@ -197,13 +197,13 @@ class MockCamera : public Camera {
   MOCK_METHOD(bool, HasPendingResultByType, (PendingResultType type),
               (const override));
 
-  MOCK_METHOD(camera_windows::CaptureController*, GetCaptureController, (),
+  MOCK_METHOD(camera_windows::CaptureController *, GetCaptureController, (),
               (override));
 
   MOCK_METHOD(bool, InitCamera,
               (flutter::TextureRegistrar * texture_registrar,
-               flutter::BinaryMessenger* messenger,
-               const PlatformMediaSettings& media_settings),
+               flutter::BinaryMessenger *messenger,
+               const PlatformMediaSettings &media_settings),
               (override));
 
   std::unique_ptr<CaptureController> capture_controller_;
@@ -221,9 +221,9 @@ class MockCaptureControllerFactory : public CaptureControllerFactory {
   virtual ~MockCaptureControllerFactory() = default;
 
   // Disallow copy and move.
-  MockCaptureControllerFactory(const MockCaptureControllerFactory&) = delete;
-  MockCaptureControllerFactory& operator=(const MockCaptureControllerFactory&) =
-      delete;
+  MockCaptureControllerFactory(const MockCaptureControllerFactory &) = delete;
+  MockCaptureControllerFactory &operator=(
+      const MockCaptureControllerFactory &) = delete;
 
   MOCK_METHOD(std::unique_ptr<CaptureController>, CreateCaptureController,
               (CaptureControllerListener * listener), (override));
@@ -235,8 +235,8 @@ class MockCaptureController : public CaptureController {
 
   MOCK_METHOD(bool, InitCaptureDevice,
               (flutter::TextureRegistrar * texture_registrar,
-               const std::string& device_id,
-               const PlatformMediaSettings& media_settings),
+               const std::string &device_id,
+               const PlatformMediaSettings &media_settings),
               (override));
 
   MOCK_METHOD(uint32_t, GetPreviewWidth, (), (const override));
@@ -246,9 +246,9 @@ class MockCaptureController : public CaptureController {
   MOCK_METHOD(void, StartPreview, (), (override));
   MOCK_METHOD(void, ResumePreview, (), (override));
   MOCK_METHOD(void, PausePreview, (), (override));
-  MOCK_METHOD(void, StartRecord, (const std::string& file_path), (override));
+  MOCK_METHOD(void, StartRecord, (const std::string &file_path), (override));
   MOCK_METHOD(void, StopRecord, (), (override));
-  MOCK_METHOD(void, TakePicture, (const std::string& file_path), (override));
+  MOCK_METHOD(void, TakePicture, (const std::string &file_path), (override));
 };
 
 // MockCameraPlugin extends CameraPlugin behaviour a bit to allow adding cameras
@@ -256,25 +256,25 @@ class MockCaptureController : public CaptureController {
 // system calls
 class MockCameraPlugin : public CameraPlugin {
  public:
-  MockCameraPlugin(flutter::TextureRegistrar* texture_registrar,
-                   flutter::BinaryMessenger* messenger)
+  MockCameraPlugin(flutter::TextureRegistrar *texture_registrar,
+                   flutter::BinaryMessenger *messenger)
       : CameraPlugin(texture_registrar, messenger) {}
 
   // Creates a plugin instance with the given CameraFactory instance.
   // Exists for unit testing with mock implementations.
-  MockCameraPlugin(flutter::TextureRegistrar* texture_registrar,
-                   flutter::BinaryMessenger* messenger,
+  MockCameraPlugin(flutter::TextureRegistrar *texture_registrar,
+                   flutter::BinaryMessenger *messenger,
                    std::unique_ptr<CameraFactory> camera_factory)
       : CameraPlugin(texture_registrar, messenger, std::move(camera_factory)) {}
 
   ~MockCameraPlugin() = default;
 
   // Disallow copy and move.
-  MockCameraPlugin(const MockCameraPlugin&) = delete;
-  MockCameraPlugin& operator=(const MockCameraPlugin&) = delete;
+  MockCameraPlugin(const MockCameraPlugin &) = delete;
+  MockCameraPlugin &operator=(const MockCameraPlugin &) = delete;
 
   MOCK_METHOD(bool, EnumerateVideoCaptureDeviceSources,
-              (IMFActivate * **devices, UINT32* count), (override));
+              (IMFActivate * **devices, UINT32 *count), (override));
 
   // Helper to add camera without creating it via CameraFactory for testing
   // purposes
@@ -301,12 +301,12 @@ class MockCaptureSource : public IMFCaptureSource {
   }
 
   // IUnknown
-  STDMETHODIMP_(HRESULT) QueryInterface(const IID& riid, void** ppv) {
+  STDMETHODIMP_(HRESULT) QueryInterface(const IID &riid, void **ppv) {
     *ppv = nullptr;
 
     if (riid == IID_IMFCaptureSource) {
-      *ppv = static_cast<IMFCaptureSource*>(this);
-      ((IUnknown*)*ppv)->AddRef();
+      *ppv = static_cast<IMFCaptureSource *>(this);
+      ((IUnknown *)*ppv)->AddRef();
       return S_OK;
     }
 
@@ -315,35 +315,35 @@ class MockCaptureSource : public IMFCaptureSource {
 
   MOCK_METHOD(HRESULT, GetCaptureDeviceSource,
               (MF_CAPTURE_ENGINE_DEVICE_TYPE mfCaptureEngineDeviceType,
-               IMFMediaSource** ppMediaSource));
+               IMFMediaSource **ppMediaSource));
   MOCK_METHOD(HRESULT, GetCaptureDeviceActivate,
               (MF_CAPTURE_ENGINE_DEVICE_TYPE mfCaptureEngineDeviceType,
-               IMFActivate** ppActivate));
+               IMFActivate **ppActivate));
   MOCK_METHOD(HRESULT, GetService,
-              (REFIID rguidService, REFIID riid, IUnknown** ppUnknown));
+              (REFIID rguidService, REFIID riid, IUnknown **ppUnknown));
   MOCK_METHOD(HRESULT, AddEffect,
-              (DWORD dwSourceStreamIndex, IUnknown* pUnknown));
+              (DWORD dwSourceStreamIndex, IUnknown *pUnknown));
 
   MOCK_METHOD(HRESULT, RemoveEffect,
-              (DWORD dwSourceStreamIndex, IUnknown* pUnknown));
+              (DWORD dwSourceStreamIndex, IUnknown *pUnknown));
   MOCK_METHOD(HRESULT, RemoveAllEffects, (DWORD dwSourceStreamIndex));
   MOCK_METHOD(HRESULT, GetAvailableDeviceMediaType,
               (DWORD dwSourceStreamIndex, DWORD dwMediaTypeIndex,
-               IMFMediaType** ppMediaType));
+               IMFMediaType **ppMediaType));
   MOCK_METHOD(HRESULT, SetCurrentDeviceMediaType,
-              (DWORD dwSourceStreamIndex, IMFMediaType* pMediaType));
+              (DWORD dwSourceStreamIndex, IMFMediaType *pMediaType));
   MOCK_METHOD(HRESULT, GetCurrentDeviceMediaType,
-              (DWORD dwSourceStreamIndex, IMFMediaType** ppMediaType));
+              (DWORD dwSourceStreamIndex, IMFMediaType **ppMediaType));
   MOCK_METHOD(HRESULT, GetDeviceStreamCount, (DWORD * pdwStreamCount));
   MOCK_METHOD(HRESULT, GetDeviceStreamCategory,
               (DWORD dwSourceStreamIndex,
-               MF_CAPTURE_ENGINE_STREAM_CATEGORY* pStreamCategory));
+               MF_CAPTURE_ENGINE_STREAM_CATEGORY *pStreamCategory));
   MOCK_METHOD(HRESULT, GetMirrorState,
-              (DWORD dwStreamIndex, BOOL* pfMirrorState));
+              (DWORD dwStreamIndex, BOOL *pfMirrorState));
   MOCK_METHOD(HRESULT, SetMirrorState,
               (DWORD dwStreamIndex, BOOL fMirrorState));
   MOCK_METHOD(HRESULT, GetStreamIndexFromFriendlyName,
-              (UINT32 uifriendlyName, DWORD* pdwActualStreamIndex));
+              (UINT32 uifriendlyName, DWORD *pdwActualStreamIndex));
 
  private:
   volatile ULONG ref_ = 0;
@@ -368,12 +368,12 @@ class MockMediaSource : public IMFMediaSourceEx {
   }
 
   // IUnknown
-  STDMETHODIMP_(HRESULT) QueryInterface(const IID& riid, void** ppv) {
+  STDMETHODIMP_(HRESULT) QueryInterface(const IID &riid, void **ppv) {
     *ppv = nullptr;
 
     if (riid == IID_IMFMediaSource) {
-      *ppv = static_cast<IMFMediaSource*>(this);
-      ((IUnknown*)*ppv)->AddRef();
+      *ppv = static_cast<IMFMediaSource *>(this);
+      ((IUnknown *)*ppv)->AddRef();
       return S_OK;
     }
 
@@ -381,18 +381,18 @@ class MockMediaSource : public IMFMediaSourceEx {
   }
 
   // IMFMediaSource
-  HRESULT GetCharacteristics(DWORD* dwCharacteristics) override {
+  HRESULT GetCharacteristics(DWORD *dwCharacteristics) override {
     return E_NOTIMPL;
   }
   // IMFMediaSource
   HRESULT CreatePresentationDescriptor(
-      IMFPresentationDescriptor** presentationDescriptor) override {
+      IMFPresentationDescriptor **presentationDescriptor) override {
     return E_NOTIMPL;
   }
   // IMFMediaSource
-  HRESULT Start(IMFPresentationDescriptor* presentationDescriptor,
-                const GUID* guidTimeFormat,
-                const PROPVARIANT* varStartPosition) override {
+  HRESULT Start(IMFPresentationDescriptor *presentationDescriptor,
+                const GUID *guidTimeFormat,
+                const PROPVARIANT *varStartPosition) override {
     return E_NOTIMPL;
   }
   // IMFMediaSource
@@ -403,32 +403,32 @@ class MockMediaSource : public IMFMediaSourceEx {
   HRESULT Shutdown(void) override { return E_NOTIMPL; }
 
   // IMFMediaEventGenerator
-  HRESULT GetEvent(DWORD dwFlags, IMFMediaEvent** event) override {
+  HRESULT GetEvent(DWORD dwFlags, IMFMediaEvent **event) override {
     return E_NOTIMPL;
   }
   // IMFMediaEventGenerator
-  HRESULT BeginGetEvent(IMFAsyncCallback* callback,
-                        IUnknown* unkState) override {
+  HRESULT BeginGetEvent(IMFAsyncCallback *callback,
+                        IUnknown *unkState) override {
     return E_NOTIMPL;
   }
   // IMFMediaEventGenerator
-  HRESULT EndGetEvent(IMFAsyncResult* result, IMFMediaEvent** event) override {
+  HRESULT EndGetEvent(IMFAsyncResult *result, IMFMediaEvent **event) override {
     return E_NOTIMPL;
   }
   // IMFMediaEventGenerator
   HRESULT QueueEvent(MediaEventType met, REFGUID guidExtendedType,
-                     HRESULT hrStatus, const PROPVARIANT* value) override {
+                     HRESULT hrStatus, const PROPVARIANT *value) override {
     return E_NOTIMPL;
   }
 
   // IMFMediaSourceEx
-  HRESULT GetSourceAttributes(IMFAttributes** attributes) { return E_NOTIMPL; }
+  HRESULT GetSourceAttributes(IMFAttributes **attributes) { return E_NOTIMPL; }
   // IMFMediaSourceEx
-  HRESULT GetStreamAttributes(DWORD stream_id, IMFAttributes** attributes) {
+  HRESULT GetStreamAttributes(DWORD stream_id, IMFAttributes **attributes) {
     return E_NOTIMPL;
   }
   // IMFMediaSourceEx
-  HRESULT SetD3DManager(IUnknown* manager) { return S_OK; }
+  HRESULT SetD3DManager(IUnknown *manager) { return S_OK; }
 
  private:
   volatile ULONG ref_ = 0;
@@ -438,17 +438,17 @@ class MockCapturePreviewSink : public IMFCapturePreviewSink {
  public:
   // IMFCaptureSink
   MOCK_METHOD(HRESULT, GetOutputMediaType,
-              (DWORD dwSinkStreamIndex, IMFMediaType** ppMediaType));
+              (DWORD dwSinkStreamIndex, IMFMediaType **ppMediaType));
 
   // IMFCaptureSink
   MOCK_METHOD(HRESULT, GetService,
               (DWORD dwSinkStreamIndex, REFGUID rguidService, REFIID riid,
-               IUnknown** ppUnknown));
+               IUnknown **ppUnknown));
 
   // IMFCaptureSink
   MOCK_METHOD(HRESULT, AddStream,
-              (DWORD dwSourceStreamIndex, IMFMediaType* pMediaType,
-               IMFAttributes* pAttributes, DWORD* pdwSinkStreamIndex));
+              (DWORD dwSourceStreamIndex, IMFMediaType *pMediaType,
+               IMFAttributes *pAttributes, DWORD *pdwSinkStreamIndex));
 
   // IMFCaptureSink
   MOCK_METHOD(HRESULT, Prepare, ());
@@ -464,13 +464,13 @@ class MockCapturePreviewSink : public IMFCapturePreviewSink {
 
   // IMFCapturePreviewSink
   MOCK_METHOD(HRESULT, UpdateVideo,
-              (const MFVideoNormalizedRect* pSrc, const RECT* pDst,
-               const COLORREF* pBorderClr));
+              (const MFVideoNormalizedRect *pSrc, const RECT *pDst,
+               const COLORREF *pBorderClr));
 
   // IMFCapturePreviewSink
   MOCK_METHOD(HRESULT, SetSampleCallback,
               (DWORD dwStreamSinkIndex,
-               IMFCaptureEngineOnSampleCallback* pCallback));
+               IMFCaptureEngineOnSampleCallback *pCallback));
 
   // IMFCapturePreviewSink
   MOCK_METHOD(HRESULT, GetMirrorState, (BOOL * pfMirrorState));
@@ -480,7 +480,7 @@ class MockCapturePreviewSink : public IMFCapturePreviewSink {
 
   // IMFCapturePreviewSink
   MOCK_METHOD(HRESULT, GetRotation,
-              (DWORD dwStreamIndex, DWORD* pdwRotationValue));
+              (DWORD dwStreamIndex, DWORD *pdwRotationValue));
 
   // IMFCapturePreviewSink
   MOCK_METHOD(HRESULT, SetRotation,
@@ -502,19 +502,19 @@ class MockCapturePreviewSink : public IMFCapturePreviewSink {
   }
 
   // IUnknown
-  STDMETHODIMP_(HRESULT) QueryInterface(const IID& riid, void** ppv) {
+  STDMETHODIMP_(HRESULT) QueryInterface(const IID &riid, void **ppv) {
     *ppv = nullptr;
 
     if (riid == IID_IMFCapturePreviewSink) {
-      *ppv = static_cast<IMFCapturePreviewSink*>(this);
-      ((IUnknown*)*ppv)->AddRef();
+      *ppv = static_cast<IMFCapturePreviewSink *>(this);
+      ((IUnknown *)*ppv)->AddRef();
       return S_OK;
     }
 
     return E_NOINTERFACE;
   }
 
-  void SendFakeSample(uint8_t* src_buffer, uint32_t size) {
+  void SendFakeSample(uint8_t *src_buffer, uint32_t size) {
     assert(sample_callback_);
     ComPtr<IMFSample> sample;
     ComPtr<IMFMediaBuffer> buffer;
@@ -525,7 +525,7 @@ class MockCapturePreviewSink : public IMFCapturePreviewSink {
     }
 
     if (SUCCEEDED(hr)) {
-      uint8_t* target_data;
+      uint8_t *target_data;
       if (SUCCEEDED(buffer->Lock(&target_data, nullptr, nullptr))) {
         std::copy(src_buffer, src_buffer + size, target_data);
       }
@@ -556,17 +556,17 @@ class MockCaptureRecordSink : public IMFCaptureRecordSink {
  public:
   // IMFCaptureSink
   MOCK_METHOD(HRESULT, GetOutputMediaType,
-              (DWORD dwSinkStreamIndex, IMFMediaType** ppMediaType));
+              (DWORD dwSinkStreamIndex, IMFMediaType **ppMediaType));
 
   // IMFCaptureSink
   MOCK_METHOD(HRESULT, GetService,
               (DWORD dwSinkStreamIndex, REFGUID rguidService, REFIID riid,
-               IUnknown** ppUnknown));
+               IUnknown **ppUnknown));
 
   // IMFCaptureSink
   MOCK_METHOD(HRESULT, AddStream,
-              (DWORD dwSourceStreamIndex, IMFMediaType* pMediaType,
-               IMFAttributes* pAttributes, DWORD* pdwSinkStreamIndex));
+              (DWORD dwSourceStreamIndex, IMFMediaType *pMediaType,
+               IMFAttributes *pAttributes, DWORD *pdwSinkStreamIndex));
 
   // IMFCaptureSink
   MOCK_METHOD(HRESULT, Prepare, ());
@@ -584,14 +584,14 @@ class MockCaptureRecordSink : public IMFCaptureRecordSink {
   // IMFCaptureRecordSink
   MOCK_METHOD(HRESULT, SetSampleCallback,
               (DWORD dwStreamSinkIndex,
-               IMFCaptureEngineOnSampleCallback* pCallback));
+               IMFCaptureEngineOnSampleCallback *pCallback));
 
   // IMFCaptureRecordSink
   MOCK_METHOD(HRESULT, SetCustomSink, (IMFMediaSink * pMediaSink));
 
   // IMFCaptureRecordSink
   MOCK_METHOD(HRESULT, GetRotation,
-              (DWORD dwStreamIndex, DWORD* pdwRotationValue));
+              (DWORD dwStreamIndex, DWORD *pdwRotationValue));
 
   // IMFCaptureRecordSink
   MOCK_METHOD(HRESULT, SetRotation,
@@ -610,12 +610,12 @@ class MockCaptureRecordSink : public IMFCaptureRecordSink {
   }
 
   // IUnknown
-  STDMETHODIMP_(HRESULT) QueryInterface(const IID& riid, void** ppv) {
+  STDMETHODIMP_(HRESULT) QueryInterface(const IID &riid, void **ppv) {
     *ppv = nullptr;
 
     if (riid == IID_IMFCaptureRecordSink) {
-      *ppv = static_cast<IMFCaptureRecordSink*>(this);
-      ((IUnknown*)*ppv)->AddRef();
+      *ppv = static_cast<IMFCaptureRecordSink *>(this);
+      ((IUnknown *)*ppv)->AddRef();
       return S_OK;
     }
 
@@ -631,17 +631,17 @@ class MockCapturePhotoSink : public IMFCapturePhotoSink {
  public:
   // IMFCaptureSink
   MOCK_METHOD(HRESULT, GetOutputMediaType,
-              (DWORD dwSinkStreamIndex, IMFMediaType** ppMediaType));
+              (DWORD dwSinkStreamIndex, IMFMediaType **ppMediaType));
 
   // IMFCaptureSink
   MOCK_METHOD(HRESULT, GetService,
               (DWORD dwSinkStreamIndex, REFGUID rguidService, REFIID riid,
-               IUnknown** ppUnknown));
+               IUnknown **ppUnknown));
 
   // IMFCaptureSink
   MOCK_METHOD(HRESULT, AddStream,
-              (DWORD dwSourceStreamIndex, IMFMediaType* pMediaType,
-               IMFAttributes* pAttributes, DWORD* pdwSinkStreamIndex));
+              (DWORD dwSourceStreamIndex, IMFMediaType *pMediaType,
+               IMFAttributes *pAttributes, DWORD *pdwSinkStreamIndex));
 
   // IMFCaptureSink
   MOCK_METHOD(HRESULT, Prepare, ());
@@ -672,12 +672,12 @@ class MockCapturePhotoSink : public IMFCapturePhotoSink {
   }
 
   // IUnknown
-  STDMETHODIMP_(HRESULT) QueryInterface(const IID& riid, void** ppv) {
+  STDMETHODIMP_(HRESULT) QueryInterface(const IID &riid, void **ppv) {
     *ppv = nullptr;
 
     if (riid == IID_IMFCapturePhotoSink) {
-      *ppv = static_cast<IMFCapturePhotoSink*>(this);
-      ((IUnknown*)*ppv)->AddRef();
+      *ppv = static_cast<IMFCapturePhotoSink *>(this);
+      ((IUnknown *)*ppv)->AddRef();
       return S_OK;
     }
 
@@ -695,84 +695,84 @@ class FakeIMFAttributesBase : public T {
                 "I must inherit from IMFAttributes");
 
   // IIMFAttributes
-  HRESULT GetItem(REFGUID guidKey, PROPVARIANT* pValue) override {
+  HRESULT GetItem(REFGUID guidKey, PROPVARIANT *pValue) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
-  HRESULT GetItemType(REFGUID guidKey, MF_ATTRIBUTE_TYPE* pType) override {
+  HRESULT GetItemType(REFGUID guidKey, MF_ATTRIBUTE_TYPE *pType) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
   HRESULT CompareItem(REFGUID guidKey, REFPROPVARIANT Value,
-                      BOOL* pbResult) override {
+                      BOOL *pbResult) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
-  HRESULT Compare(IMFAttributes* pTheirs, MF_ATTRIBUTES_MATCH_TYPE MatchType,
-                  BOOL* pbResult) override {
+  HRESULT Compare(IMFAttributes *pTheirs, MF_ATTRIBUTES_MATCH_TYPE MatchType,
+                  BOOL *pbResult) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
-  HRESULT GetUINT32(REFGUID guidKey, UINT32* punValue) override {
+  HRESULT GetUINT32(REFGUID guidKey, UINT32 *punValue) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
-  HRESULT GetUINT64(REFGUID guidKey, UINT64* punValue) override {
+  HRESULT GetUINT64(REFGUID guidKey, UINT64 *punValue) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
-  HRESULT GetDouble(REFGUID guidKey, double* pfValue) override {
+  HRESULT GetDouble(REFGUID guidKey, double *pfValue) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
-  HRESULT GetGUID(REFGUID guidKey, GUID* pguidValue) override {
+  HRESULT GetGUID(REFGUID guidKey, GUID *pguidValue) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
-  HRESULT GetStringLength(REFGUID guidKey, UINT32* pcchLength) override {
+  HRESULT GetStringLength(REFGUID guidKey, UINT32 *pcchLength) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
   HRESULT GetString(REFGUID guidKey, LPWSTR pwszValue, UINT32 cchBufSize,
-                    UINT32* pcchLength) override {
+                    UINT32 *pcchLength) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
-  HRESULT GetAllocatedString(REFGUID guidKey, LPWSTR* ppwszValue,
-                             UINT32* pcchLength) override {
+  HRESULT GetAllocatedString(REFGUID guidKey, LPWSTR *ppwszValue,
+                             UINT32 *pcchLength) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
-  HRESULT GetBlobSize(REFGUID guidKey, UINT32* pcbBlobSize) override {
+  HRESULT GetBlobSize(REFGUID guidKey, UINT32 *pcbBlobSize) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
-  HRESULT GetBlob(REFGUID guidKey, UINT8* pBuf, UINT32 cbBufSize,
-                  UINT32* pcbBlobSize) override {
+  HRESULT GetBlob(REFGUID guidKey, UINT8 *pBuf, UINT32 cbBufSize,
+                  UINT32 *pcbBlobSize) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
-  HRESULT GetAllocatedBlob(REFGUID guidKey, UINT8** ppBuf,
-                           UINT32* pcbSize) override {
+  HRESULT GetAllocatedBlob(REFGUID guidKey, UINT8 **ppBuf,
+                           UINT32 *pcbSize) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
   HRESULT GetUnknown(REFGUID guidKey, REFIID riid,
-                     __RPC__deref_out_opt LPVOID* ppv) override {
+                     __RPC__deref_out_opt LPVOID *ppv) override {
     return E_NOTIMPL;
   }
 
@@ -813,13 +813,13 @@ class FakeIMFAttributesBase : public T {
   }
 
   // IIMFAttributes
-  HRESULT SetBlob(REFGUID guidKey, const UINT8* pBuf,
+  HRESULT SetBlob(REFGUID guidKey, const UINT8 *pBuf,
                   UINT32 cbBufSize) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
-  HRESULT SetUnknown(REFGUID guidKey, IUnknown* pUnknown) override {
+  HRESULT SetUnknown(REFGUID guidKey, IUnknown *pUnknown) override {
     return E_NOTIMPL;
   }
 
@@ -830,16 +830,16 @@ class FakeIMFAttributesBase : public T {
   HRESULT UnlockStore(void) override { return E_NOTIMPL; }
 
   // IIMFAttributes
-  HRESULT GetCount(UINT32* pcItems) override { return E_NOTIMPL; }
+  HRESULT GetCount(UINT32 *pcItems) override { return E_NOTIMPL; }
 
   // IIMFAttributes
-  HRESULT GetItemByIndex(UINT32 unIndex, GUID* pguidKey,
-                         PROPVARIANT* pValue) override {
+  HRESULT GetItemByIndex(UINT32 unIndex, GUID *pguidKey,
+                         PROPVARIANT *pValue) override {
     return E_NOTIMPL;
   }
 
   // IIMFAttributes
-  HRESULT CopyAllItems(IMFAttributes* pDest) override { return E_NOTIMPL; }
+  HRESULT CopyAllItems(IMFAttributes *pDest) override { return E_NOTIMPL; }
 };
 
 class FakeMediaType : public FakeIMFAttributesBase<IMFMediaType> {
@@ -851,7 +851,7 @@ class FakeMediaType : public FakeIMFAttributesBase<IMFMediaType> {
         height_(height) {}
 
   // IMFAttributes
-  HRESULT GetUINT64(REFGUID key, UINT64* value) override {
+  HRESULT GetUINT64(REFGUID key, UINT64 *value) override {
     if (key == MF_MT_FRAME_SIZE) {
       *value = (int64_t)width_ << 32 | (int64_t)height_;
       return S_OK;
@@ -863,7 +863,7 @@ class FakeMediaType : public FakeIMFAttributesBase<IMFMediaType> {
   };
 
   // IMFAttributes
-  HRESULT GetUINT32(REFGUID key, UINT32* value) override {
+  HRESULT GetUINT32(REFGUID key, UINT32 *value) override {
     if (key == MF_MT_AVG_BITRATE && video_bitrate_.has_value()) {
       *value = video_bitrate_.value();
       return S_OK;
@@ -876,7 +876,7 @@ class FakeMediaType : public FakeIMFAttributesBase<IMFMediaType> {
   };
 
   // IMFAttributes
-  HRESULT GetGUID(REFGUID key, GUID* value) override {
+  HRESULT GetGUID(REFGUID key, GUID *value) override {
     if (key == MF_MT_MAJOR_TYPE) {
       *value = major_type_;
       return S_OK;
@@ -909,7 +909,7 @@ class FakeMediaType : public FakeIMFAttributesBase<IMFMediaType> {
   }
 
   // IIMFAttributes
-  HRESULT CopyAllItems(IMFAttributes* pDest) override {
+  HRESULT CopyAllItems(IMFAttributes *pDest) override {
     pDest->SetUINT64(MF_MT_FRAME_SIZE,
                      (int64_t)width_ << 32 | (int64_t)height_);
     pDest->SetUINT64(MF_MT_FRAME_RATE, frame_rate_);
@@ -929,24 +929,24 @@ class FakeMediaType : public FakeIMFAttributesBase<IMFMediaType> {
   }
 
   // IMFMediaType
-  HRESULT STDMETHODCALLTYPE GetMajorType(GUID* pguidMajorType) override {
+  HRESULT STDMETHODCALLTYPE GetMajorType(GUID *pguidMajorType) override {
     return E_NOTIMPL;
   };
 
   // IMFMediaType
-  HRESULT STDMETHODCALLTYPE IsCompressedFormat(BOOL* pfCompressed) override {
+  HRESULT STDMETHODCALLTYPE IsCompressedFormat(BOOL *pfCompressed) override {
     return E_NOTIMPL;
   }
 
   // IMFMediaType
-  HRESULT STDMETHODCALLTYPE IsEqual(IMFMediaType* pIMediaType,
-                                    DWORD* pdwFlags) override {
+  HRESULT STDMETHODCALLTYPE IsEqual(IMFMediaType *pIMediaType,
+                                    DWORD *pdwFlags) override {
     return E_NOTIMPL;
   }
 
   // IMFMediaType
   HRESULT STDMETHODCALLTYPE GetRepresentation(
-      GUID guidRepresentation, LPVOID* ppvRepresentation) override {
+      GUID guidRepresentation, LPVOID *ppvRepresentation) override {
     return E_NOTIMPL;
   }
 
@@ -969,12 +969,12 @@ class FakeMediaType : public FakeIMFAttributesBase<IMFMediaType> {
   }
 
   // IUnknown
-  STDMETHODIMP_(HRESULT) QueryInterface(const IID& riid, void** ppv) {
+  STDMETHODIMP_(HRESULT) QueryInterface(const IID &riid, void **ppv) {
     *ppv = nullptr;
 
     if (riid == IID_IMFMediaType) {
-      *ppv = static_cast<IMFMediaType*>(this);
-      ((IUnknown*)*ppv)->AddRef();
+      *ppv = static_cast<IMFMediaType *>(this);
+      ((IUnknown *)*ppv)->AddRef();
       return S_OK;
     }
 
@@ -997,16 +997,16 @@ class MockCaptureEngine : public IMFCaptureEngine {
  public:
   MockCaptureEngine() {
     ON_CALL(*this, Initialize)
-        .WillByDefault([this](IMFCaptureEngineOnEventCallback* callback,
-                              IMFAttributes* attributes, IUnknown* audioSource,
-                              IUnknown* videoSource) -> HRESULT {
+        .WillByDefault([this](IMFCaptureEngineOnEventCallback *callback,
+                              IMFAttributes *attributes, IUnknown *audioSource,
+                              IUnknown *videoSource) -> HRESULT {
           EXPECT_TRUE(callback);
           EXPECT_TRUE(attributes);
           EXPECT_TRUE(videoSource);
           // audioSource is allowed to be nullptr;
           callback_ = callback;
-          videoSource_ = reinterpret_cast<IMFMediaSource*>(videoSource);
-          audioSource_ = reinterpret_cast<IMFMediaSource*>(audioSource);
+          videoSource_ = reinterpret_cast<IMFMediaSource *>(videoSource);
+          audioSource_ = reinterpret_cast<IMFMediaSource *>(audioSource);
           initialized_ = true;
           return S_OK;
         });
@@ -1016,8 +1016,8 @@ class MockCaptureEngine : public IMFCaptureEngine {
 
   MOCK_METHOD(HRESULT, Initialize,
               (IMFCaptureEngineOnEventCallback * callback,
-               IMFAttributes* attributes, IUnknown* audioSource,
-               IUnknown* videoSource));
+               IMFAttributes *attributes, IUnknown *audioSource,
+               IUnknown *videoSource));
   MOCK_METHOD(HRESULT, StartPreview, ());
   MOCK_METHOD(HRESULT, StopPreview, ());
   MOCK_METHOD(HRESULT, StartRecord, ());
@@ -1025,7 +1025,7 @@ class MockCaptureEngine : public IMFCaptureEngine {
               (BOOL finalize, BOOL flushUnprocessedSamples));
   MOCK_METHOD(HRESULT, TakePhoto, ());
   MOCK_METHOD(HRESULT, GetSink,
-              (MF_CAPTURE_ENGINE_SINK_TYPE type, IMFCaptureSink** sink));
+              (MF_CAPTURE_ENGINE_SINK_TYPE type, IMFCaptureSink **sink));
   MOCK_METHOD(HRESULT, GetSource, (IMFCaptureSource * *ppSource));
 
   // IUnknown
@@ -1041,12 +1041,12 @@ class MockCaptureEngine : public IMFCaptureEngine {
   }
 
   // IUnknown
-  STDMETHODIMP_(HRESULT) QueryInterface(const IID& riid, void** ppv) {
+  STDMETHODIMP_(HRESULT) QueryInterface(const IID &riid, void **ppv) {
     *ppv = nullptr;
 
     if (riid == IID_IMFCaptureEngine) {
-      *ppv = static_cast<IMFCaptureEngine*>(this);
-      ((IUnknown*)*ppv)->AddRef();
+      *ppv = static_cast<IMFCaptureEngine *>(this);
+      ((IUnknown *)*ppv)->AddRef();
       return S_OK;
     }
 

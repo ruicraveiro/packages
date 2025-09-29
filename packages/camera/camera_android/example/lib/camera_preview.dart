@@ -27,7 +27,7 @@ class CameraPreview extends StatelessWidget {
             builder: (BuildContext context, Object? value, Widget? child) {
               final double cameraAspectRatio =
                   controller.value.previewSize!.width /
-                  controller.value.previewSize!.height;
+                      controller.value.previewSize!.height;
               return AspectRatio(
                 aspectRatio: _isLandscape()
                     ? cameraAspectRatio
@@ -75,7 +75,7 @@ class CameraPreview extends StatelessWidget {
     return controller.value.isRecordingVideo
         ? controller.value.recordingOrientation!
         : (controller.value.previewPauseOrientation ??
-              controller.value.lockedCaptureOrientation ??
-              controller.value.deviceOrientation);
+            controller.value.lockedCaptureOrientation ??
+            controller.value.deviceOrientation);
   }
 }

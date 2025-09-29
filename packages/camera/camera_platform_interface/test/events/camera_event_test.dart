@@ -32,14 +32,14 @@ void main() {
     test('fromJson should initialize all properties', () {
       final CameraInitializedEvent event =
           CameraInitializedEvent.fromJson(const <String, dynamic>{
-            'cameraId': 1,
-            'previewWidth': 1024.0,
-            'previewHeight': 640.0,
-            'exposureMode': 'auto',
-            'exposurePointSupported': true,
-            'focusMode': 'auto',
-            'focusPointSupported': true,
-          });
+        'cameraId': 1,
+        'previewWidth': 1024.0,
+        'previewHeight': 640.0,
+        'exposureMode': 'auto',
+        'exposurePointSupported': true,
+        'focusMode': 'auto',
+        'focusPointSupported': true,
+      });
 
       expect(event.cameraId, 1);
       expect(event.previewWidth, 1024);
@@ -300,10 +300,10 @@ void main() {
     test('fromJson should initialize all properties', () {
       final CameraResolutionChangedEvent event =
           CameraResolutionChangedEvent.fromJson(const <String, dynamic>{
-            'cameraId': 1,
-            'captureWidth': 1024.0,
-            'captureHeight': 640.0,
-          });
+        'cameraId': 1,
+        'captureWidth': 1024.0,
+        'captureHeight': 640.0,
+      });
 
       expect(event.cameraId, 1);
       expect(event.captureWidth, 1024);

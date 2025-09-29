@@ -146,7 +146,8 @@ void main() {
 
   group('FacingModeConstraint', () {
     group('ideal', () {
-      testWidgets('serializes correctly '
+      testWidgets(
+          'serializes correctly '
           'for environment camera type', (WidgetTester tester) async {
         expect(
           FacingModeConstraint(CameraType.environment).toJson(),
@@ -154,7 +155,8 @@ void main() {
         );
       });
 
-      testWidgets('serializes correctly '
+      testWidgets(
+          'serializes correctly '
           'for user camera type', (WidgetTester tester) async {
         expect(
           FacingModeConstraint(CameraType.user).toJson(),
@@ -171,7 +173,8 @@ void main() {
     });
 
     group('exact', () {
-      testWidgets('serializes correctly '
+      testWidgets(
+          'serializes correctly '
           'for environment camera type', (WidgetTester tester) async {
         expect(
           FacingModeConstraint.exact(CameraType.environment).toJson(),
@@ -179,7 +182,8 @@ void main() {
         );
       });
 
-      testWidgets('serializes correctly '
+      testWidgets(
+          'serializes correctly '
           'for user camera type', (WidgetTester tester) async {
         expect(
           FacingModeConstraint.exact(CameraType.user).toJson(),

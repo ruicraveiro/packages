@@ -283,8 +283,8 @@ void main() {
 
     test('Should receive initialized event', () async {
       // Act
-      final Stream<CameraInitializedEvent> eventStream = camera
-          .onCameraInitialized(cameraId);
+      final Stream<CameraInitializedEvent> eventStream =
+          camera.onCameraInitialized(cameraId);
       final StreamQueue<CameraInitializedEvent> streamQueue =
           StreamQueue<CameraInitializedEvent>(eventStream);
 
@@ -342,8 +342,8 @@ void main() {
 
     test('Should receive device orientation change events', () async {
       // Act
-      final Stream<DeviceOrientationChangedEvent> eventStream = camera
-          .onDeviceOrientationChanged();
+      final Stream<DeviceOrientationChangedEvent> eventStream =
+          camera.onDeviceOrientationChanged();
       final StreamQueue<DeviceOrientationChangedEvent> streamQueue =
           StreamQueue<DeviceOrientationChangedEvent>(eventStream);
 
@@ -404,15 +404,15 @@ void main() {
       () async {
         final List<PlatformCameraDescription> returnData =
             <PlatformCameraDescription>[
-              PlatformCameraDescription(
-                name: 'Test 1',
-                lensDirection: PlatformCameraLensDirection.front,
-              ),
-              PlatformCameraDescription(
-                name: 'Test 2',
-                lensDirection: PlatformCameraLensDirection.back,
-              ),
-            ];
+          PlatformCameraDescription(
+            name: 'Test 1',
+            lensDirection: PlatformCameraLensDirection.front,
+          ),
+          PlatformCameraDescription(
+            name: 'Test 2',
+            lensDirection: PlatformCameraLensDirection.back,
+          ),
+        ];
         when(mockApi.getAvailableCameras()).thenAnswer((_) async => returnData);
 
         final List<CameraDescription> cameras = await camera.availableCameras();
@@ -771,8 +771,8 @@ void main() {
         mockApi.isVideoStabilizationModeSupported(any),
       ).thenAnswer((_) async => false);
 
-      final Iterable<VideoStabilizationMode> modes = await camera
-          .getSupportedVideoStabilizationModes(cameraId);
+      final Iterable<VideoStabilizationMode> modes =
+          await camera.getSupportedVideoStabilizationModes(cameraId);
 
       expect(modes, isEmpty);
     });

@@ -16,7 +16,7 @@ import 'src/messages.g.dart';
 class CameraWindows extends CameraPlatform {
   /// Creates a new Windows [CameraPlatform] implementation instance.
   CameraWindows({@visibleForTesting CameraApi? api})
-    : _hostApi = api ?? CameraApi();
+      : _hostApi = api ?? CameraApi();
 
   /// Registers the Windows implementation of CameraPlatform.
   static void registerWith() {
@@ -43,9 +43,9 @@ class CameraWindows extends CameraPlatform {
       StreamController<CameraEvent>.broadcast();
 
   /// Returns a stream of camera events for the given [cameraId].
-  Stream<CameraEvent> _cameraEvents(int cameraId) => cameraEventStreamController
-      .stream
-      .where((CameraEvent event) => event.cameraId == cameraId);
+  Stream<CameraEvent> _cameraEvents(int cameraId) =>
+      cameraEventStreamController.stream
+          .where((CameraEvent event) => event.cameraId == cameraId);
 
   @override
   Future<List<CameraDescription>> availableCameras() async {
@@ -74,10 +74,12 @@ class CameraWindows extends CameraPlatform {
     CameraDescription cameraDescription,
     ResolutionPreset? resolutionPreset, {
     bool enableAudio = false,
-  }) => createCameraWithSettings(
-    cameraDescription,
-    MediaSettings(resolutionPreset: resolutionPreset, enableAudio: enableAudio),
-  );
+  }) =>
+      createCameraWithSettings(
+        cameraDescription,
+        MediaSettings(
+            resolutionPreset: resolutionPreset, enableAudio: enableAudio),
+      );
 
   @override
   Future<int> createCameraWithSettings(

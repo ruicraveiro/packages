@@ -170,12 +170,11 @@ class Camera {
 
     videoElement = web.HTMLVideoElement();
 
-    divElement =
-        web.HTMLDivElement()
-          ..style.setProperty('object-fit', 'cover')
-          ..style.setProperty('height', '100%')
-          ..style.setProperty('width', '100%')
-          ..append(videoElement);
+    divElement = web.HTMLDivElement()
+      ..style.setProperty('object-fit', 'cover')
+      ..style.setProperty('height', '100%')
+      ..style.setProperty('width', '100%')
+      ..append(videoElement);
 
     ui_web.platformViewRegistry.registerViewFactory(
       _getViewType(textureId),
@@ -198,8 +197,8 @@ class Camera {
       _onEndedSubscription = EventStreamProviders.endedEvent
           .forTarget(defaultVideoTrack)
           .listen((web.Event _) {
-            onEndedController.add(defaultVideoTrack);
-          });
+        onEndedController.add(defaultVideoTrack);
+      });
     }
   }
 
@@ -254,10 +253,9 @@ class Camera {
 
     final int videoWidth = videoElement.videoWidth;
     final int videoHeight = videoElement.videoHeight;
-    final web.HTMLCanvasElement canvas =
-        web.HTMLCanvasElement()
-          ..width = videoWidth
-          ..height = videoHeight;
+    final web.HTMLCanvasElement canvas = web.HTMLCanvasElement()
+      ..width = videoWidth
+      ..height = videoHeight;
     final bool isBackCamera = getLensDirection() == CameraLensDirection.back;
 
     // Flip the picture horizontally if it is not taken from a back camera.
@@ -298,7 +296,7 @@ class Camera {
   Size getVideoSize() {
     final List<web.MediaStreamTrack> videoTracks =
         (videoElement.srcObject as web.MediaStream?)?.getVideoTracks().toDart ??
-        <web.MediaStreamTrack>[];
+            <web.MediaStreamTrack>[];
 
     if (videoTracks.isEmpty) {
       return Size.zero;
@@ -357,8 +355,7 @@ class Camera {
 
     if (videoTracks.isNotEmpty) {
       final web.MediaStreamTrack defaultVideoTrack = videoTracks.first;
-      final bool canEnableTorchMode =
-          defaultVideoTrack
+      final bool canEnableTorchMode = defaultVideoTrack
               .getCapabilities()
               .torchNullable
               ?.toDart
@@ -405,8 +402,8 @@ class Camera {
   /// Throws a [CameraWebException] if the zoom level is invalid,
   /// not supported or the camera has not been initialized or started.
   void setZoomLevel(double zoom) {
-    final ZoomLevelCapability zoomLevelCapability = _cameraService
-        .getZoomLevelCapabilityForCamera(this);
+    final ZoomLevelCapability zoomLevelCapability =
+        _cameraService.getZoomLevelCapabilityForCamera(this);
 
     if (zoom < zoomLevelCapability.minimum ||
         zoom > zoomLevelCapability.maximum) {
@@ -429,7 +426,7 @@ class Camera {
   CameraLensDirection? getLensDirection() {
     final List<web.MediaStreamTrack> videoTracks =
         (videoElement.srcObject as web.MediaStream?)?.getVideoTracks().toDart ??
-        <web.MediaStreamTrack>[];
+            <web.MediaStreamTrack>[];
 
     if (videoTracks.isEmpty) {
       return null;
@@ -492,9 +489,9 @@ class Camera {
     _onVideoRecordingErrorSubscription = mediaRecorderOnErrorProvider
         .forTarget(mediaRecorder)
         .listen((web.Event event) {
-          final web.ErrorEvent error = event as web.ErrorEvent;
-          videoRecordingErrorController.add(error);
-        });
+      final web.ErrorEvent error = event as web.ErrorEvent;
+      videoRecordingErrorController.add(error);
+    });
 
     mediaRecorder!.start();
   }
@@ -613,22 +610,20 @@ class Camera {
 
     return types.firstWhere(
       (String type) => isVideoTypeSupported(type),
-      orElse:
-          () =>
-              throw CameraWebException(
-                textureId,
-                CameraErrorCode.notSupported,
-                'The browser does not support any of the following video types: ${types.join(',')}.',
-              ),
+      orElse: () => throw CameraWebException(
+        textureId,
+        CameraErrorCode.notSupported,
+        'The browser does not support any of the following video types: ${types.join(',')}.',
+      ),
     );
   }
 
-  CameraWebException
-  get _videoRecordingNotStartedException => CameraWebException(
-    textureId,
-    CameraErrorCode.videoRecordingNotStarted,
-    'The video recorder is uninitialized. The recording might not have been started. Make sure to call `startVideoRecording` first.',
-  );
+  CameraWebException get _videoRecordingNotStartedException =>
+      CameraWebException(
+        textureId,
+        CameraErrorCode.videoRecordingNotStarted,
+        'The video recorder is uninitialized. The recording might not have been started. Make sure to call `startVideoRecording` first.',
+      );
 
   /// Applies default styles to the video [element].
   void _applyDefaultVideoStyles(web.HTMLVideoElement element) {

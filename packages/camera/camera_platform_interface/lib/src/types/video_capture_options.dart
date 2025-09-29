@@ -20,9 +20,9 @@ class VideoCaptureOptions {
     this.streamOptions,
     this.enablePersistentRecording = true,
   }) : assert(
-         streamOptions == null || streamCallback != null,
-         'Must specify streamCallback if providing streamOptions.',
-       );
+          streamOptions == null || streamCallback != null,
+          'Must specify streamCallback if providing streamOptions.',
+        );
 
   /// The ID of the camera to use for capturing.
   final int cameraId;
@@ -68,10 +68,10 @@ class VideoCaptureOptions {
 
   @override
   int get hashCode => Object.hash(
-    cameraId,
-    maxDuration,
-    streamCallback,
-    streamOptions,
-    enablePersistentRecording,
-  );
+        cameraId,
+        maxDuration,
+        streamCallback,
+        streamOptions,
+        enablePersistentRecording,
+      );
 }

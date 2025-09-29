@@ -28,5 +28,4 @@ extern OSType FCPGetPixelFormatForPigeonFormat(FCPPlatformImageFormatGroup image
 extern AVCaptureVideoStabilizationMode getAvCaptureVideoStabilizationMode(
     FCPPlatformVideoStabilizationMode videoStabilizationMode);
 
-
 NS_ASSUME_NONNULL_END

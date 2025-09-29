@@ -33,16 +33,16 @@ struct MFVideoFormatRGB32Pixel {
 // conversion of texture formats.
 class TextureHandler {
  public:
-  TextureHandler(flutter::TextureRegistrar* texture_registrar)
+  TextureHandler(flutter::TextureRegistrar *texture_registrar)
       : texture_registrar_(texture_registrar) {}
   virtual ~TextureHandler();
 
   // Prevent copying.
-  TextureHandler(TextureHandler const&) = delete;
-  TextureHandler& operator=(TextureHandler const&) = delete;
+  TextureHandler(TextureHandler const &) = delete;
+  TextureHandler &operator=(TextureHandler const &) = delete;
 
   // Updates source data buffer with given data.
-  bool UpdateBuffer(uint8_t* data, uint32_t data_length);
+  bool UpdateBuffer(uint8_t *data, uint32_t data_length);
 
   // Registers texture and updates given texture_id pointer value.
   int64_t RegisterTexture();
@@ -61,7 +61,7 @@ class TextureHandler {
   void OnBufferUpdated();
 
   // Converts local pixel buffer to flutter pixel buffer.
-  const FlutterDesktopPixelBuffer* ConvertPixelBufferForFlutter(size_t width,
+  const FlutterDesktopPixelBuffer *ConvertPixelBufferForFlutter(size_t width,
                                                                 size_t height);
 
   // Checks if texture registrar, texture id and texture are available.
@@ -81,7 +81,7 @@ class TextureHandler {
   std::unique_ptr<flutter::TextureVariant> texture_;
   std::unique_ptr<FlutterDesktopPixelBuffer> flutter_desktop_pixel_buffer_ =
       nullptr;
-  flutter::TextureRegistrar* texture_registrar_ = nullptr;
+  flutter::TextureRegistrar *texture_registrar_ = nullptr;
 
   std::mutex buffer_mutex_;
 };

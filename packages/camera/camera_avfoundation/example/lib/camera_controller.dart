@@ -33,19 +33,19 @@ class CameraValue {
 
   /// Creates a new camera controller state for an uninitialized controller.
   const CameraValue.uninitialized(CameraDescription description)
-    : this(
-        isInitialized: false,
-        isRecordingVideo: false,
-        isTakingPicture: false,
-        isStreamingImages: false,
-        isRecordingPaused: false,
-        flashMode: FlashMode.auto,
-        exposureMode: ExposureMode.auto,
-        focusMode: FocusMode.auto,
-        deviceOrientation: DeviceOrientation.portraitUp,
-        isPreviewPaused: false,
-        description: description,
-      );
+      : this(
+          isInitialized: false,
+          isRecordingVideo: false,
+          isTakingPicture: false,
+          isStreamingImages: false,
+          isRecordingPaused: false,
+          flashMode: FlashMode.auto,
+          exposureMode: ExposureMode.auto,
+          focusMode: FocusMode.auto,
+          deviceOrientation: DeviceOrientation.portraitUp,
+          isPreviewPaused: false,
+          description: description,
+        );
 
   /// True after [CameraController.initialize] has completed successfully.
   final bool isInitialized;
@@ -176,25 +176,26 @@ class CameraController extends ValueNotifier<CameraValue> {
     ResolutionPreset resolutionPreset, {
     bool enableAudio = true,
     ImageFormatGroup? imageFormatGroup,
-  }) => CameraController.withSettings(
-    cameraDescription,
-    mediaSettings: MediaSettings(
-      resolutionPreset: resolutionPreset,
-      enableAudio: enableAudio,
-    ),
-    imageFormatGroup: imageFormatGroup,
-  );
+  }) =>
+      CameraController.withSettings(
+        cameraDescription,
+        mediaSettings: MediaSettings(
+          resolutionPreset: resolutionPreset,
+          enableAudio: enableAudio,
+        ),
+        imageFormatGroup: imageFormatGroup,
+      );
 
   /// Creates a new camera controller in an uninitialized state, using specified media settings like FPS and bitrate.
   CameraController.withSettings(
     CameraDescription cameraDescription, {
     required this.mediaSettings,
     this.imageFormatGroup,
-  }) : assert(
-         mediaSettings.resolutionPreset != null,
-         'resolutionPreset should be provided in CameraController.withSettings',
-       ),
-       super(CameraValue.uninitialized(cameraDescription));
+  })  : assert(
+          mediaSettings.resolutionPreset != null,
+          'resolutionPreset should be provided in CameraController.withSettings',
+        ),
+        super(CameraValue.uninitialized(cameraDescription));
 
   /// The properties of the camera device controlled by this controller.
   CameraDescription get description => value.description;
@@ -213,7 +214,7 @@ class CameraController extends ValueNotifier<CameraValue> {
   StreamSubscription<CameraImageData>? _imageStreamSubscription;
   FutureOr<bool>? _initCalled;
   StreamSubscription<DeviceOrientationChangedEvent>?
-  _deviceOrientationSubscription;
+      _deviceOrientationSubscription;
 
   /// The camera identifier with which the controller is associated.
   int get cameraId => _cameraId;
@@ -228,8 +229,8 @@ class CameraController extends ValueNotifier<CameraValue> {
     _deviceOrientationSubscription = CameraPlatform.instance
         .onDeviceOrientationChanged()
         .listen((DeviceOrientationChangedEvent event) {
-          value = value.copyWith(deviceOrientation: event.orientation);
-        });
+      value = value.copyWith(deviceOrientation: event.orientation);
+    });
 
     _cameraId = await CameraPlatform.instance.createCameraWithSettings(
       description,
@@ -325,8 +326,8 @@ class CameraController extends ValueNotifier<CameraValue> {
     _imageStreamSubscription = CameraPlatform.instance
         .onStreamedFrameAvailable(_cameraId)
         .listen((CameraImageData imageData) {
-          onAvailable(imageData);
-        });
+      onAvailable(imageData);
+    });
     value = value.copyWith(isStreamingImages: true);
   }
 
@@ -417,8 +418,8 @@ class CameraController extends ValueNotifier<CameraValue> {
     ]);
 
     // Round to the closest step if needed
-    final double stepSize = await CameraPlatform.instance
-        .getExposureOffsetStepSize(_cameraId);
+    final double stepSize =
+        await CameraPlatform.instance.getExposureOffsetStepSize(_cameraId);
     if (stepSize > 0) {
       final double inv = 1.0 / stepSize;
       double roundedOffset = (offset * inv).roundToDouble() / inv;

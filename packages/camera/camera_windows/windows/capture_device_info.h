@@ -16,8 +16,8 @@ class CaptureDeviceInfo {
   virtual ~CaptureDeviceInfo() = default;
 
   // Disallow copy and move.
-  CaptureDeviceInfo(const CaptureDeviceInfo&) = delete;
-  CaptureDeviceInfo& operator=(const CaptureDeviceInfo&) = delete;
+  CaptureDeviceInfo(const CaptureDeviceInfo &) = delete;
+  CaptureDeviceInfo &operator=(const CaptureDeviceInfo &) = delete;
 
   // Build unique device name from display name and device id.
   // Format: "display_name <device_id>".
@@ -25,15 +25,15 @@ class CaptureDeviceInfo {
 
   // Parses display name and device id from unique device name format.
   // Format: "display_name <device_id>".
-  bool ParseDeviceInfoFromCameraName(const std::string& camera_name);
+  bool ParseDeviceInfoFromCameraName(const std::string &camera_name);
 
   // Updates display name.
-  void SetDisplayName(const std::string& display_name) {
+  void SetDisplayName(const std::string &display_name) {
     display_name_ = display_name;
   }
 
   // Updates device id.
-  void SetDeviceID(const std::string& device_id) { device_id_ = device_id; }
+  void SetDeviceID(const std::string &device_id) { device_id_ = device_id; }
 
   // Returns device id.
   std::string GetDeviceId() const { return device_id_; }

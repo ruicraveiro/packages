@@ -35,17 +35,16 @@ void main() {
     // have been initialized. While registerWith could initialize them, that
     // could slow down startup, so instead the handler should be set up lazily.
     final ByteData? response = await TestDefaultBinaryMessengerBinding
-        .instance
-        .defaultBinaryMessenger
+        .instance.defaultBinaryMessenger
         .handlePlatformMessage(
-          AndroidCamera.deviceEventChannelName,
-          const StandardMethodCodec().encodeMethodCall(
-            const MethodCall('orientation_changed', <String, Object>{
-              'orientation': 'portraitDown',
-            }),
-          ),
-          (ByteData? data) {},
-        );
+      AndroidCamera.deviceEventChannelName,
+      const StandardMethodCodec().encodeMethodCall(
+        const MethodCall('orientation_changed', <String, Object>{
+          'orientation': 'portraitDown',
+        }),
+      ),
+      (ByteData? data) {},
+    );
     expect(response, null);
   });
 
@@ -336,8 +335,8 @@ void main() {
 
     test('Should receive initialized event', () async {
       // Act
-      final Stream<CameraInitializedEvent> eventStream = camera
-          .onCameraInitialized(cameraId);
+      final Stream<CameraInitializedEvent> eventStream =
+          camera.onCameraInitialized(cameraId);
       final StreamQueue<CameraInitializedEvent> streamQueue =
           StreamQueue<CameraInitializedEvent>(eventStream);
 
@@ -420,8 +419,8 @@ void main() {
 
     test('Should receive device orientation change events', () async {
       // Act
-      final Stream<DeviceOrientationChangedEvent> eventStream = camera
-          .onDeviceOrientationChanged();
+      final Stream<DeviceOrientationChangedEvent> eventStream =
+          camera.onDeviceOrientationChanged();
       final StreamQueue<DeviceOrientationChangedEvent> streamQueue =
           StreamQueue<DeviceOrientationChangedEvent>(eventStream);
 
@@ -482,17 +481,17 @@ void main() {
         // Arrange
         final List<PlatformCameraDescription> returnData =
             <PlatformCameraDescription>[
-              PlatformCameraDescription(
-                name: 'Test 1',
-                lensDirection: PlatformCameraLensDirection.front,
-                sensorOrientation: 1,
-              ),
-              PlatformCameraDescription(
-                name: 'Test 2',
-                lensDirection: PlatformCameraLensDirection.back,
-                sensorOrientation: 2,
-              ),
-            ];
+          PlatformCameraDescription(
+            name: 'Test 1',
+            lensDirection: PlatformCameraLensDirection.front,
+            sensorOrientation: 1,
+          ),
+          PlatformCameraDescription(
+            name: 'Test 2',
+            lensDirection: PlatformCameraLensDirection.back,
+            sensorOrientation: 2,
+          ),
+        ];
         when(
           mockCameraApi.getAvailableCameras(),
         ).thenAnswer((_) async => returnData);

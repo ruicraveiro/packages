@@ -47,11 +47,10 @@ class CaptureRequestOptionsProxyApi extends PigeonApiCaptureRequestOptions {
       var key = option.getKey();
       var value = option.getValue();
       if (CaptureRequest.CONTROL_VIDEO_STABILIZATION_MODE == key) {
-        value = ((Long)value).intValue();
+        value = ((Long) value).intValue();
       }
 
-      builder.setCaptureRequestOption(
-          (CaptureRequest.Key<Object>) key, value);
+      builder.setCaptureRequestOption((CaptureRequest.Key<Object>) key, value);
     }
 
     return builder.build();

@@ -340,13 +340,13 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     final List<DropdownMenuItem<ResolutionPreset>> resolutionItems =
         ResolutionPreset.values.map<DropdownMenuItem<ResolutionPreset>>((
-          ResolutionPreset value,
-        ) {
-          return DropdownMenuItem<ResolutionPreset>(
-            value: value,
-            child: Text(value.toString()),
-          );
-        }).toList();
+      ResolutionPreset value,
+    ) {
+      return DropdownMenuItem<ResolutionPreset>(
+        value: value,
+        child: Text(value.toString()),
+      );
+    }).toList();
 
     return MaterialApp(
       scaffoldMessengerKey: _scaffoldMessengerKey,
@@ -384,10 +384,9 @@ class _MyAppState extends State<MyApp> {
                   ),
                   const SizedBox(width: 20),
                   ElevatedButton(
-                    onPressed:
-                        _initialized
-                            ? _disposeCurrentCamera
-                            : _initializeCamera,
+                    onPressed: _initialized
+                        ? _disposeCurrentCamera
+                        : _initializeCamera,
                     child: Text(
                       _initialized ? 'Dispose camera' : 'Create camera',
                     ),
@@ -415,10 +414,9 @@ class _MyAppState extends State<MyApp> {
                   ),
                   const SizedBox(width: 5),
                   ElevatedButton(
-                    onPressed:
-                        (_initialized && !_recording && !_recordingTimed)
-                            ? () => _recordTimed(5)
-                            : null,
+                    onPressed: (_initialized && !_recording && !_recordingTimed)
+                        ? () => _recordTimed(5)
+                        : null,
                     child: const Text('Record 5 seconds'),
                   ),
                   if (_cameras.length > 1) ...<Widget>[

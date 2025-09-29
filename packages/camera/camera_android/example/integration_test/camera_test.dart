@@ -30,13 +30,13 @@ void main() {
 
   final Map<ResolutionPreset, Size> presetExpectedSizes =
       <ResolutionPreset, Size>{
-        ResolutionPreset.low: const Size(240, 320),
-        ResolutionPreset.medium: const Size(480, 720),
-        ResolutionPreset.high: const Size(720, 1280),
-        ResolutionPreset.veryHigh: const Size(1080, 1920),
-        ResolutionPreset.ultraHigh: const Size(2160, 3840),
-        // Don't bother checking for max here since it could be anything.
-      };
+    ResolutionPreset.low: const Size(240, 320),
+    ResolutionPreset.medium: const Size(480, 720),
+    ResolutionPreset.high: const Size(720, 1280),
+    ResolutionPreset.veryHigh: const Size(1080, 1920),
+    ResolutionPreset.ultraHigh: const Size(2160, 3840),
+    // Don't bother checking for max here since it could be anything.
+  };
 
   /// Verify that [actual] has dimensions that are at least as large as
   /// [expectedSize]. Allows for a mismatch in portrait vs landscape. Returns
@@ -81,8 +81,8 @@ void main() {
   testWidgets(
     'Capture specific video resolutions',
     (WidgetTester tester) async {
-      final List<CameraDescription> cameras = await CameraPlatform.instance
-          .availableCameras();
+      final List<CameraDescription> cameras =
+          await CameraPlatform.instance.availableCameras();
       if (cameras.isEmpty) {
         return;
       }
@@ -114,8 +114,8 @@ void main() {
   );
 
   testWidgets('Pause and resume video recording', (WidgetTester tester) async {
-    final List<CameraDescription> cameras = await CameraPlatform.instance
-        .availableCameras();
+    final List<CameraDescription> cameras =
+        await CameraPlatform.instance.availableCameras();
     if (cameras.isEmpty) {
       return;
     }
@@ -164,8 +164,8 @@ void main() {
   });
 
   testWidgets('Set description while recording', (WidgetTester tester) async {
-    final List<CameraDescription> cameras = await CameraPlatform.instance
-        .availableCameras();
+    final List<CameraDescription> cameras =
+        await CameraPlatform.instance.availableCameras();
     if (cameras.length < 2) {
       return;
     }
@@ -201,8 +201,8 @@ void main() {
   });
 
   testWidgets('Set description', (WidgetTester tester) async {
-    final List<CameraDescription> cameras = await CameraPlatform.instance
-        .availableCameras();
+    final List<CameraDescription> cameras =
+        await CameraPlatform.instance.availableCameras();
     if (cameras.length < 2) {
       return;
     }
@@ -216,8 +216,8 @@ void main() {
   });
 
   testWidgets('image streaming', (WidgetTester tester) async {
-    final List<CameraDescription> cameras = await CameraPlatform.instance
-        .availableCameras();
+    final List<CameraDescription> cameras =
+        await CameraPlatform.instance.availableCameras();
     if (cameras.isEmpty) {
       return;
     }
@@ -246,8 +246,8 @@ void main() {
   });
 
   testWidgets('recording with image stream', (WidgetTester tester) async {
-    final List<CameraDescription> cameras = await CameraPlatform.instance
-        .availableCameras();
+    final List<CameraDescription> cameras =
+        await CameraPlatform.instance.availableCameras();
     if (cameras.isEmpty) {
       return;
     }
@@ -284,8 +284,8 @@ void main() {
 
   group('Camera settings', () {
     Future<CameraDescription> getCamera() async {
-      final List<CameraDescription> cameras = await CameraPlatform.instance
-          .availableCameras();
+      final List<CameraDescription> cameras =
+          await CameraPlatform.instance.availableCameras();
       expect(cameras.isNotEmpty, equals(true));
 
       // Prefer back camera, as it allows more customizations.

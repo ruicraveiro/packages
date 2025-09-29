@@ -19,7 +19,7 @@ import 'utils.dart';
 class AVFoundationCamera extends CameraPlatform {
   /// Creates a new AVFoundation-based [CameraPlatform] implementation instance.
   AVFoundationCamera({@visibleForTesting CameraApi? api})
-    : _hostApi = api ?? CameraApi();
+      : _hostApi = api ?? CameraApi();
 
   /// Registers this class as the default instance of [CameraPlatform].
   static void registerWith() {
@@ -60,9 +60,9 @@ class AVFoundationCamera extends CameraPlatform {
   // The stream for vending frames to platform interface clients.
   StreamController<CameraImageData>? _frameStreamController;
 
-  Stream<CameraEvent> _cameraEvents(int cameraId) => cameraEventStreamController
-      .stream
-      .where((CameraEvent event) => event.cameraId == cameraId);
+  Stream<CameraEvent> _cameraEvents(int cameraId) =>
+      cameraEventStreamController.stream
+          .where((CameraEvent event) => event.cameraId == cameraId);
 
   @override
   Future<List<CameraDescription>> availableCameras() async {
@@ -80,10 +80,12 @@ class AVFoundationCamera extends CameraPlatform {
     CameraDescription cameraDescription,
     ResolutionPreset? resolutionPreset, {
     bool enableAudio = false,
-  }) => createCameraWithSettings(
-    cameraDescription,
-    MediaSettings(resolutionPreset: resolutionPreset, enableAudio: enableAudio),
-  );
+  }) =>
+      createCameraWithSettings(
+        cameraDescription,
+        MediaSettings(
+            resolutionPreset: resolutionPreset, enableAudio: enableAudio),
+      );
 
   @override
   Future<int> createCameraWithSettings(
@@ -277,18 +279,17 @@ class AVFoundationCamera extends CameraPlatform {
     const EventChannel cameraEventChannel = EventChannel(
       'plugins.flutter.io/camera_avfoundation/imageStream',
     );
-    _platformImageStreamSubscription = cameraEventChannel
-        .receiveBroadcastStream()
-        .listen((dynamic imageData) {
-          try {
-            _hostApi.receivedImageStreamData();
-          } on PlatformException catch (e) {
-            throw CameraException(e.code, e.message);
-          }
-          _frameStreamController!.add(
-            cameraImageFromPlatformData(imageData as Map<dynamic, dynamic>),
-          );
-        });
+    _platformImageStreamSubscription =
+        cameraEventChannel.receiveBroadcastStream().listen((dynamic imageData) {
+      try {
+        _hostApi.receivedImageStreamData();
+      } on PlatformException catch (e) {
+        throw CameraException(e.code, e.message);
+      }
+      _frameStreamController!.add(
+        cameraImageFromPlatformData(imageData as Map<dynamic, dynamic>),
+      );
+    });
   }
 
   FutureOr<void> _onFrameStreamCancel() async {
@@ -387,7 +388,8 @@ class AVFoundationCamera extends CameraPlatform {
   ) async {
     try {
       final Map<VideoStabilizationMode, PlatformVideoStabilizationMode>
-      availableModes = await _getSupportedVideoStabilizationModeMap(cameraId);
+          availableModes =
+          await _getSupportedVideoStabilizationModeMap(cameraId);
 
       final PlatformVideoStabilizationMode? platformMode = availableModes[mode];
       if (platformMode == null) {
@@ -407,7 +409,7 @@ class AVFoundationCamera extends CameraPlatform {
   }
 
   Future<Map<VideoStabilizationMode, PlatformVideoStabilizationMode>>
-  _getSupportedVideoStabilizationModeMap(int cameraId) async {
+      _getSupportedVideoStabilizationModeMap(int cameraId) async {
     final Map<VideoStabilizationMode, PlatformVideoStabilizationMode> ret =
         <VideoStabilizationMode, PlatformVideoStabilizationMode>{};
 
@@ -415,8 +417,8 @@ class AVFoundationCamera extends CameraPlatform {
       final PlatformVideoStabilizationMode? platformMode =
           _pigeonVideoStabilizationMode(mode);
       if (platformMode != null) {
-        final bool isSupported = await _hostApi
-            .isVideoStabilizationModeSupported(platformMode);
+        final bool isSupported =
+            await _hostApi.isVideoStabilizationModeSupported(platformMode);
         if (isSupported) {
           ret[mode] = platformMode;
         }

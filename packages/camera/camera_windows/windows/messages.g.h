@@ -21,16 +21,16 @@ namespace camera_windows {
 
 class FlutterError {
  public:
-  explicit FlutterError(const std::string& code) : code_(code) {}
-  explicit FlutterError(const std::string& code, const std::string& message)
+  explicit FlutterError(const std::string &code) : code_(code) {}
+  explicit FlutterError(const std::string &code, const std::string &message)
       : code_(code), message_(message) {}
-  explicit FlutterError(const std::string& code, const std::string& message,
-                        const flutter::EncodableValue& details)
+  explicit FlutterError(const std::string &code, const std::string &message,
+                        const flutter::EncodableValue &details)
       : code_(code), message_(message), details_(details) {}
 
-  const std::string& code() const { return code_; }
-  const std::string& message() const { return message_; }
-  const flutter::EncodableValue& details() const { return details_; }
+  const std::string &code() const { return code_; }
+  const std::string &message() const { return message_; }
+  const flutter::EncodableValue &details() const { return details_; }
 
  private:
   std::string code_;
@@ -41,14 +41,14 @@ class FlutterError {
 template <class T>
 class ErrorOr {
  public:
-  ErrorOr(const T& rhs) : v_(rhs) {}
-  ErrorOr(const T&& rhs) : v_(std::move(rhs)) {}
-  ErrorOr(const FlutterError& rhs) : v_(rhs) {}
-  ErrorOr(const FlutterError&& rhs) : v_(std::move(rhs)) {}
+  ErrorOr(const T &rhs) : v_(rhs) {}
+  ErrorOr(const T &&rhs) : v_(std::move(rhs)) {}
+  ErrorOr(const FlutterError &rhs) : v_(rhs) {}
+  ErrorOr(const FlutterError &&rhs) : v_(std::move(rhs)) {}
 
   bool has_error() const { return std::holds_alternative<FlutterError>(v_); }
-  const T& value() const { return std::get<T>(v_); };
-  const FlutterError& error() const { return std::get<FlutterError>(v_); };
+  const T &value() const { return std::get<T>(v_); };
+  const FlutterError &error() const { return std::get<FlutterError>(v_); };
 
  private:
   friend class CameraApi;
@@ -76,27 +76,27 @@ class PlatformMediaSettings {
  public:
   // Constructs an object setting all non-nullable fields.
   explicit PlatformMediaSettings(
-      const PlatformResolutionPreset& resolution_preset, bool enable_audio);
+      const PlatformResolutionPreset &resolution_preset, bool enable_audio);
 
   // Constructs an object setting all fields.
   explicit PlatformMediaSettings(
-      const PlatformResolutionPreset& resolution_preset,
-      const int64_t* frames_per_second, const int64_t* video_bitrate,
-      const int64_t* audio_bitrate, bool enable_audio);
+      const PlatformResolutionPreset &resolution_preset,
+      const int64_t *frames_per_second, const int64_t *video_bitrate,
+      const int64_t *audio_bitrate, bool enable_audio);
 
-  const PlatformResolutionPreset& resolution_preset() const;
-  void set_resolution_preset(const PlatformResolutionPreset& value_arg);
+  const PlatformResolutionPreset &resolution_preset() const;
+  void set_resolution_preset(const PlatformResolutionPreset &value_arg);
 
-  const int64_t* frames_per_second() const;
-  void set_frames_per_second(const int64_t* value_arg);
+  const int64_t *frames_per_second() const;
+  void set_frames_per_second(const int64_t *value_arg);
   void set_frames_per_second(int64_t value_arg);
 
-  const int64_t* video_bitrate() const;
-  void set_video_bitrate(const int64_t* value_arg);
+  const int64_t *video_bitrate() const;
+  void set_video_bitrate(const int64_t *value_arg);
   void set_video_bitrate(int64_t value_arg);
 
-  const int64_t* audio_bitrate() const;
-  void set_audio_bitrate(const int64_t* value_arg);
+  const int64_t *audio_bitrate() const;
+  void set_audio_bitrate(const int64_t *value_arg);
   void set_audio_bitrate(int64_t value_arg);
 
   bool enable_audio() const;
@@ -104,7 +104,7 @@ class PlatformMediaSettings {
 
  private:
   static PlatformMediaSettings FromEncodableList(
-      const flutter::EncodableList& list);
+      const flutter::EncodableList &list);
   flutter::EncodableList ToEncodableList() const;
   friend class CameraApi;
   friend class CameraEventApi;
@@ -131,7 +131,7 @@ class PlatformSize {
   void set_height(double value_arg);
 
  private:
-  static PlatformSize FromEncodableList(const flutter::EncodableList& list);
+  static PlatformSize FromEncodableList(const flutter::EncodableList &list);
   flutter::EncodableList ToEncodableList() const;
   friend class CameraApi;
   friend class CameraEventApi;
@@ -143,31 +143,31 @@ class PlatformSize {
 class PigeonInternalCodecSerializer : public flutter::StandardCodecSerializer {
  public:
   PigeonInternalCodecSerializer();
-  inline static PigeonInternalCodecSerializer& GetInstance() {
+  inline static PigeonInternalCodecSerializer &GetInstance() {
     static PigeonInternalCodecSerializer sInstance;
     return sInstance;
   }
 
-  void WriteValue(const flutter::EncodableValue& value,
-                  flutter::ByteStreamWriter* stream) const override;
+  void WriteValue(const flutter::EncodableValue &value,
+                  flutter::ByteStreamWriter *stream) const override;
 
  protected:
   flutter::EncodableValue ReadValueOfType(
-      uint8_t type, flutter::ByteStreamReader* stream) const override;
+      uint8_t type, flutter::ByteStreamReader *stream) const override;
 };
 
 // Generated interface from Pigeon that represents a handler of messages from
 // Flutter.
 class CameraApi {
  public:
-  CameraApi(const CameraApi&) = delete;
-  CameraApi& operator=(const CameraApi&) = delete;
+  CameraApi(const CameraApi &) = delete;
+  CameraApi &operator=(const CameraApi &) = delete;
   virtual ~CameraApi() {}
   // Returns the names of all of the available capture devices.
   virtual ErrorOr<flutter::EncodableList> GetAvailableCameras() = 0;
   // Creates a camera instance for the given device name and settings.
-  virtual void Create(const std::string& camera_name,
-                      const PlatformMediaSettings& settings,
+  virtual void Create(const std::string &camera_name,
+                      const PlatformMediaSettings &settings,
                       std::function<void(ErrorOr<int64_t> reply)> result) = 0;
   // Initializes a camera, and returns the size of its preview.
   virtual void Initialize(
@@ -199,14 +199,14 @@ class CameraApi {
       std::function<void(std::optional<FlutterError> reply)> result) = 0;
 
   // The codec used by CameraApi.
-  static const flutter::StandardMessageCodec& GetCodec();
+  static const flutter::StandardMessageCodec &GetCodec();
   // Sets up an instance of `CameraApi` to handle messages through the
   // `binary_messenger`.
-  static void SetUp(flutter::BinaryMessenger* binary_messenger, CameraApi* api);
-  static void SetUp(flutter::BinaryMessenger* binary_messenger, CameraApi* api,
-                    const std::string& message_channel_suffix);
+  static void SetUp(flutter::BinaryMessenger *binary_messenger, CameraApi *api);
+  static void SetUp(flutter::BinaryMessenger *binary_messenger, CameraApi *api,
+                    const std::string &message_channel_suffix);
   static flutter::EncodableValue WrapError(std::string_view error_message);
-  static flutter::EncodableValue WrapError(const FlutterError& error);
+  static flutter::EncodableValue WrapError(const FlutterError &error);
 
  protected:
   CameraApi() = default;
@@ -215,20 +215,20 @@ class CameraApi {
 // called from C++.
 class CameraEventApi {
  public:
-  CameraEventApi(flutter::BinaryMessenger* binary_messenger);
-  CameraEventApi(flutter::BinaryMessenger* binary_messenger,
-                 const std::string& message_channel_suffix);
-  static const flutter::StandardMessageCodec& GetCodec();
+  CameraEventApi(flutter::BinaryMessenger *binary_messenger);
+  CameraEventApi(flutter::BinaryMessenger *binary_messenger,
+                 const std::string &message_channel_suffix);
+  static const flutter::StandardMessageCodec &GetCodec();
   // Called when the camera instance is closing on the native side.
-  void CameraClosing(std::function<void(void)>&& on_success,
-                     std::function<void(const FlutterError&)>&& on_error);
+  void CameraClosing(std::function<void(void)> &&on_success,
+                     std::function<void(const FlutterError &)> &&on_error);
   // Called when a camera error occurs on the native side.
-  void Error(const std::string& error_message,
-             std::function<void(void)>&& on_success,
-             std::function<void(const FlutterError&)>&& on_error);
+  void Error(const std::string &error_message,
+             std::function<void(void)> &&on_success,
+             std::function<void(const FlutterError &)> &&on_error);
 
  private:
-  flutter::BinaryMessenger* binary_messenger_;
+  flutter::BinaryMessenger *binary_messenger_;
   std::string message_channel_suffix_;
 };
 

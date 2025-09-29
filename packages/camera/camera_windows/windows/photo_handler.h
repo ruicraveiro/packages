@@ -34,8 +34,8 @@ class PhotoHandler {
   virtual ~PhotoHandler() = default;
 
   // Prevent copying.
-  PhotoHandler(PhotoHandler const&) = delete;
-  PhotoHandler& operator=(PhotoHandler const&) = delete;
+  PhotoHandler(PhotoHandler const &) = delete;
+  PhotoHandler &operator=(PhotoHandler const &) = delete;
 
   // Initializes photo sink if not initialized and requests the capture engine
   // to take photo.
@@ -47,9 +47,9 @@ class PhotoHandler {
   // base_media_type: A pointer to base media type used as a base
   //                  for the actual photo capture media type.
   // file_path:       A string that hold file path for photo capture.
-  HRESULT TakePhoto(const std::string& file_path,
-                    IMFCaptureEngine* capture_engine,
-                    IMFMediaType* base_media_type);
+  HRESULT TakePhoto(const std::string &file_path,
+                    IMFCaptureEngine *capture_engine,
+                    IMFMediaType *base_media_type);
 
   // Set the photo handler recording state to: kIdle.
   void OnPhotoTaken();
@@ -67,8 +67,8 @@ class PhotoHandler {
 
  private:
   // Initializes record sink for video file capture.
-  HRESULT InitPhotoSink(IMFCaptureEngine* capture_engine,
-                        IMFMediaType* base_media_type);
+  HRESULT InitPhotoSink(IMFCaptureEngine *capture_engine,
+                        IMFMediaType *base_media_type);
 
   std::string file_path_;
   PhotoState photo_state_ = PhotoState::kNotStarted;

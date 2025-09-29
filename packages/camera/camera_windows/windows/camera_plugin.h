@@ -31,27 +31,27 @@ class CameraPlugin : public flutter::Plugin,
                      public CameraApi,
                      public VideoCaptureDeviceEnumerator {
  public:
-  static void RegisterWithRegistrar(flutter::PluginRegistrarWindows* registrar);
+  static void RegisterWithRegistrar(flutter::PluginRegistrarWindows *registrar);
 
-  CameraPlugin(flutter::TextureRegistrar* texture_registrar,
-               flutter::BinaryMessenger* messenger);
+  CameraPlugin(flutter::TextureRegistrar *texture_registrar,
+               flutter::BinaryMessenger *messenger);
 
   // Creates a plugin instance with the given CameraFactory instance.
   // Exists for unit testing with mock implementations.
-  CameraPlugin(flutter::TextureRegistrar* texture_registrar,
-               flutter::BinaryMessenger* messenger,
+  CameraPlugin(flutter::TextureRegistrar *texture_registrar,
+               flutter::BinaryMessenger *messenger,
                std::unique_ptr<CameraFactory> camera_factory);
 
   virtual ~CameraPlugin();
 
   // Disallow copy and move.
-  CameraPlugin(const CameraPlugin&) = delete;
-  CameraPlugin& operator=(const CameraPlugin&) = delete;
+  CameraPlugin(const CameraPlugin &) = delete;
+  CameraPlugin &operator=(const CameraPlugin &) = delete;
 
   // CameraApi:
   ErrorOr<flutter::EncodableList> GetAvailableCameras() override;
-  void Create(const std::string& camera_name,
-              const PlatformMediaSettings& settings,
+  void Create(const std::string &camera_name,
+              const PlatformMediaSettings &settings,
               std::function<void(ErrorOr<int64_t> reply)> result) override;
   void Initialize(
       int64_t camera_id,
@@ -76,22 +76,22 @@ class CameraPlugin : public flutter::Plugin,
  private:
   // Loops through cameras and returns camera
   // with matching device_id or nullptr.
-  Camera* GetCameraByDeviceId(std::string& device_id);
+  Camera *GetCameraByDeviceId(std::string &device_id);
 
   // Loops through cameras and returns camera
   // with matching camera_id or nullptr.
-  Camera* GetCameraByCameraId(int64_t camera_id);
+  Camera *GetCameraByCameraId(int64_t camera_id);
 
   // Disposes camera by camera id.
   void DisposeCameraByCameraId(int64_t camera_id);
 
   // Enumerates video capture devices.
-  bool EnumerateVideoCaptureDeviceSources(IMFActivate*** devices,
-                                          UINT32* count) override;
+  bool EnumerateVideoCaptureDeviceSources(IMFActivate ***devices,
+                                          UINT32 *count) override;
 
   std::unique_ptr<CameraFactory> camera_factory_;
-  flutter::TextureRegistrar* texture_registrar_;
-  flutter::BinaryMessenger* messenger_;
+  flutter::TextureRegistrar *texture_registrar_;
+  flutter::BinaryMessenger *messenger_;
   std::vector<std::unique_ptr<Camera>> cameras_;
 
   friend class camera_windows::test::MockCameraPlugin;

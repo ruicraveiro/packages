@@ -140,8 +140,8 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
                 border: Border.all(
                   color:
                       controller != null && controller!.value.isRecordingVideo
-                      ? Colors.redAccent
-                      : Colors.grey,
+                          ? Colors.redAccent
+                          : Colors.grey,
                   width: 3.0,
                 ),
               ),
@@ -238,13 +238,13 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
                 height: 64.0,
                 child: (localVideoController == null)
                     ? (
-                      // The captured image on the web contains a network-accessible URL
-                      // pointing to a location within the browser. It may be displayed
-                      // either with Image.network or Image.memory after loading the image
-                      // bytes to memory.
-                      kIsWeb
-                          ? Image.network(imageFile!.path)
-                          : Image.file(File(imageFile!.path)))
+                        // The captured image on the web contains a network-accessible URL
+                        // pointing to a location within the browser. It may be displayed
+                        // either with Image.network or Image.memory after loading the image
+                        // bytes to memory.
+                        kIsWeb
+                            ? Image.network(imageFile!.path)
+                            : Image.file(File(imageFile!.path)))
                     : Container(
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.pink),
@@ -288,9 +288,8 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
                     IconButton(
                       icon: const Icon(Icons.filter_center_focus),
                       color: Colors.blue,
-                      onPressed: controller != null
-                          ? onFocusModeButtonPressed
-                          : null,
+                      onPressed:
+                          controller != null ? onFocusModeButtonPressed : null,
                     ),
                   ]
                 : <Widget>[],
@@ -395,7 +394,7 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
                     style: styleAuto,
                     onPressed: controller != null
                         ? () =>
-                              onSetExposureModeButtonPressed(ExposureMode.auto)
+                            onSetExposureModeButtonPressed(ExposureMode.auto)
                         : null,
                     onLongPress: () {
                       if (controller != null) {
@@ -412,8 +411,8 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
                     style: styleLocked,
                     onPressed: controller != null
                         ? () => onSetExposureModeButtonPressed(
-                            ExposureMode.locked,
-                          )
+                              ExposureMode.locked,
+                            )
                         : null,
                     child: const Text('LOCKED'),
                   ),
@@ -436,8 +435,7 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
                     min: _minAvailableExposureOffset,
                     max: _maxAvailableExposureOffset,
                     label: _currentExposureOffset.toString(),
-                    onChanged:
-                        _minAvailableExposureOffset ==
+                    onChanged: _minAvailableExposureOffset ==
                             _maxAvailableExposureOffset
                         ? null
                         : setExposureOffset,
@@ -517,8 +515,7 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
         IconButton(
           icon: const Icon(Icons.camera_alt),
           color: Colors.blue,
-          onPressed:
-              cameraController != null &&
+          onPressed: cameraController != null &&
                   cameraController.value.isInitialized &&
                   !cameraController.value.isRecordingVideo
               ? onTakePictureButtonPressed
@@ -527,35 +524,31 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
         IconButton(
           icon: const Icon(Icons.videocam),
           color: Colors.blue,
-          onPressed:
-              cameraController != null &&
+          onPressed: cameraController != null &&
                   cameraController.value.isInitialized &&
                   !cameraController.value.isRecordingVideo
               ? onVideoRecordButtonPressed
               : null,
         ),
         IconButton(
-          icon:
-              cameraController != null &&
+          icon: cameraController != null &&
                   (!cameraController.value.isRecordingVideo ||
                       cameraController.value.isRecordingPaused)
               ? const Icon(Icons.play_arrow)
               : const Icon(Icons.pause),
           color: Colors.blue,
-          onPressed:
-              cameraController != null &&
+          onPressed: cameraController != null &&
                   cameraController.value.isInitialized &&
                   cameraController.value.isRecordingVideo
               ? cameraController.value.isRecordingPaused
-                    ? onResumeButtonPressed
-                    : onPauseButtonPressed
+                  ? onResumeButtonPressed
+                  : onPauseButtonPressed
               : null,
         ),
         IconButton(
           icon: const Icon(Icons.stop),
           color: Colors.red,
-          onPressed:
-              cameraController != null &&
+          onPressed: cameraController != null &&
                   cameraController.value.isInitialized &&
                   cameraController.value.isRecordingVideo
               ? onStopButtonPressed
@@ -565,11 +558,10 @@ class _CameraExampleHomeState extends State<CameraExampleHome>
           icon: const Icon(Icons.pause_presentation),
           color:
               cameraController != null && cameraController.value.isPreviewPaused
-              ? Colors.red
-              : Colors.blue,
-          onPressed: cameraController == null
-              ? null
-              : onPausePreviewButtonPressed,
+                  ? Colors.red
+                  : Colors.blue,
+          onPressed:
+              cameraController == null ? null : onPausePreviewButtonPressed,
         ),
       ],
     );

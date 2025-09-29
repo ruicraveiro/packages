@@ -12,21 +12,25 @@ import 'messages.g.dart';
 /// Converts a [PlatformCameraLensDirection] to [CameraLensDirection].
 CameraLensDirection cameraLensDirectionFromPlatform(
   PlatformCameraLensDirection direction,
-) => switch (direction) {
-  PlatformCameraLensDirection.front => CameraLensDirection.front,
-  PlatformCameraLensDirection.back => CameraLensDirection.back,
-  PlatformCameraLensDirection.external => CameraLensDirection.external,
-};
+) =>
+    switch (direction) {
+      PlatformCameraLensDirection.front => CameraLensDirection.front,
+      PlatformCameraLensDirection.back => CameraLensDirection.back,
+      PlatformCameraLensDirection.external => CameraLensDirection.external,
+    };
 
 /// Converts a [PlatformDeviceOrientation] to [DeviceOrientation].
 DeviceOrientation deviceOrientationFromPlatform(
   PlatformDeviceOrientation orientation,
-) => switch (orientation) {
-  PlatformDeviceOrientation.portraitUp => DeviceOrientation.portraitUp,
-  PlatformDeviceOrientation.portraitDown => DeviceOrientation.portraitDown,
-  PlatformDeviceOrientation.landscapeLeft => DeviceOrientation.landscapeLeft,
-  PlatformDeviceOrientation.landscapeRight => DeviceOrientation.landscapeRight,
-};
+) =>
+    switch (orientation) {
+      PlatformDeviceOrientation.portraitUp => DeviceOrientation.portraitUp,
+      PlatformDeviceOrientation.portraitDown => DeviceOrientation.portraitDown,
+      PlatformDeviceOrientation.landscapeLeft =>
+        DeviceOrientation.landscapeLeft,
+      PlatformDeviceOrientation.landscapeRight =>
+        DeviceOrientation.landscapeRight,
+    };
 
 /// Converts a [DeviceOrientation] to [PlatformDeviceOrientation].
 PlatformDeviceOrientation deviceOrientationToPlatform(

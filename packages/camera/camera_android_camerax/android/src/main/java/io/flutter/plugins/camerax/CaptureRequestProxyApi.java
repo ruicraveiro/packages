@@ -6,7 +6,6 @@ package io.flutter.plugins.camerax;
 
 import android.hardware.camera2.CaptureRequest;
 import androidx.annotation.NonNull;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

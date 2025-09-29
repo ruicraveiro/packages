@@ -30,14 +30,14 @@ enum class RecordState { kNotStarted, kStarting, kRunning, kStopping };
 // Handles record sink initialization and manages the state of video recording.
 class RecordHandler {
  public:
-  explicit RecordHandler(const PlatformMediaSettings& media_settings)
+  explicit RecordHandler(const PlatformMediaSettings &media_settings)
       : media_settings_(media_settings) {}
 
   virtual ~RecordHandler() = default;
 
   // Prevent copying.
-  RecordHandler(RecordHandler const&) = delete;
-  RecordHandler& operator=(RecordHandler const&) = delete;
+  RecordHandler(RecordHandler const &) = delete;
+  RecordHandler &operator=(RecordHandler const &) = delete;
 
   // Initializes record sink and requests capture engine to start recording.
   //
@@ -48,15 +48,15 @@ class RecordHandler {
   //                  the actual recording.
   // base_media_type: A pointer to base media type used as a base
   //                  for the actual video capture media type.
-  HRESULT StartRecord(const std::string& file_path,
-                      IMFCaptureEngine* capture_engine,
-                      IMFMediaType* base_media_type);
+  HRESULT StartRecord(const std::string &file_path,
+                      IMFCaptureEngine *capture_engine,
+                      IMFMediaType *base_media_type);
 
   // Stops existing recording.
   //
   // capture_engine:  A pointer to capture engine instance. Used to stop
   //                  the ongoing recording.
-  HRESULT StopRecord(IMFCaptureEngine* capture_engine);
+  HRESULT StopRecord(IMFCaptureEngine *capture_engine);
 
   // Set the record handler recording state to: running.
   void OnRecordStarted();
@@ -82,8 +82,8 @@ class RecordHandler {
 
  private:
   // Initializes record sink for video file capture.
-  HRESULT InitRecordSink(IMFCaptureEngine* capture_engine,
-                         IMFMediaType* base_media_type);
+  HRESULT InitRecordSink(IMFCaptureEngine *capture_engine,
+                         IMFMediaType *base_media_type);
 
   const PlatformMediaSettings media_settings_;
   int64_t recording_start_timestamp_us_ = -1;

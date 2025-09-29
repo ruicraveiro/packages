@@ -21,10 +21,10 @@ class CaptureEngineObserver {
   virtual bool IsReadyForSample() const = 0;
 
   // Handles Capture Engine media events.
-  virtual void OnEvent(IMFMediaEvent* event) = 0;
+  virtual void OnEvent(IMFMediaEvent *event) = 0;
 
   // Updates texture buffer
-  virtual bool UpdateBuffer(uint8_t* data, uint32_t new_length) = 0;
+  virtual bool UpdateBuffer(uint8_t *data, uint32_t new_length) = 0;
 
   // Handles capture timestamps updates.
   // Used to stop timed recordings when recorded time is exceeded.
@@ -38,29 +38,29 @@ class CaptureEngineObserver {
 class CaptureEngineListener : public IMFCaptureEngineOnSampleCallback,
                               public IMFCaptureEngineOnEventCallback {
  public:
-  CaptureEngineListener(CaptureEngineObserver* observer) : observer_(observer) {
+  CaptureEngineListener(CaptureEngineObserver *observer) : observer_(observer) {
     assert(observer);
   }
 
   ~CaptureEngineListener() {}
 
   // Disallow copy and move.
-  CaptureEngineListener(const CaptureEngineListener&) = delete;
-  CaptureEngineListener& operator=(const CaptureEngineListener&) = delete;
+  CaptureEngineListener(const CaptureEngineListener &) = delete;
+  CaptureEngineListener &operator=(const CaptureEngineListener &) = delete;
 
   // IUnknown
   STDMETHODIMP_(ULONG) AddRef();
   STDMETHODIMP_(ULONG) Release();
-  STDMETHODIMP_(HRESULT) QueryInterface(const IID& riid, void** ppv);
+  STDMETHODIMP_(HRESULT) QueryInterface(const IID &riid, void **ppv);
 
   // IMFCaptureEngineOnEventCallback
-  STDMETHODIMP OnEvent(IMFMediaEvent* pEvent);
+  STDMETHODIMP OnEvent(IMFMediaEvent *pEvent);
 
   // IMFCaptureEngineOnSampleCallback
-  STDMETHODIMP_(HRESULT) OnSample(IMFSample* pSample);
+  STDMETHODIMP_(HRESULT) OnSample(IMFSample *pSample);
 
  private:
-  CaptureEngineObserver* observer_;
+  CaptureEngineObserver *observer_;
   volatile ULONG ref_ = 0;
 };
 

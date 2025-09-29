@@ -40,8 +40,8 @@ class PreviewHandler {
   virtual ~PreviewHandler() = default;
 
   // Prevent copying.
-  PreviewHandler(PreviewHandler const&) = delete;
-  PreviewHandler& operator=(PreviewHandler const&) = delete;
+  PreviewHandler(PreviewHandler const &) = delete;
+  PreviewHandler &operator=(PreviewHandler const &) = delete;
 
   // Initializes preview sink and requests capture engine to start previewing.
   // Sets preview state to: starting.
@@ -52,15 +52,15 @@ class PreviewHandler {
   //                  for the actual video capture media type.
   // sample_callback: A pointer to capture engine listener.
   //                  This is set as sample callback for preview sink.
-  HRESULT StartPreview(IMFCaptureEngine* capture_engine,
-                       IMFMediaType* base_media_type,
-                       CaptureEngineListener* sample_callback);
+  HRESULT StartPreview(IMFCaptureEngine *capture_engine,
+                       IMFMediaType *base_media_type,
+                       CaptureEngineListener *sample_callback);
 
   // Stops existing recording.
   //
   // capture_engine:  A pointer to capture engine instance. Used to stop
   //                  the ongoing recording.
-  HRESULT StopPreview(IMFCaptureEngine* capture_engine);
+  HRESULT StopPreview(IMFCaptureEngine *capture_engine);
 
   // Set the preview handler recording state to: paused.
   bool PausePreview();
@@ -88,9 +88,9 @@ class PreviewHandler {
 
  private:
   // Initializes record sink for video file capture.
-  HRESULT InitPreviewSink(IMFCaptureEngine* capture_engine,
-                          IMFMediaType* base_media_type,
-                          CaptureEngineListener* sample_callback);
+  HRESULT InitPreviewSink(IMFCaptureEngine *capture_engine,
+                          IMFMediaType *base_media_type,
+                          CaptureEngineListener *sample_callback);
 
   PreviewState preview_state_ = PreviewState::kNotStarted;
   ComPtr<IMFCapturePreviewSink> preview_sink_;

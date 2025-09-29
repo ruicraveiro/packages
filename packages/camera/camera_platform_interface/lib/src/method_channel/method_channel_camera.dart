@@ -58,9 +58,9 @@ class MethodChannelCamera extends CameraPlatform {
   // The stream for vending frames to platform interface clients.
   StreamController<CameraImageData>? _frameStreamController;
 
-  Stream<CameraEvent> _cameraEvents(int cameraId) => cameraEventStreamController
-      .stream
-      .where((CameraEvent event) => event.cameraId == cameraId);
+  Stream<CameraEvent> _cameraEvents(int cameraId) =>
+      cameraEventStreamController.stream
+          .where((CameraEvent event) => event.cameraId == cameraId);
 
   @override
   Future<List<CameraDescription>> availableCameras() async {
@@ -91,10 +91,12 @@ class MethodChannelCamera extends CameraPlatform {
     CameraDescription cameraDescription,
     ResolutionPreset? resolutionPreset, {
     bool enableAudio = false,
-  }) async => createCameraWithSettings(
-    cameraDescription,
-    MediaSettings(resolutionPreset: resolutionPreset, enableAudio: enableAudio),
-  );
+  }) async =>
+      createCameraWithSettings(
+        cameraDescription,
+        MediaSettings(
+            resolutionPreset: resolutionPreset, enableAudio: enableAudio),
+      );
 
   @override
   Future<int> createCameraWithSettings(
@@ -105,18 +107,17 @@ class MethodChannelCamera extends CameraPlatform {
       final ResolutionPreset? resolutionPreset = mediaSettings.resolutionPreset;
       final Map<String, dynamic>? reply = await _channel
           .invokeMapMethod<String, dynamic>('create', <String, dynamic>{
-            'cameraName': cameraDescription.name,
-            'resolutionPreset':
-                resolutionPreset != null
-                    ? _serializeResolutionPreset(
-                      mediaSettings.resolutionPreset!,
-                    )
-                    : null,
-            'fps': mediaSettings.fps,
-            'videoBitrate': mediaSettings.videoBitrate,
-            'audioBitrate': mediaSettings.audioBitrate,
-            'enableAudio': mediaSettings.enableAudio,
-          });
+        'cameraName': cameraDescription.name,
+        'resolutionPreset': resolutionPreset != null
+            ? _serializeResolutionPreset(
+                mediaSettings.resolutionPreset!,
+              )
+            : null,
+        'fps': mediaSettings.fps,
+        'videoBitrate': mediaSettings.videoBitrate,
+        'audioBitrate': mediaSettings.audioBitrate,
+        'enableAudio': mediaSettings.enableAudio,
+      });
 
       return reply!['cameraId']! as int;
     } on PlatformException catch (e) {
@@ -145,27 +146,25 @@ class MethodChannelCamera extends CameraPlatform {
       completer.complete();
     });
 
-    _channel
-        .invokeMapMethod<String, dynamic>('initialize', <String, dynamic>{
-          'cameraId': cameraId,
-          'imageFormatGroup': imageFormatGroup.name(),
-        })
-        .catchError(
-          // TODO(srawlins): This should return a value of the future's type. This
-          // will fail upcoming analysis checks with
-          // https://github.com/flutter/flutter/issues/105750.
-          // ignore: body_might_complete_normally_catch_error
-          (Object error, StackTrace stackTrace) {
-            if (error is! PlatformException) {
-              // ignore: only_throw_errors
-              throw error;
-            }
-            completer.completeError(
-              CameraException(error.code, error.message),
-              stackTrace,
-            );
-          },
+    _channel.invokeMapMethod<String, dynamic>('initialize', <String, dynamic>{
+      'cameraId': cameraId,
+      'imageFormatGroup': imageFormatGroup.name(),
+    }).catchError(
+      // TODO(srawlins): This should return a value of the future's type. This
+      // will fail upcoming analysis checks with
+      // https://github.com/flutter/flutter/issues/105750.
+      // ignore: body_might_complete_normally_catch_error
+      (Object error, StackTrace stackTrace) {
+        if (error is! PlatformException) {
+          // ignore: only_throw_errors
+          throw error;
+        }
+        completer.completeError(
+          CameraException(error.code, error.message),
+          stackTrace,
         );
+      },
+    );
 
     return completer.future;
   }
@@ -300,9 +299,9 @@ class MethodChannelCamera extends CameraPlatform {
 
   @override
   Future<void> pauseVideoRecording(int cameraId) => _channel.invokeMethod<void>(
-    'pauseVideoRecording',
-    <String, dynamic>{'cameraId': cameraId},
-  );
+        'pauseVideoRecording',
+        <String, dynamic>{'cameraId': cameraId},
+      );
 
   @override
   Future<void> resumeVideoRecording(int cameraId) =>
@@ -344,20 +343,19 @@ class MethodChannelCamera extends CameraPlatform {
     const EventChannel cameraEventChannel = EventChannel(
       'plugins.flutter.io/camera/imageStream',
     );
-    _platformImageStreamSubscription = cameraEventChannel
-        .receiveBroadcastStream()
-        .listen((dynamic imageData) {
-          if (defaultTargetPlatform == TargetPlatform.iOS) {
-            try {
-              _channel.invokeMethod<void>('receivedImageStreamData');
-            } on PlatformException catch (e) {
-              throw CameraException(e.code, e.message);
-            }
-          }
-          _frameStreamController!.add(
-            cameraImageFromPlatformData(imageData as Map<dynamic, dynamic>),
-          );
-        });
+    _platformImageStreamSubscription =
+        cameraEventChannel.receiveBroadcastStream().listen((dynamic imageData) {
+      if (defaultTargetPlatform == TargetPlatform.iOS) {
+        try {
+          _channel.invokeMethod<void>('receivedImageStreamData');
+        } on PlatformException catch (e) {
+          throw CameraException(e.code, e.message);
+        }
+      }
+      _frameStreamController!.add(
+        cameraImageFromPlatformData(imageData as Map<dynamic, dynamic>),
+      );
+    });
   }
 
   FutureOr<void> _onFrameStreamCancel() async {

@@ -20,8 +20,8 @@ class CameraOptions {
   /// Creates a new instance of [CameraOptions]
   /// with the given [audio] and [video] constraints.
   const CameraOptions({AudioConstraints? audio, VideoConstraints? video})
-    : audio = audio ?? const AudioConstraints(),
-      video = video ?? const VideoConstraints();
+      : audio = audio ?? const AudioConstraints(),
+        video = video ?? const VideoConstraints();
 
   /// The audio constraints for the camera.
   final AudioConstraints audio;

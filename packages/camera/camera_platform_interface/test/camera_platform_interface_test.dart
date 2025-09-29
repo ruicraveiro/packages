@@ -198,28 +198,28 @@ void main() {
 
         final OverriddenCameraPlatform cameraPlatform =
             OverriddenCameraPlatform((
-              CameraDescription cameraDescriptionArg,
-              ResolutionPreset? resolutionPresetArg,
-              bool enableAudioArg,
-            ) {
-              expect(
-                cameraDescriptionArg,
-                cameraDescription,
-                reason: 'should pass camera description',
-              );
-              expect(
-                resolutionPresetArg,
-                mediaSettings.resolutionPreset,
-                reason: 'should pass resolution preset',
-              );
-              expect(
-                enableAudioArg,
-                mediaSettings.enableAudio,
-                reason: 'should pass enableAudio',
-              );
+          CameraDescription cameraDescriptionArg,
+          ResolutionPreset? resolutionPresetArg,
+          bool enableAudioArg,
+        ) {
+          expect(
+            cameraDescriptionArg,
+            cameraDescription,
+            reason: 'should pass camera description',
+          );
+          expect(
+            resolutionPresetArg,
+            mediaSettings.resolutionPreset,
+            reason: 'should pass resolution preset',
+          );
+          expect(
+            enableAudioArg,
+            mediaSettings.enableAudio,
+            reason: 'should pass enableAudio',
+          );
 
-              createCameraCalled = true;
-            });
+          createCameraCalled = true;
+        });
 
         // Act & Assert
         cameraPlatform.createCameraWithSettings(
@@ -595,8 +595,7 @@ class OverriddenCameraPlatform extends CameraPlatform {
     CameraDescription cameraDescription,
     ResolutionPreset? resolutionPreset,
     bool enableAudio,
-  )
-  _onCreateCameraCalled;
+  ) _onCreateCameraCalled;
 
   @override
   Future<int> createCamera(

@@ -21,8 +21,8 @@ void main() {
     test('fromJson should initialize all properties', () {
       final DeviceOrientationChangedEvent event =
           DeviceOrientationChangedEvent.fromJson(const <String, dynamic>{
-            'orientation': 'portraitUp',
-          });
+        'orientation': 'portraitUp',
+      });
 
       expect(event.orientation, DeviceOrientation.portraitUp);
     });

@@ -18,7 +18,7 @@ import 'utils.dart';
 class AndroidCamera extends CameraPlatform {
   /// Creates a new [CameraPlatform] instance.
   AndroidCamera({@visibleForTesting CameraApi? hostApi})
-    : _hostApi = hostApi ?? CameraApi();
+      : _hostApi = hostApi ?? CameraApi();
 
   /// Registers this class as the default instance of [CameraPlatform].
   static void registerWith() {
@@ -60,15 +60,15 @@ class AndroidCamera extends CameraPlatform {
   // The stream for vending frames to platform interface clients.
   StreamController<CameraImageData>? _frameStreamController;
 
-  Stream<CameraEvent> _cameraEvents(int cameraId) => cameraEventStreamController
-      .stream
-      .where((CameraEvent event) => event.cameraId == cameraId);
+  Stream<CameraEvent> _cameraEvents(int cameraId) =>
+      cameraEventStreamController.stream
+          .where((CameraEvent event) => event.cameraId == cameraId);
 
   @override
   Future<List<CameraDescription>> availableCameras() async {
     try {
-      final List<PlatformCameraDescription> cameraDescriptions = await _hostApi
-          .getAvailableCameras();
+      final List<PlatformCameraDescription> cameraDescriptions =
+          await _hostApi.getAvailableCameras();
       return cameraDescriptions.map((
         PlatformCameraDescription cameraDescription,
       ) {
@@ -90,10 +90,12 @@ class AndroidCamera extends CameraPlatform {
     CameraDescription cameraDescription,
     ResolutionPreset? resolutionPreset, {
     bool enableAudio = false,
-  }) => createCameraWithSettings(
-    cameraDescription,
-    MediaSettings(resolutionPreset: resolutionPreset, enableAudio: enableAudio),
-  );
+  }) =>
+      createCameraWithSettings(
+        cameraDescription,
+        MediaSettings(
+            resolutionPreset: resolutionPreset, enableAudio: enableAudio),
+      );
 
   @override
   Future<int> createCameraWithSettings(
@@ -273,13 +275,12 @@ class AndroidCamera extends CameraPlatform {
     const EventChannel cameraEventChannel = EventChannel(
       'plugins.flutter.io/camera_android/imageStream',
     );
-    _platformImageStreamSubscription = cameraEventChannel
-        .receiveBroadcastStream()
-        .listen((dynamic imageData) {
-          _frameStreamController!.add(
-            cameraImageFromPlatformData(imageData as Map<dynamic, dynamic>),
-          );
-        });
+    _platformImageStreamSubscription =
+        cameraEventChannel.receiveBroadcastStream().listen((dynamic imageData) {
+      _frameStreamController!.add(
+        cameraImageFromPlatformData(imageData as Map<dynamic, dynamic>),
+      );
+    });
   }
 
   FutureOr<void> _onFrameStreamCancel() async {

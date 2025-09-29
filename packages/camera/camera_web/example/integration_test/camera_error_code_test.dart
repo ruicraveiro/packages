@@ -119,9 +119,8 @@ void main() {
           expect(
             CameraErrorCode.fromMediaError(
               createJSInteropWrapper(
-                    FakeMediaError(MediaError.MEDIA_ERR_ABORTED),
-                  )
-                  as MediaError,
+                FakeMediaError(MediaError.MEDIA_ERR_ABORTED),
+              ) as MediaError,
             ).toString(),
             equals('mediaErrorAborted'),
           );
@@ -131,9 +130,8 @@ void main() {
           expect(
             CameraErrorCode.fromMediaError(
               createJSInteropWrapper(
-                    FakeMediaError(MediaError.MEDIA_ERR_NETWORK),
-                  )
-                  as MediaError,
+                FakeMediaError(MediaError.MEDIA_ERR_NETWORK),
+              ) as MediaError,
             ).toString(),
             equals('mediaErrorNetwork'),
           );
@@ -143,9 +141,8 @@ void main() {
           expect(
             CameraErrorCode.fromMediaError(
               createJSInteropWrapper(
-                    FakeMediaError(MediaError.MEDIA_ERR_DECODE),
-                  )
-                  as MediaError,
+                FakeMediaError(MediaError.MEDIA_ERR_DECODE),
+              ) as MediaError,
             ).toString(),
             equals('mediaErrorDecode'),
           );
@@ -157,9 +154,8 @@ void main() {
           expect(
             CameraErrorCode.fromMediaError(
               createJSInteropWrapper(
-                    FakeMediaError(MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED),
-                  )
-                  as MediaError,
+                FakeMediaError(MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED),
+              ) as MediaError,
             ).toString(),
             equals('mediaErrorSourceNotSupported'),
           );

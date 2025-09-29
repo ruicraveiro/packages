@@ -40,8 +40,8 @@ enum class CaptureEngineState { kNotInitialized, kInitializing, kInitialized };
 // Interface for a class that enumerates video capture device sources.
 class VideoCaptureDeviceEnumerator {
  private:
-  virtual bool EnumerateVideoCaptureDeviceSources(IMFActivate*** devices,
-                                                  UINT32* count) = 0;
+  virtual bool EnumerateVideoCaptureDeviceSources(IMFActivate ***devices,
+                                                  UINT32 *count) = 0;
 };
 
 // Interface implemented by capture controllers.
@@ -54,8 +54,8 @@ class CaptureController {
   virtual ~CaptureController() = default;
 
   // Disallow copy and move.
-  CaptureController(const CaptureController&) = delete;
-  CaptureController& operator=(const CaptureController&) = delete;
+  CaptureController(const CaptureController &) = delete;
+  CaptureController &operator=(const CaptureController &) = delete;
 
   // Initializes the capture controller with the specified device id.
   //
@@ -68,8 +68,8 @@ class CaptureController {
   //                    be captured.
   // media_settings:    Settings controlling capture behavior.
   virtual bool InitCaptureDevice(
-      TextureRegistrar* texture_registrar, const std::string& device_id,
-      const PlatformMediaSettings& media_settings) = 0;
+      TextureRegistrar *texture_registrar, const std::string &device_id,
+      const PlatformMediaSettings &media_settings) = 0;
 
   // Returns preview frame width
   virtual uint32_t GetPreviewWidth() const = 0;
@@ -87,13 +87,13 @@ class CaptureController {
   virtual void ResumePreview() = 0;
 
   // Starts recording video.
-  virtual void StartRecord(const std::string& file_path) = 0;
+  virtual void StartRecord(const std::string &file_path) = 0;
 
   // Stops the current video recording.
   virtual void StopRecord() = 0;
 
   // Captures a still photo.
-  virtual void TakePicture(const std::string& file_path) = 0;
+  virtual void TakePicture(const std::string &file_path) = 0;
 };
 
 // Concrete implementation of the |CaptureController| interface.
@@ -104,50 +104,50 @@ class CaptureController {
 class CaptureControllerImpl : public CaptureController,
                               public CaptureEngineObserver {
  public:
-  static bool EnumerateVideoCaptureDeviceSources(IMFActivate*** devices,
-                                                 UINT32* count);
+  static bool EnumerateVideoCaptureDeviceSources(IMFActivate ***devices,
+                                                 UINT32 *count);
 
-  explicit CaptureControllerImpl(CaptureControllerListener* listener);
+  explicit CaptureControllerImpl(CaptureControllerListener *listener);
   virtual ~CaptureControllerImpl();
 
   // Disallow copy and move.
-  CaptureControllerImpl(const CaptureControllerImpl&) = delete;
-  CaptureControllerImpl& operator=(const CaptureControllerImpl&) = delete;
+  CaptureControllerImpl(const CaptureControllerImpl &) = delete;
+  CaptureControllerImpl &operator=(const CaptureControllerImpl &) = delete;
 
   // CaptureController
-  bool InitCaptureDevice(TextureRegistrar* texture_registrar,
-                         const std::string& device_id,
-                         const PlatformMediaSettings& media_settings) override;
+  bool InitCaptureDevice(TextureRegistrar *texture_registrar,
+                         const std::string &device_id,
+                         const PlatformMediaSettings &media_settings) override;
   uint32_t GetPreviewWidth() const override { return preview_frame_width_; }
   uint32_t GetPreviewHeight() const override { return preview_frame_height_; }
   void StartPreview() override;
   void PausePreview() override;
   void ResumePreview() override;
-  void StartRecord(const std::string& file_path) override;
+  void StartRecord(const std::string &file_path) override;
   void StopRecord() override;
-  void TakePicture(const std::string& file_path) override;
+  void TakePicture(const std::string &file_path) override;
 
   // CaptureEngineObserver
-  void OnEvent(IMFMediaEvent* event) override;
+  void OnEvent(IMFMediaEvent *event) override;
   bool IsReadyForSample() const override {
     return capture_engine_state_ == CaptureEngineState::kInitialized &&
            preview_handler_ && preview_handler_->IsRunning();
   }
-  bool UpdateBuffer(uint8_t* data, uint32_t data_length) override;
+  bool UpdateBuffer(uint8_t *data, uint32_t data_length) override;
   void UpdateCaptureTime(uint64_t capture_time) override;
 
   // Sets capture engine, for testing purposes.
-  void SetCaptureEngine(IMFCaptureEngine* capture_engine) {
+  void SetCaptureEngine(IMFCaptureEngine *capture_engine) {
     capture_engine_ = capture_engine;
   }
 
   // Sets video source, for testing purposes.
-  void SetVideoSource(IMFMediaSource* video_source) {
+  void SetVideoSource(IMFMediaSource *video_source) {
     video_source_ = video_source;
   }
 
   // Sets audio source, for testing purposes.
-  void SetAudioSource(IMFMediaSource* audio_source) {
+  void SetAudioSource(IMFMediaSource *audio_source) {
     audio_source_ = audio_source;
   }
 
@@ -169,7 +169,7 @@ class CaptureControllerImpl : public CaptureController,
   HRESULT CreateDefaultAudioCaptureSource();
 
   // Initializes video capture source from camera device.
-  HRESULT CreateVideoCaptureSourceForDevice(const std::string& video_device_id);
+  HRESULT CreateVideoCaptureSourceForDevice(const std::string &video_device_id);
 
   // Creates DX11 Device and D3D Manager.
   HRESULT CreateD3DManagerWithDX11Device();
@@ -183,32 +183,32 @@ class CaptureControllerImpl : public CaptureController,
 
   // Enumerates video_sources media types and finds out best resolution
   // for a given source.
-  HRESULT FindBaseMediaTypesForSource(IMFCaptureSource* source);
+  HRESULT FindBaseMediaTypesForSource(IMFCaptureSource *source);
 
   // Stops preview. Called internally on camera reset and dispose.
   HRESULT StopPreview();
 
   // Handles capture engine initalization event.
   void OnCaptureEngineInitialized(CameraResult result,
-                                  const std::string& error);
+                                  const std::string &error);
 
   // Handles capture engine errors.
-  void OnCaptureEngineError(CameraResult result, const std::string& error);
+  void OnCaptureEngineError(CameraResult result, const std::string &error);
 
   // Handles picture events.
-  void OnPicture(CameraResult result, const std::string& error);
+  void OnPicture(CameraResult result, const std::string &error);
 
   // Handles preview started events.
-  void OnPreviewStarted(CameraResult result, const std::string& error);
+  void OnPreviewStarted(CameraResult result, const std::string &error);
 
   // Handles preview stopped events.
-  void OnPreviewStopped(CameraResult result, const std::string& error);
+  void OnPreviewStopped(CameraResult result, const std::string &error);
 
   // Handles record started events.
-  void OnRecordStarted(CameraResult result, const std::string& error);
+  void OnRecordStarted(CameraResult result, const std::string &error);
 
   // Handles record stopped events.
-  void OnRecordStopped(CameraResult result, const std::string& error);
+  void OnRecordStopped(CameraResult result, const std::string &error);
 
   bool media_foundation_started_ = false;
 
@@ -219,7 +219,7 @@ class CaptureControllerImpl : public CaptureController,
   std::unique_ptr<PreviewHandler> preview_handler_;
   std::unique_ptr<PhotoHandler> photo_handler_;
   std::unique_ptr<TextureHandler> texture_handler_;
-  CaptureControllerListener* capture_controller_listener_;
+  CaptureControllerListener *capture_controller_listener_;
 
   std::string video_device_id_;
   CaptureEngineState capture_engine_state_ =
@@ -234,7 +234,7 @@ class CaptureControllerImpl : public CaptureController,
   ComPtr<IMFMediaSource> video_source_;
   ComPtr<IMFMediaSource> audio_source_;
 
-  TextureRegistrar* texture_registrar_ = nullptr;
+  TextureRegistrar *texture_registrar_ = nullptr;
 };
 
 // Inferface for factory classes that create |CaptureController| instances.
@@ -244,13 +244,14 @@ class CaptureControllerFactory {
   virtual ~CaptureControllerFactory() = default;
 
   // Disallow copy and move.
-  CaptureControllerFactory(const CaptureControllerFactory&) = delete;
-  CaptureControllerFactory& operator=(const CaptureControllerFactory&) = delete;
+  CaptureControllerFactory(const CaptureControllerFactory &) = delete;
+  CaptureControllerFactory &operator=(const CaptureControllerFactory &) =
+      delete;
 
   // Create and return a |CaptureController| that makes callbacks on the
   // specified |CaptureControllerListener|, which must not be null.
   virtual std::unique_ptr<CaptureController> CreateCaptureController(
-      CaptureControllerListener* listener) = 0;
+      CaptureControllerListener *listener) = 0;
 };
 
 // Concreate implementation of |CaptureControllerFactory|.
@@ -260,12 +261,12 @@ class CaptureControllerFactoryImpl : public CaptureControllerFactory {
   virtual ~CaptureControllerFactoryImpl() = default;
 
   // Disallow copy and move.
-  CaptureControllerFactoryImpl(const CaptureControllerFactoryImpl&) = delete;
-  CaptureControllerFactoryImpl& operator=(const CaptureControllerFactoryImpl&) =
-      delete;
+  CaptureControllerFactoryImpl(const CaptureControllerFactoryImpl &) = delete;
+  CaptureControllerFactoryImpl &operator=(
+      const CaptureControllerFactoryImpl &) = delete;
 
   std::unique_ptr<CaptureController> CreateCaptureController(
-      CaptureControllerListener* listener) override {
+      CaptureControllerListener *listener) override {
     return std::make_unique<CaptureControllerImpl>(listener);
   }
 };
